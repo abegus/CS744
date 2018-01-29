@@ -19,7 +19,7 @@ namespace _744Project.Models
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
 
-        //...
+        //Test
         // entities created by Saleh in Sql Server
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<AdminLog> AdminLogs { get; set; }
