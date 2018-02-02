@@ -224,25 +224,35 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802012256301_InitialCreate.cs" />
+    <Compile Include="Migrations\201802012256301_InitialCreate.Designer.cs">
+      <DependentUpon>201802012256301_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802012259129_test.cs" />
+    <Compile Include="Migrations\201802012259129_test.Designer.cs">
+      <DependentUpon>201802012259129_test.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\AdminLog.cs" />
-    <Compile Include="Models\AdminUser.cs" />
     <Compile Include="Models\AspNetRole.cs" />
     <Compile Include="Models\AspNetUser.cs" />
     <Compile Include="Models\AspNetUserClaim.cs" />
     <Compile Include="Models\AspNetUserLogin.cs" />
-    <Compile Include="Models\Connection.cs" />
-    <Compile Include="Models\ConnectionLink.cs" />
     <Compile Include="Models\CreditCard.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\C__MigrationHistory.cs" />
-    <Compile Include="Models\DatbaseModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MasterModel.cs" />
     <Compile Include="Models\ProcessCenter.cs" />
+    <Compile Include="Models\ProcessCenterTransaction.cs" />
     <Compile Include="Models\Relay.cs" />
+    <Compile Include="Models\RelayToProcessCenterConnection.cs" />
+    <Compile Include="Models\RelayToRelayConnection.cs" />
+    <Compile Include="Models\RelayTransaction.cs" />
     <Compile Include="Models\Store.cs" />
+    <Compile Include="Models\StoreTransaction.cs" />
     <Compile Include="Models\sysdiagram.cs" />
     <Compile Include="Models\Transaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -324,6 +334,14 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201802012256301_InitialCreate.resx">
+      <DependentUpon>201802012256301_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802012259129_test.resx">
+      <DependentUpon>201802012259129_test.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

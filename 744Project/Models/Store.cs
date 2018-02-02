@@ -11,7 +11,7 @@ namespace _744Project.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Store()
         {
-            ConnectionLinks = new HashSet<ConnectionLink>();
+            StoreTransactions = new HashSet<StoreTransaction>();
         }
 
         public int storeID { get; set; }
@@ -19,11 +19,13 @@ namespace _744Project.Models
         [StringLength(50)]
         public string storeName { get; set; }
 
+        public int? storeWeight { get; set; }
+
         public int? relayID { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ConnectionLink> ConnectionLinks { get; set; }
-
         public virtual Relay Relay { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<StoreTransaction> StoreTransactions { get; set; }
     }
 }

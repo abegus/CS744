@@ -8,6 +8,14 @@ namespace _744Project.Models
 
     public partial class Transaction
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Transaction()
+        {
+            ProcessCenterTransactions = new HashSet<ProcessCenterTransaction>();
+            RelayTransactions = new HashSet<RelayTransaction>();
+            StoreTransactions = new HashSet<StoreTransaction>();
+        }
+
         public int transactionID { get; set; }
 
         public DateTime? transactionTime { get; set; }
@@ -25,10 +33,21 @@ namespace _744Project.Models
 
         public int? cardID { get; set; }
 
+        public int? connectionID { get; set; }
+
         public int? accountID { get; set; }
 
         public virtual Account Account { get; set; }
 
         public virtual CreditCard CreditCard { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ProcessCenterTransaction> ProcessCenterTransactions { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RelayTransaction> RelayTransactions { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<StoreTransaction> StoreTransactions { get; set; }
     }
 }

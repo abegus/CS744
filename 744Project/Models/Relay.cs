@@ -11,7 +11,9 @@ namespace _744Project.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Relay()
         {
-            ConnectionLinks = new HashSet<ConnectionLink>();
+            RelayToProcessCenterConnections = new HashSet<RelayToProcessCenterConnection>();
+            RelayToRelayConnections = new HashSet<RelayToRelayConnection>();
+            RelayTransactions = new HashSet<RelayTransaction>();
             Stores = new HashSet<Store>();
         }
 
@@ -23,9 +25,13 @@ namespace _744Project.Models
         public int? processCenterID { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ConnectionLink> ConnectionLinks { get; set; }
+        public virtual ICollection<RelayToProcessCenterConnection> RelayToProcessCenterConnections { get; set; }
 
-        public virtual ProcessCenter ProcessCenter { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RelayToRelayConnection> RelayToRelayConnections { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RelayTransaction> RelayTransactions { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Store> Stores { get; set; }

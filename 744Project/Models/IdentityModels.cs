@@ -21,7 +21,7 @@ namespace _744Project.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DatbaseModel", throwIfV1Schema: false) //was DefaultConnection
+            : base("DatabaseConnection", throwIfV1Schema: false) //was DefaultConnection, was DatabaseModel
         {
         }
 

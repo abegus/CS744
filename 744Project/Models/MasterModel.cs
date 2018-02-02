@@ -5,32 +5,29 @@ namespace _744Project.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
 
-    public partial class DatbaseModel : DbContext
+    public partial class MasterModel : DbContext
     {
-        public DatbaseModel()
-            : base("name=DatbaseModel")
+        public MasterModel()
+            : base("name=DatabaseConnection")
         {
         }
 
-        // .net Identiy db sets
         public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
+        public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
-
-        //Test
-        // entities created by Saleh in Sql Server
-        public virtual DbSet<Account> Accounts { get; set; }
-        public virtual DbSet<AdminLog> AdminLogs { get; set; }
-        public virtual DbSet<AdminUser> AdminUsers { get; set; }
-        public virtual DbSet<ConnectionLink> ConnectionLinks { get; set; }
-        public virtual DbSet<Connection> Connections { get; set; }
         public virtual DbSet<CreditCard> CreditCards { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<ProcessCenter> ProcessCenters { get; set; }
+        public virtual DbSet<ProcessCenterTransaction> ProcessCenterTransactions { get; set; }
         public virtual DbSet<Relay> Relays { get; set; }
+        public virtual DbSet<RelayToProcessCenterConnection> RelayToProcessCenterConnections { get; set; }
+        public virtual DbSet<RelayToRelayConnection> RelayToRelayConnections { get; set; }
+        public virtual DbSet<RelayTransaction> RelayTransactions { get; set; }
         public virtual DbSet<Store> Stores { get; set; }
+        public virtual DbSet<StoreTransaction> StoreTransactions { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Transaction> Transactions { get; set; }
 

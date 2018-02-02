@@ -17,6 +17,8 @@ namespace _744Project.Models
 
         public int accountID { get; set; }
 
+        public string accountName { get; set; }
+
         [StringLength(50)]
         public string accountNumber { get; set; }
 
