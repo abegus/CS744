@@ -12,7 +12,7 @@ namespace _744Project.Controllers
 {
     public class StoresController : Controller
     {
-        private DatbaseModel db = new DatbaseModel();
+        private MasterModel db = new MasterModel();
 
         // GET: Stores
         public ActionResult Index()
@@ -48,7 +48,7 @@ namespace _744Project.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "storeID,storeName,relayID")] Store store)
+        public ActionResult Create([Bind(Include = "storeID,storeName,storeWeight,relayID")] Store store)
         {
             if (ModelState.IsValid)
             {
@@ -82,7 +82,7 @@ namespace _744Project.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "storeID,storeName,relayID")] Store store)
+        public ActionResult Edit([Bind(Include = "storeID,storeName,storeWeight,relayID")] Store store)
         {
             if (ModelState.IsValid)
             {
