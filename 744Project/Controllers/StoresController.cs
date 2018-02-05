@@ -17,7 +17,16 @@ namespace _744Project.Controllers
         // GET: Stores
         public ActionResult Index()
         {
+
+            /*Store store = db.Stores.Find("123");
+            store.storeID = "123";
+
+            db.Stores.Add(store);
+            db.SaveChanges();*/
+
+
             var stores = db.Stores.Include(s => s.Relay);
+            var sqlstores = from st in db.Stores select st;
             return View(stores.ToList());
         }
 

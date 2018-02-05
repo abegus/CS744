@@ -229,6 +229,14 @@
     <Compile Include="Migrations\201802051741030_initialcreate.Designer.cs">
       <DependentUpon>201802051741030_initialcreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802051834116_add middle name.cs" />
+    <Compile Include="Migrations\201802051834116_add middle name.Designer.cs">
+      <DependentUpon>201802051834116_add middle name.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802051917266_reset.cs" />
+    <Compile Include="Migrations\201802051917266_reset.Designer.cs">
+      <DependentUpon>201802051917266_reset.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -340,6 +348,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201802051741030_initialcreate.resx">
       <DependentUpon>201802051741030_initialcreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802051834116_add middle name.resx">
+      <DependentUpon>201802051834116_add middle name.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802051917266_reset.resx">
+      <DependentUpon>201802051917266_reset.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

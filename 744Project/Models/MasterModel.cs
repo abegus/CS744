@@ -50,6 +50,10 @@ namespace _744Project.Models
                 .HasMany(e => e.AspNetUserLogins)
                 .WithRequired(e => e.AspNetUser)
                 .HasForeignKey(e => e.UserId);
+
+            //adding many to many (self) relatioship for Relays
+           /* modelBuilder.Entity<Relay>()
+                .HasMany(e => e.Relay)*/
         }
     }
 }

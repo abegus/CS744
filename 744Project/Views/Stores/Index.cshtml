@@ -20,7 +20,7 @@
         <th>
             @Html.DisplayNameFor(model => model.storeWeight)
         </th>
-        <th></th>
+        <!--<th></th>-->
     </tr>
 
 @foreach (var item in Model) {
@@ -34,11 +34,11 @@
         <td>
             @Html.DisplayFor(modelItem => item.storeWeight)
         </td>
-        <td>
+        <!--<td>
             @Html.ActionLink("Edit", "Edit", new { id=item.storeID }) |
             @Html.ActionLink("Details", "Details", new { id=item.storeID }) |
             @Html.ActionLink("Delete", "Delete", new { id=item.storeID })
-        </td>
+        </td>-->
     </tr>
 }
 

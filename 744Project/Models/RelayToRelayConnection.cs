@@ -9,13 +9,19 @@ namespace _744Project.Models
     public partial class RelayToRelayConnection
     {
         [Key]
-        public int relayConnectionID { get; set; }
+       public int relayConnectionID { get; set; }
 
+        
         [StringLength(50)]
         public string relayID { get; set; }
+
+        //[Key]
+        //[StringLength(50)]
+        //public string relayID2 { get; set; }
 
         public int? relayWeight { get; set; }
 
         public virtual Relay Relay { get; set; }
+       // public virtual Relay Relay2 { get; set; }
     }
 }

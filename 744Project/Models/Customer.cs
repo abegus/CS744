@@ -21,6 +21,9 @@ namespace _744Project.Models
         public string customerFirstname { get; set; }
 
         [StringLength(50)]
+        public string middleName { get; set; }
+
+        [StringLength(50)]
         public string customerLastname { get; set; }
 
         [StringLength(50)]
