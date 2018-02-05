@@ -17,8 +17,6 @@ namespace _744Project.Models
 
         public int accountID { get; set; }
 
-        public string accountName { get; set; }
-
         [StringLength(50)]
         public string accountNumber { get; set; }
 
@@ -26,6 +24,8 @@ namespace _744Project.Models
         public string accountBalance { get; set; }
 
         public int? customerID { get; set; }
+
+        public string accountName { get; set; }
 
         public virtual Customer Customer { get; set; }
 

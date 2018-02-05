@@ -17,12 +17,11 @@ namespace _744Project.Models
             Stores = new HashSet<Store>();
         }
 
-        public int relayID { get; set; }
+        [StringLength(50)]
+        public string relayID { get; set; }
 
         [StringLength(50)]
         public string relayName { get; set; }
-
-        public int? processCenterID { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RelayToProcessCenterConnection> RelayToProcessCenterConnections { get; set; }

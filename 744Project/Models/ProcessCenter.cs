@@ -15,7 +15,8 @@ namespace _744Project.Models
             RelayToProcessCenterConnections = new HashSet<RelayToProcessCenterConnection>();
         }
 
-        public int processCenterID { get; set; }
+        [StringLength(50)]
+        public string processCenterID { get; set; }
 
         [StringLength(50)]
         public string processCenterName { get; set; }

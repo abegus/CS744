@@ -22,7 +22,7 @@ namespace _744Project.Controllers
         }
 
         // GET: Stores/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(string id)
         {
             if (id == null)
             {
@@ -62,7 +62,7 @@ namespace _744Project.Controllers
         }
 
         // GET: Stores/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(string id)
         {
             if (id == null)
             {
@@ -95,7 +95,7 @@ namespace _744Project.Controllers
         }
 
         // GET: Stores/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(string id)
         {
             if (id == null)
             {
@@ -112,7 +112,7 @@ namespace _744Project.Controllers
         // POST: Stores/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(string id)
         {
             Store store = db.Stores.Find(id);
             db.Stores.Remove(store);

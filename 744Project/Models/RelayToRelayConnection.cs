@@ -11,7 +11,8 @@ namespace _744Project.Models
         [Key]
         public int relayConnectionID { get; set; }
 
-        public int? relayID { get; set; }
+        [StringLength(50)]
+        public string relayID { get; set; }
 
         public int? relayWeight { get; set; }
 

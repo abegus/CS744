@@ -10,7 +10,8 @@ namespace _744Project.Models
     {
         public int relayTransactionID { get; set; }
 
-        public int? relayID { get; set; }
+        [StringLength(50)]
+        public string relayID { get; set; }
 
         public int? transactionID { get; set; }
 

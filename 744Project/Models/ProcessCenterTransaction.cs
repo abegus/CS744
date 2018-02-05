@@ -10,7 +10,8 @@ namespace _744Project.Models
     {
         public int processCenterTransactionID { get; set; }
 
-        public int? processCenterID { get; set; }
+        [StringLength(50)]
+        public string processCenterID { get; set; }
 
         public int? transactionID { get; set; }
 

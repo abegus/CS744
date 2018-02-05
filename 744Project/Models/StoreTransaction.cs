@@ -10,7 +10,8 @@ namespace _744Project.Models
     {
         public int storeTransactionID { get; set; }
 
-        public int? storeID { get; set; }
+        [StringLength(50)]
+        public string storeID { get; set; }
 
         public int? transactionID { get; set; }
 
