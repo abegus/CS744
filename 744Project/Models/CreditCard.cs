@@ -13,19 +13,19 @@ namespace _744Project.Models
         {
             Transactions = new HashSet<Transaction>();
         }
-
+        [Display(Name = "Card ID")]
         [Key]
         public int cardID { get; set; }
-
+        [Display(Name = "Card Number")]
         [StringLength(50)]
         public string cardNumber { get; set; }
-
+        [Display(Name = "Card Expiration Date")]
         [StringLength(50)]
         public string cardExpirationDate { get; set; }
-
+        [Display(Name = "Card Security Code")]
         [StringLength(50)]
         public string cardSecurityCode { get; set; }
-
+        [Display(Name = "Card Maximum Allowed")]
         [StringLength(50)]
         public string cardMaxAllowed { get; set; }
 
