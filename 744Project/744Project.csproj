@@ -221,6 +221,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\NetworkController.cs" />
     <Compile Include="Controllers\StoresController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -262,6 +263,7 @@
     <Compile Include="Models\Transaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\NetworkViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -328,6 +330,11 @@
     <Content Include="Views\Stores\Details.cshtml" />
     <Content Include="Views\Stores\Edit.cshtml" />
     <Content Include="Views\Stores\Index.cshtml" />
+    <Content Include="Views\Network\Create.cshtml" />
+    <Content Include="Views\Network\Delete.cshtml" />
+    <Content Include="Views\Network\Details.cshtml" />
+    <Content Include="Views\Network\Edit.cshtml" />
+    <Content Include="Views\Network\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
