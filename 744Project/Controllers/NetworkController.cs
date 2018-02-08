@@ -127,6 +127,8 @@ namespace _744Project.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
+            //test
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
