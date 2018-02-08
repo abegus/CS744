@@ -19,9 +19,11 @@ namespace _744Project.Models
         [Display(Name = "Card Number")]
         [StringLength(50)]
         public string cardNumber { get; set; }
+
         [Display(Name = "Card Expiration Date")]
-        [StringLength(50)]
-        public string cardExpirationDate { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime cardExpirationDate { get; set; }
+
         [Display(Name = "Card Security Code")]
         [StringLength(50)]
         public string cardSecurityCode { get; set; }

@@ -17,12 +17,22 @@ namespace _744Project.Controllers
         // GET: Customers
         public ActionResult Index()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             return View(db.Customers.ToList());
         }
 
         // GET: Customers/Details/5
         public ActionResult Details(int? id)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -38,6 +48,11 @@ namespace _744Project.Controllers
         // GET: Customers/Create
         public ActionResult Create()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
 
@@ -48,6 +63,11 @@ namespace _744Project.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "customerID,customerFirstname,middleName,customerLastname,customerPhone,customerSSN,customerAddress,customerCity,customerState,customerZip")] Customer customer)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Customers.Add(customer);
@@ -61,6 +81,11 @@ namespace _744Project.Controllers
         // GET: Customers/Edit/5
         public ActionResult Edit(int? id)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -80,6 +105,11 @@ namespace _744Project.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "customerID,customerFirstname,middleName,customerLastname,customerPhone,customerSSN,customerAddress,customerCity,customerState,customerZip")] Customer customer)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Entry(customer).State = EntityState.Modified;
@@ -92,6 +122,11 @@ namespace _744Project.Controllers
         // GET: Customers/Delete/5
         public ActionResult Delete(int? id)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -109,6 +144,11 @@ namespace _744Project.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             Customer customer = db.Customers.Find(id);
             db.Customers.Remove(customer);
             db.SaveChanges();

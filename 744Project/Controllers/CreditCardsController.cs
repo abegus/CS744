@@ -17,6 +17,11 @@ namespace _744Project.Controllers
         // GET: CreditCards
         public ActionResult Index()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             var creditCards = db.CreditCards.Include(c => c.Account).Include(c => c.Customer);
             return View(creditCards.ToList());
         }
@@ -24,6 +29,11 @@ namespace _744Project.Controllers
         // GET: CreditCards/Details/5
         public ActionResult Details(int? id)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -39,6 +49,11 @@ namespace _744Project.Controllers
         // GET: CreditCards/Create
         public ActionResult Create()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             ViewBag.accountID = new SelectList(db.Accounts, "accountID", "accountNumber");
             ViewBag.customerID = new SelectList(db.Customers, "customerID", "customerFirstname");
             return View();
@@ -51,6 +66,11 @@ namespace _744Project.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "cardID,cardNumber,cardExpirationDate,cardSecurityCode,cardMaxAllowed,accountID,customerID")] CreditCard creditCard)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (ModelState.IsValid)
             {
                 db.CreditCards.Add(creditCard);
@@ -66,6 +86,11 @@ namespace _744Project.Controllers
         // GET: CreditCards/Edit/5
         public ActionResult Edit(int? id)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -87,6 +112,11 @@ namespace _744Project.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "cardID,cardNumber,cardExpirationDate,cardSecurityCode,cardMaxAllowed,accountID,customerID")] CreditCard creditCard)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Entry(creditCard).State = EntityState.Modified;
@@ -101,6 +131,11 @@ namespace _744Project.Controllers
         // GET: CreditCards/Delete/5
         public ActionResult Delete(int? id)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -118,6 +153,11 @@ namespace _744Project.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             CreditCard creditCard = db.CreditCards.Find(id);
             db.CreditCards.Remove(creditCard);
             db.SaveChanges();

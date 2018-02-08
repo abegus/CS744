@@ -241,6 +241,10 @@
     <Compile Include="Migrations\201802051917266_reset.Designer.cs">
       <DependentUpon>201802051917266_reset.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802081944141_updating card dates.cs" />
+    <Compile Include="Migrations\201802081944141_updating card dates.Designer.cs">
+      <DependentUpon>201802081944141_updating card dates.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -359,6 +363,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802051917266_reset.resx">
       <DependentUpon>201802051917266_reset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802081944141_updating card dates.resx">
+      <DependentUpon>201802081944141_updating card dates.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -17,6 +17,10 @@ namespace _744Project.Controllers
         // GET: Network
         public ActionResult Index()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
 
             return View(db.Relays.ToList());
         }
@@ -24,6 +28,11 @@ namespace _744Project.Controllers
         // GET: Network/Details/5
         public ActionResult Details(string id)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -39,6 +48,11 @@ namespace _744Project.Controllers
         // GET: Network/Create
         public ActionResult Create()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
 
@@ -49,6 +63,11 @@ namespace _744Project.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "relayID,relayName")] Relay relay)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Relays.Add(relay);
@@ -62,6 +81,11 @@ namespace _744Project.Controllers
         // GET: Network/Edit/5
         public ActionResult Edit(string id)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -81,6 +105,11 @@ namespace _744Project.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "relayID,relayName")] Relay relay)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Entry(relay).State = EntityState.Modified;
@@ -93,6 +122,11 @@ namespace _744Project.Controllers
         // GET: Network/Delete/5
         public ActionResult Delete(string id)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -110,6 +144,11 @@ namespace _744Project.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             Relay relay = db.Relays.Find(id);
             db.Relays.Remove(relay);
             db.SaveChanges();
