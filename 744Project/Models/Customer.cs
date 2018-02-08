@@ -14,33 +14,33 @@ namespace _744Project.Models
             Accounts = new HashSet<Account>();
             CreditCards = new HashSet<CreditCard>();
         }
-
+        [Display(Name = "Customer ID")]
         public int customerID { get; set; }
-
+        [Display(Name ="Customer First Name")]
         [StringLength(50)]
         public string customerFirstname { get; set; }
-
+        [Display(Name = "Customer Middle Name")]
         [StringLength(50)]
         public string middleName { get; set; }
-
+        [Display(Name = "Customer Last Name")]
         [StringLength(50)]
         public string customerLastname { get; set; }
-
+        [Display(Name = "Customer Phone")]
         [StringLength(50)]
         public string customerPhone { get; set; }
-
+        [Display(Name = "Customer SSN")]
         [StringLength(50)]
         public string customerSSN { get; set; }
-
+        [Display(Name = "Customer Address")]
         [StringLength(100)]
         public string customerAddress { get; set; }
-
+        [Display(Name = "Customer City")]
         [StringLength(50)]
         public string customerCity { get; set; }
-
+        [Display(Name = "Customer State")]
         [StringLength(50)]
         public string customerState { get; set; }
-
+        [Display(Name = "Customer ZIP")]
         [StringLength(50)]
         public string customerZip { get; set; }
 

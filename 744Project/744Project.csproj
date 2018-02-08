@@ -219,6 +219,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AccountsController.cs" />
+    <Compile Include="Controllers\CreditCardsController.cs" />
+    <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\NetworkController.cs" />
@@ -330,11 +333,6 @@
     <Content Include="Views\Stores\Details.cshtml" />
     <Content Include="Views\Stores\Edit.cshtml" />
     <Content Include="Views\Stores\Index.cshtml" />
-    <Content Include="Views\Network\Create.cshtml" />
-    <Content Include="Views\Network\Delete.cshtml" />
-    <Content Include="Views\Network\Details.cshtml" />
-    <Content Include="Views\Network\Edit.cshtml" />
-    <Content Include="Views\Network\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,51 @@
+﻿@model _744Project.Models.Account
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Account</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>            
+            @Html.DisplayNameFor(model => model.Customer.customerFirstname)
+
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Customer.customerFirstname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.accountNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.accountNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.accountBalance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.accountBalance)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.accountName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.accountName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.accountID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
