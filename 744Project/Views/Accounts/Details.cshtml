@@ -49,3 +49,64 @@
     @Html.ActionLink("Edit", "Edit", new { id = Model.accountID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+
+
+
+
+
+@*The below is to show cards for the selected account:*@
+<div>    
+    <table class="table">
+        @* I was going to write a count loop and hide the below table headers if there is no credit card assigned to an account *@
+        @* but Dr. Kasi spicifically says that each account should have at least one credit card, and an account will not be created without a credit card*@
+    <tr>
+        <th>
+            <h5>Credit Card ID</h5>
+        </th>
+        <th>
+            <h5>Credit Card Number</h5>
+        </th>
+        <th>
+            <h5>Credit Card Expiration Date</h5>
+        </th>
+        <th>
+            <h5>Credit Card Security Code</h5>
+        </th>
+        <th>
+            <h5>Credit Card Max Allowed</h5>
+        </th>
+        <th></th>
+    </tr>
+
+        @foreach (var item in Model.CreditCards)
+        {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.cardID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.cardNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.cardExpirationDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.cardSecurityCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.cardMaxAllowed)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "../CreditCards/Edit", new { id = item.cardID }) |
+            @Html.ActionLink("Details", "../CreditCards/Details", new { id = item.cardID }) |
+            @Html.ActionLink("Delete", "../CreditCards/Delete", new { id = item.cardID })
+        </td>
+    </tr>
+        }
+
+    </table>
+</div>
+
+
+
+
