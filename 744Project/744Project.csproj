@@ -245,6 +245,10 @@
     <Compile Include="Migrations\201802081944141_updating card dates.Designer.cs">
       <DependentUpon>201802081944141_updating card dates.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802110224262_Add IP address colunm.cs" />
+    <Compile Include="Migrations\201802110224262_Add IP address colunm.Designer.cs">
+      <DependentUpon>201802110224262_Add IP address colunm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -525,6 +529,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802081944141_updating card dates.resx">
       <DependentUpon>201802081944141_updating card dates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802110224262_Add IP address colunm.resx">
+      <DependentUpon>201802110224262_Add IP address colunm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.addmiddlename.resources" />
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.initialcreate.resources" />

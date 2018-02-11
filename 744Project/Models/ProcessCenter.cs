@@ -19,6 +19,9 @@ namespace _744Project.Models
         public string processCenterID { get; set; }
 
         [StringLength(50)]
+        public string processCenterIP { get; set; }
+
+        [StringLength(50)]
         public string processCenterName { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

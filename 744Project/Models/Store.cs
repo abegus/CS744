@@ -18,6 +18,9 @@ namespace _744Project.Models
         public string storeID { get; set; }
 
         [StringLength(50)]
+        public string storeIP { get; set; }
+
+        [StringLength(50)]
         public string storeName { get; set; }
 
         public int? storeWeight { get; set; }

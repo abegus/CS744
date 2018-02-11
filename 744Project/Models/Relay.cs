@@ -23,6 +23,9 @@ namespace _744Project.Models
         [StringLength(50)]
         public string relayName { get; set; }
 
+        [StringLength(50)]
+        public string relayIP { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RelayToProcessCenterConnection> RelayToProcessCenterConnections { get; set; }
 
