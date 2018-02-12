@@ -25,6 +25,7 @@
                     @if (User.Identity.IsAuthenticated)
     {
 
+				<li>@Html.ActionLink("Network","Index","Network")</li>
                 <li>@Html.ActionLink("Stores", "Index", "Stores")</li>
                 <li>@Html.ActionLink("Accounts", "Index", "Accounts")</li>
                 //The 2 lines below are just to view the pages, and will be deleted later:
@@ -40,7 +41,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Team Saturn</p>
+           <!-- <p>&copy; @DateTime.Now.Year - Team Saturn</p>-->
         </footer>
     </div>
 

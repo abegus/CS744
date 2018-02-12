@@ -428,6 +428,8 @@
     <Content Include="obj\Release\744Project.csproj.CoreCompileInputs.cache" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\cytoscape.js" />
+    <Content Include="Scripts\cytoscape.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
