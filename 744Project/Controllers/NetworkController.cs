@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using _744Project.Models;
+using _744Project.ViewModels;
 
 namespace _744Project.Controllers
 {
@@ -22,7 +23,9 @@ namespace _744Project.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            return View(db.Relays.ToList());
+            NetworkViewModel vm = new NetworkViewModel();
+
+            return View(vm);
         }
 
         // GET: Network/Details/5

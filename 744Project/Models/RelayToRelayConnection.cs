@@ -16,12 +16,12 @@ namespace _744Project.Models
         public string relayID { get; set; }
 
         //[Key]
-        //[StringLength(50)]
-        //public string relayID2 { get; set; }
+        [StringLength(50)]
+        public string relayID2 { get; set; }
 
         public int? relayWeight { get; set; }
 
         public virtual Relay Relay { get; set; }
-       // public virtual Relay Relay2 { get; set; }
+        public virtual Relay Relay2 { get; set; }
     }
 }
