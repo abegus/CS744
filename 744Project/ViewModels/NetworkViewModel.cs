@@ -15,17 +15,26 @@ namespace _744Project.ViewModels
 
         public List<IpConnection> connections; // a list of the connections between NetworkEntities    (connections)
         public Dictionary<String, NetworkEntity> networkEntities; //Key: IP, Value: NetworkEntiy. a list of data objects from the Network.  (store, relay, PC)
+        //public JsonData jsonData;
 
         public NetworkViewModel()
         {
+            connections = new List<IpConnection>();
+            networkEntities = new Dictionary<string, NetworkEntity>();
+
             var storeToRelays = from store in db.Stores select store;
-            connections = convertStoresToIpConnections(storeToRelays);
+            //connections = 
+            convertStoresToIpConnections(storeToRelays);
 
             var relayToRelays = from rr in db.RelayToRelayConnections select rr;
-            connections.AddRange(convertRelayConnections(relayToRelays));
+            //connections.AddRange(
+            convertRelayConnections(relayToRelays);
 
             var relayToPC= from rpc in db.RelayToProcessCenterConnections select rpc;
-            connections.AddRange(convertRelayProcessingConnections(relayToPC));
+            //connections.AddRange(
+            convertRelayProcessingConnections(relayToPC);
+
+            
         }
 
         private List<IpConnection> convertStoresToIpConnections(IEnumerable<Store> stores)
@@ -36,9 +45,18 @@ namespace _744Project.ViewModels
             foreach(var store in stores)
             {
                 //add a new connection from store to relay
-                newConnections.Add(new IpConnection(store.storeIP, store.Relay.relayIP, store.storeWeight));
+                connections.Add(new IpConnection(store.storeIP, store.Relay.relayIP, store.storeWeight));
                 //add JUST THE STORE to the network entities
-                networkEntities.Add(store.storeIP, new NetworkEntity(store.storeIP, 0, store.storeID));
+                NetworkEntity temp = new NetworkEntity(store.storeIP, 0, store.storeID);
+                networkEntities.Add(store.storeIP, temp);
+
+                //only add it if it doesnt already exist
+                if (!networkEntities.ContainsKey(store.Relay.relayIP))
+                {
+                    NetworkEntity relay = new NetworkEntity(store.Relay.relayIP, 1, store.Relay.relayID);
+                    networkEntities.Add(store.Relay.relayIP, relay);
+                }
+               
             }
 
             return newConnections;
@@ -51,11 +69,15 @@ namespace _744Project.ViewModels
             //convert relay-relay to connections...
             foreach(var relayCon in rr)
             {
-                newConnections.Add(new IpConnection(relayCon.Relay.relayIP, relayCon.Relay2.relayIP, relayCon.relayWeight));
+                connections.Add(new IpConnection(relayCon.Relay.relayIP, relayCon.Relay2.relayIP, relayCon.relayWeight));
 
                 //do I just add the first one, or both?
-                networkEntities.Add(relayCon.Relay.relayIP, new NetworkEntity(relayCon.Relay.relayIP, 1, relayCon.Relay.relayID));
-                networkEntities.Add(relayCon.Relay2.relayIP, new NetworkEntity(relayCon.Relay2.relayIP, 1, relayCon.Relay2.relayID));
+                NetworkEntity temp1 = new NetworkEntity(relayCon.Relay.relayIP, 1, relayCon.Relay.relayID);
+                NetworkEntity temp2 = new NetworkEntity(relayCon.Relay2.relayIP, 1, relayCon.Relay2.relayID);
+                if (!networkEntities.ContainsKey(relayCon.Relay.relayIP)) 
+                    networkEntities.Add(relayCon.Relay.relayIP, temp1 );
+                if (!networkEntities.ContainsKey(relayCon.Relay2.relayIP))
+                    networkEntities.Add(relayCon.Relay2.relayIP, temp2 );
             }
 
             return newConnections;
@@ -68,11 +90,15 @@ namespace _744Project.ViewModels
             //convert relay-PC to connections...
             foreach(var con in rpc)
             {
-                newConnections.Add(new IpConnection(con.Relay.relayIP, con.ProcessCenter.processCenterIP, con.relayToProcessCenterConnectionWeight));
+                connections.Add(new IpConnection(con.Relay.relayIP, con.ProcessCenter.processCenterIP, con.relayToProcessCenterConnectionWeight));
 
                 //do I just add the first one, or both?
-                networkEntities.Add(con.Relay.relayIP, new NetworkEntity(con.Relay.relayIP, 1, con.Relay.relayID));
-                networkEntities.Add(con.ProcessCenter.processCenterIP, new NetworkEntity(con.ProcessCenter.processCenterIP, 2, con.ProcessCenter.processCenterID));
+                NetworkEntity temp1 = new NetworkEntity(con.Relay.relayIP, 1, con.Relay.relayID);
+                NetworkEntity temp2 = new NetworkEntity(con.ProcessCenter.processCenterIP, 2, con.ProcessCenter.processCenterID);
+                if (!networkEntities.ContainsKey(con.Relay.relayIP))
+                    networkEntities.Add(con.Relay.relayIP, temp1);
+                if (!networkEntities.ContainsKey(con.ProcessCenter.processCenterIP))
+                    networkEntities.Add(con.ProcessCenter.processCenterIP, temp2);
             }
 
             return newConnections;
@@ -90,9 +116,9 @@ namespace _744Project.ViewModels
 
         public IpConnection (string ip1, string ip2, int? weight)
         {
-            ip1 = this.ip1;
-            ip2 = this.ip2;
-            weight = this.weight;
+            this.ip1 = ip1;
+            this.ip2 = ip2;
+            this.weight = weight??0;
         }
     }
 
@@ -104,9 +130,9 @@ namespace _744Project.ViewModels
 
         public NetworkEntity(string ip, int type, string databaseId)
         {
-            ip = this.ip;
-            type = this.type;
-            databaseId = this.databaseId;
+            this.ip = ip;
+            this.type = type;
+            this.databaseId = databaseId;
         }
         //maybe a list<Transactions>..... numTransactions....
     }

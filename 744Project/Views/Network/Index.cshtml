@@ -16,11 +16,40 @@
 
 </div>
 
+<div>
+	@Html.Raw(Json.Encode(Model))
+</div>
+
 
 
 @section Scripts{
 
 <script>
+	var jsonData = @Html.Raw(Json.Encode(Model));
+
+	var NetworkElements = {
+		nodes: [],
+		edges: []
+	};
+
+	function convertToCytoscape() {
+		//alert("hi");
+		console.log("Hello..");
+		//console.log(jsonData.networkEntities);
+		for(var p in jsonData.networkEntities){
+			console.log(p);
+			NetworkElements.nodes.push({ data: { id: p } });
+			
+		}
+		console.log("===========================================================================================");
+		for(var q in jsonData.connections){
+			console.log(jsonData.connections[q]);
+			NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2 } });
+		}
+
+		return NetworkElements;
+	}
+
 	var cy = cytoscape({
 		container: document.getElementById('cy'),
 		style: [
@@ -35,7 +64,8 @@
 		layout: {
 			name: 'grid'
 		},
-		elements: [
+		elements: convertToCytoscape()
+		/*[
 			// nodes
 			{ data: { id: 'a' } },
 			{ data: { id: 'b' } },
@@ -79,8 +109,13 @@
 					target: 'e'
 				}
 			}
-		]
+		]*/
 	});	
+
+	function testData() {
+		alert("here..");
+		return testData;
+	}
 
 </script>
 }

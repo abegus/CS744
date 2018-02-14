@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using _744Project.Models;
 using _744Project.ViewModels;
+using System.Web.Script.Serialization;
 
 namespace _744Project.Controllers
 {
@@ -24,6 +25,9 @@ namespace _744Project.Controllers
             }
 
             NetworkViewModel vm = new NetworkViewModel();
+
+            //var serializer = new JavaScriptSerializer();
+            //var temp = serializer.Serialize(vm);
 
             return View(vm);
         }
