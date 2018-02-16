@@ -13,17 +13,20 @@ namespace _744Project.Models
         {
             CreditCards = new HashSet<CreditCard>();
             Transactions = new HashSet<Transaction>();
-        }
+        }        
         [Display(Name = "Account ID")]
         public int accountID { get; set; }
+        [Required]
         [Display(Name = "Account Number")]
         [StringLength(50)]
         public string accountNumber { get; set; }
+        [Required]
         [Display(Name = "Account Balance")]
         [StringLength(50)]
         public string accountBalance { get; set; }
 
         public int? customerID { get; set; }
+        [Required]
         [Display(Name = "Account Name")]
         public string accountName { get; set; }
 

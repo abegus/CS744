@@ -253,6 +253,10 @@
     <Compile Include="Migrations\201802132232494_relay to realy.Designer.cs">
       <DependentUpon>201802132232494_relay to realy.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802161506351_newRequiredFields.cs" />
+    <Compile Include="Migrations\201802161506351_newRequiredFields.Designer.cs">
+      <DependentUpon>201802161506351_newRequiredFields.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -541,6 +545,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802132232494_relay to realy.resx">
       <DependentUpon>201802132232494_relay to realy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802161506351_newRequiredFields.resx">
+      <DependentUpon>201802161506351_newRequiredFields.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.addmiddlename.resources" />
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.initialcreate.resources" />

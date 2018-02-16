@@ -16,17 +16,19 @@ namespace _744Project.Models
         [Display(Name = "Card ID")]
         [Key]
         public int cardID { get; set; }
+        [Required]
         [Display(Name = "Card Number")]
         [StringLength(50)]
         public string cardNumber { get; set; }
-
+        [Required]
         [Display(Name = "Card Expiration Date")]
         [DataType(DataType.Date)]
         public DateTime cardExpirationDate { get; set; }
-
+        [Required]
         [Display(Name = "Card Security Code")]
         [StringLength(50)]
         public string cardSecurityCode { get; set; }
+        [Required]
         [Display(Name = "Card Maximum Allowed")]
         [StringLength(50)]
         public string cardMaxAllowed { get; set; }
