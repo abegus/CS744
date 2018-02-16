@@ -1,0 +1,45 @@
+﻿@model IEnumerable<_744Project.Models.RelayToRelayConnection>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.relayID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.relayID2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.relayWeight)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.relayID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.relayID2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.relayWeight)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.relayConnectionID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.relayConnectionID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.relayConnectionID })
+        </td>
+    </tr>
+}
+
+</table>

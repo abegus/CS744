@@ -1,0 +1,42 @@
+﻿@model _744Project.Models.RelayToRelayConnection
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>RelayToRelayConnection</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.relayID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.relayID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.relayID2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.relayID2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.relayWeight)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.relayWeight)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.relayConnectionID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

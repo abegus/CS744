@@ -32,6 +32,13 @@ namespace _744Project.Controllers
             return View(vm);
         }
 
+        [HttpPost]
+        public ActionResult NodePositions(string data)
+        {
+            var temp = data;
+            return RedirectToAction("Index", "Home");
+        }
+
         // GET: Network/Details/5
         public ActionResult Details(string id)
         {

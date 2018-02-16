@@ -17,8 +17,9 @@
 </div>
 
 <div>
-	@Html.Raw(Json.Encode(Model))
+	Html.Raw(Json.Encode(Model))
 </div>
+
 
 
 
@@ -35,10 +36,22 @@
 	function convertToCytoscape() {
 		//alert("hi");
 		console.log("Hello..");
-		//console.log(jsonData.networkEntities);
+		console.log(jsonData.networkEntities);
 		for(var p in jsonData.networkEntities){
 			console.log(p);
-			NetworkElements.nodes.push({ data: { id: p } });
+			console.log(jsonData.networkEntities[p].type);
+			//if it is a store
+			if (jsonData.networkEntities[p].type == 0) {
+				NetworkElements.nodes.push({ data: { id: p , color: 'yellow', shape: 'square'} });
+			}
+			//if it is a relay
+			else if (jsonData.networkEntities[p].type == 1) {
+				NetworkElements.nodes.push({ data: { id: p, color: 'blue', shape: 'circle' } });
+			}
+			else {
+				NetworkElements.nodes.push({ data: { id: p, color: 'red', shape: 'triangle' } });
+			}
+			//NetworkElements.nodes.push({ data: { id: p } });
 			
 		}
 		console.log("===========================================================================================");
@@ -56,65 +69,52 @@
 			{
 				selector: 'node',
 				style: {
-					shape: 'hexagon',
-					'background-color': 'red',
-					label: 'data(id)'
+					//shape: 'data(shape)',
+					shape: 'circle',
+					'border-width': '5',
+					//'background-color': 'red',
+					'background-color': 'data(color)',
+					content: 'data(id)',
+					'curve-style': 'bezier'
 				}
 			}],
 		layout: {
-			name: 'grid'
+			name: 'breadthfirst'
 		},
 		elements: convertToCytoscape()
-		/*[
-			// nodes
-			{ data: { id: 'a' } },
-			{ data: { id: 'b' } },
-			{ data: { id: 'c' } },
-			{ data: { id: 'd' } },
-			{ data: { id: 'e' } },
-			{ data: { id: 'f' } },
-			// edges
-			{
-				data: {
-					id: 'ab',
-					source: 'a',
-					target: 'b'
-				}
-			},
-			{
-				data: {
-					id: 'cd',
-					source: 'c',
-					target: 'd'
-				}
-			},
-			{
-				data: {
-					id: 'ef',
-					source: 'e',
-					target: 'f'
-				}
-			},
-			{
-				data: {
-					id: 'ac',
-					source: 'a',
-					target: 'd'
-				}
-			},
-			{
-				data: {
-					id: 'be',
-					source: 'b',
-					target: 'e'
-				}
-			}
-		]*/
 	});	
 
 	function testData() {
 		alert("here..");
 		return testData;
+	}
+	
+
+	function exportPositions() {//cy
+		var list = [];
+		var nodes = cy.nodes();
+		for (var i = 0; i < nodes.length; i++) {
+			var obj = {};
+			obj['id'] = nodes[i].id();
+			obj['pos'] = nodes[i].position();
+			list.push(obj);
+		}
+		
+
+		list = JSON.stringify({
+			'nodePosition': list
+		});
+
+		console.log(list);
+
+		var url = 'Network/NodePositions';
+		$.ajax({
+			type: 'POST',
+			url: url,
+			data: list,
+			dataType: 'json',
+			contentType: 'application/json;charset=utf-8'
+		});
 	}
 
 </script>
