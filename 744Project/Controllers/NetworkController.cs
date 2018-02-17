@@ -21,7 +21,7 @@ namespace _744Project.Controllers
         {
             if (!User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index", "Home");
+                //return RedirectToAction("Index", "Home");
             }
 
             NetworkViewModel vm = new NetworkViewModel();
