@@ -32,10 +32,37 @@ namespace _744Project.Controllers
             return View(vm);
         }
 
+        /* This method takes a list of node positions from the graph and stores their locations in the database.
+         * With this information stored, the locations can then be loaded when the page is loaded, */
         [HttpPost]
-        public ActionResult NodePositions(string data)
+        public ActionResult NodePositions(IEnumerable<NodeLocation> nodePosition)
         {
-            var temp = data;
+            var temp = nodePosition;
+
+            foreach( var node in nodePosition)
+            {
+                NodePosition nodeConfiguration = db.NodePositions.Find(node.id);
+                //if it doesn't exist, create a new instance
+                if(nodeConfiguration == null)
+                {
+                    nodeConfiguration = new NodePosition()
+                    {
+                        Ip = node.id,
+                        x = node.pos.x,
+                        y = node.pos.y
+                    };
+                    db.NodePositions.Add(nodeConfiguration);
+                }
+                //otherwise update current positions
+                else
+                {
+                    nodeConfiguration.x = node.pos.x;
+                    nodeConfiguration.y = node.pos.y;
+                }
+            }
+
+            db.SaveChanges();
+
             return RedirectToAction("Index", "Home");
         }
 

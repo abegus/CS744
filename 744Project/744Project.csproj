@@ -258,6 +258,10 @@
     <Compile Include="Migrations\201802161506351_newRequiredFields.Designer.cs">
       <DependentUpon>201802161506351_newRequiredFields.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802171854380_node position.cs" />
+    <Compile Include="Migrations\201802171854380_node position.Designer.cs">
+      <DependentUpon>201802171854380_node position.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -271,6 +275,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MasterModel.cs" />
+    <Compile Include="Models\NodePosition.cs" />
     <Compile Include="Models\ProcessCenter.cs" />
     <Compile Include="Models\ProcessCenterTransaction.cs" />
     <Compile Include="Models\Relay.cs" />
@@ -287,6 +292,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\NetworkViewModel.cs" />
+    <Compile Include="ViewModels\NodeConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\744Project.dll" />
@@ -554,6 +560,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802161506351_newRequiredFields.resx">
       <DependentUpon>201802161506351_newRequiredFields.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802171854380_node position.resx">
+      <DependentUpon>201802171854380_node position.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.addmiddlename.resources" />
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.initialcreate.resources" />

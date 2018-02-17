@@ -16,9 +16,7 @@
 
 </div>
 
-<div>
-	Html.Raw(Json.Encode(Model))
-</div>
+
 
 
 
@@ -37,26 +35,28 @@
 		//alert("hi");
 		console.log("Hello..");
 		console.log(jsonData.networkEntities);
-		for(var p in jsonData.networkEntities){
+		for (var p in jsonData.networkEntities) {
+			var xLocation = 0;
+			var yLocation = 0;
 			console.log(p);
 			console.log(jsonData.networkEntities[p].type);
 			//if it is a store
 			if (jsonData.networkEntities[p].type == 0) {
-				NetworkElements.nodes.push({ data: { id: p , color: 'yellow', shape: 'square'} });
+				NetworkElements.nodes.push({ data: { id: p, color: 'yellow', shape: 'square', category: 0 }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
 			}
 			//if it is a relay
 			else if (jsonData.networkEntities[p].type == 1) {
-				NetworkElements.nodes.push({ data: { id: p, color: 'blue', shape: 'circle' } });
+				NetworkElements.nodes.push({ data: { id: p, color: 'blue', shape: 'circle', category: 1 }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
 			}
 			else {
-				NetworkElements.nodes.push({ data: { id: p, color: 'red', shape: 'triangle' } });
+				NetworkElements.nodes.push({ data: { id: p, color: 'red', shape: 'triangle', category: 2 }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
 			}
 			//NetworkElements.nodes.push({ data: { id: p } });
 			
 		}
 		console.log("===========================================================================================");
 		for(var q in jsonData.connections){
-			console.log(jsonData.connections[q]);
+			//console.log(jsonData.connections[q]);
 			NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2 } });
 		}
 
@@ -79,7 +79,7 @@
 				}
 			}],
 		layout: {
-			name: 'breadthfirst'
+			name: 'preset'
 		},
 		elements: convertToCytoscape()
 	});	
@@ -97,6 +97,7 @@
 			var obj = {};
 			obj['id'] = nodes[i].id();
 			obj['pos'] = nodes[i].position();
+			obj['type'] = nodes[i].category;
 			list.push(obj);
 		}
 		
@@ -104,6 +105,7 @@
 		list = JSON.stringify({
 			'nodePosition': list
 		});
+		
 
 		console.log(list);
 
@@ -113,7 +115,11 @@
 			url: url,
 			data: list,
 			dataType: 'json',
-			contentType: 'application/json;charset=utf-8'
+			contentType: 'application/json;charset=utf-8',
+			success: function (data) { alert(data); },
+			failure: function (errMsg) {
+				alert(errMsg);
+			}
 		});
 	}
 
