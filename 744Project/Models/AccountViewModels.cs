@@ -58,13 +58,13 @@ namespace _744Project.Models
         [Display(Name = "Password")]
         public string Password { get; set; }
 
-        [DataType(DataType.Text)]
-        [Display(Name = "SecurityQuestion")]
-        public string SecurityQuestion { get; set; }
+       // [DataType(DataType.Text)]
+        //[Display(Name = "SecurityQuestion")]
+        //public string SecurityQuestion { get; set; }
 
-        [DataType(DataType.Text)]
-        [Display(Name = "AnswerSecurity")]
-        public string AnswerSecurity { get; set; }
+        //[DataType(DataType.Text)]
+        //[Display(Name = "AnswerSecurity")]
+        //public string AnswerSecurity { get; set; }
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
@@ -87,14 +87,6 @@ namespace _744Project.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-
-        [DataType(DataType.Text)]
-        [Display(Name = "SecurityQuestion")]
-        public string SecurityQuestion { get; set; }
-
-        [DataType(DataType.Text)]
-        [Display(Name = "AnswerSecurity")]
-        public string AnswerSecurity { get; set; }
     }
 
     public class ResetPasswordViewModel
