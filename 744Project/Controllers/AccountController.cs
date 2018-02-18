@@ -152,7 +152,7 @@ namespace _744Project.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Question = model.SecurityQuestion, Answer = model.AnswerSecurity};//security question and answer
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email};//security question and answer
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
