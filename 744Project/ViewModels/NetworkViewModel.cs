@@ -81,12 +81,17 @@ namespace _744Project.ViewModels
                 var location1 = getEntityLocation(relayCon.Relay.relayIP);
                 var location2 = getEntityLocation(relayCon.Relay2.relayIP);
 
-                NetworkEntity temp1 = new NetworkEntity(relayCon.Relay.relayIP, 1, relayCon.Relay.relayID, location1.Item1, location1.Item2);
-                NetworkEntity temp2 = new NetworkEntity(relayCon.Relay2.relayIP, 1, relayCon.Relay2.relayID, location2.Item1, location2.Item2);
-                if (!networkEntities.ContainsKey(relayCon.Relay.relayIP)) 
-                    networkEntities.Add(relayCon.Relay.relayIP, temp1 );
+                if (!networkEntities.ContainsKey(relayCon.Relay.relayIP))
+                {
+                    NetworkEntity temp1 = new NetworkEntity(relayCon.Relay.relayIP, 1, relayCon.Relay.relayID, location1.Item1, location1.Item2);
+                    networkEntities.Add(relayCon.Relay.relayIP, temp1);
+                }
+
                 if (!networkEntities.ContainsKey(relayCon.Relay2.relayIP))
-                    networkEntities.Add(relayCon.Relay2.relayIP, temp2 );
+                {
+                    NetworkEntity temp2 = new NetworkEntity(relayCon.Relay2.relayIP, 1, relayCon.Relay2.relayID, location2.Item1, location2.Item2);
+                    networkEntities.Add(relayCon.Relay2.relayIP, temp2);
+                }
             }
 
             return newConnections;
@@ -105,12 +110,16 @@ namespace _744Project.ViewModels
                 var location1 = getEntityLocation(con.Relay.relayIP);
                 var location2 = getEntityLocation(con.ProcessCenter.processCenterIP);
 
-                NetworkEntity temp1 = new NetworkEntity(con.Relay.relayIP, 1, con.Relay.relayID,location1.Item1, location1.Item2);
-                NetworkEntity temp2 = new NetworkEntity(con.ProcessCenter.processCenterIP, 2, con.ProcessCenter.processCenterID, location2.Item1, location2.Item2);
                 if (!networkEntities.ContainsKey(con.Relay.relayIP))
+                {
+                    NetworkEntity temp1 = new NetworkEntity(con.Relay.relayIP, 1, con.Relay.relayID, location1.Item1, location1.Item2);
                     networkEntities.Add(con.Relay.relayIP, temp1);
+                }
                 if (!networkEntities.ContainsKey(con.ProcessCenter.processCenterIP))
+                {
+                    NetworkEntity temp2 = new NetworkEntity(con.ProcessCenter.processCenterIP, 2, con.ProcessCenter.processCenterID, location2.Item1, location2.Item2);
                     networkEntities.Add(con.ProcessCenter.processCenterIP, temp2);
+                }
             }
 
             return newConnections;
