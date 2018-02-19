@@ -39,6 +39,10 @@ namespace _744Project.Models
 
         public int AccessFailedCount { get; set; }
 
+        public string SecurityQuestion { get; set; }//security
+
+        public string AnswerToSecurityQuestion { get; set; }//security
+
         [Required]
         [StringLength(256)]
         public string UserName { get; set; }

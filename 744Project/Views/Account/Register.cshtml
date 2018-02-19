@@ -32,13 +32,13 @@
     <div class="form-group">
         @Html.LabelFor(m => m.SecurityQuestion, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.PasswordFor(m => m.SecurityQuestion, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.SecurityQuestion, new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.AnswerSecurity, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.PasswordFor(m => m.AnswerSecurity new { @class = "form-control" })
+            @Html.PasswordFor(m => m.AnswerSecurity, new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group">
