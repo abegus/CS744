@@ -262,6 +262,22 @@
     <Compile Include="Migrations\201802171854380_node position.Designer.cs">
       <DependentUpon>201802171854380_node position.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802192103413_qwer.cs" />
+    <Compile Include="Migrations\201802192103413_qwer.Designer.cs">
+      <DependentUpon>201802192103413_qwer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802192104553_asp.cs" />
+    <Compile Include="Migrations\201802192104553_asp.Designer.cs">
+      <DependentUpon>201802192104553_asp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802192106553_qwert.cs" />
+    <Compile Include="Migrations\201802192106553_qwert.Designer.cs">
+      <DependentUpon>201802192106553_qwert.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802192114303_qwe.cs" />
+    <Compile Include="Migrations\201802192114303_qwe.Designer.cs">
+      <DependentUpon>201802192114303_qwe.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -278,10 +294,12 @@
     <Compile Include="Models\NodePosition.cs" />
     <Compile Include="Models\ProcessCenter.cs" />
     <Compile Include="Models\ProcessCenterTransaction.cs" />
+    <Compile Include="Models\Questions.cs" />
     <Compile Include="Models\Relay.cs" />
     <Compile Include="Models\RelayToProcessCenterConnection.cs" />
     <Compile Include="Models\RelayToRelayConnection.cs" />
     <Compile Include="Models\RelayTransaction.cs" />
+    <Compile Include="Models\SecurityQuestions.cs" />
     <Compile Include="Models\Store.cs" />
     <Compile Include="Models\StoreTransaction.cs" />
     <Compile Include="Models\sysdiagram.cs" />
@@ -564,6 +582,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802171854380_node position.resx">
       <DependentUpon>201802171854380_node position.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802192103413_qwer.resx">
+      <DependentUpon>201802192103413_qwer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802192104553_asp.resx">
+      <DependentUpon>201802192104553_asp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802192106553_qwert.resx">
+      <DependentUpon>201802192106553_qwert.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802192114303_qwe.resx">
+      <DependentUpon>201802192114303_qwe.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.addmiddlename.resources" />
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.initialcreate.resources" />

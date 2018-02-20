@@ -29,6 +29,8 @@ namespace _744Project.Models
         public virtual DbSet<StoreTransaction> StoreTransactions { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Transaction> Transactions { get; set; }
+        public virtual DbSet<Questions> Questions { get; set; }
+        public virtual DbSet<SecurityQuestions> SecurityQuestions { set; get; }
 
         //not a necessary part of the system, just used for storing locations of nodes
         public virtual DbSet<NodePosition> NodePositions { get; set; }

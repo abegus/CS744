@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using _744Project.Models;
+using System.Collections.Generic;
 
 namespace _744Project.Controllers
 {
@@ -22,7 +23,7 @@ namespace _744Project.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -34,9 +35,9 @@ namespace _744Project.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -75,7 +76,10 @@ namespace _744Project.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            UserManager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(10);
+            UserManager.MaxFailedAccessAttemptsBeforeLockout = 3;
+            UserManager.UserLockoutEnabledByDefault = true;
+            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: true);
             //if语句
             switch (result)
             {
@@ -121,7 +125,7 @@ namespace _744Project.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -135,12 +139,45 @@ namespace _744Project.Controllers
             }
         }
 
+        private MasterModel db = new MasterModel();
+
         //
         // GET: /Account/Register
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return View();
+            //RegisterViewModel
+            //            //create a register view model here
+            //            //rvm.Questions = ...
+            //            rvm = new RegisterViewModel();
+            //var questions = from qustion in db.Questions select qustion; //this gets all the questions in the db
+            //List<SelectListItem> quesEmu = new List<SelectListItem>();
+            //foreach (var it in db.Questions)
+            //{
+            //    quesEmu.Add(new SelectListItem { Text = it.QuestionText, Value = it.QuestionID.ToString(), Selected = (it.QuestionID == user.Company_ID) });
+            //}
+
+            //rvm.questions = quesEmu;
+            //return View();
+            RegisterViewModel rvm = new RegisterViewModel();
+            GenerateSecurityQuestion();
+            return View(rvm);
+        }
+
+        private void GenerateSecurityQuestion()
+        {
+            ViewData["SecurityQuestion"] = GetSecurityList();
+        }
+
+        private List<SelectListItem> GetSecurityList()
+        {
+            List<SelectListItem> securityList = new List<SelectListItem>();
+            var questions = from qustion in db.Questions select qustion;
+            foreach(var it in questions)
+            {
+                securityList.Add(new SelectListItem { Text = it.QuestionText, Value = it.QuestionText });
+            };
+            return securityList;
         }
 
         //
@@ -156,8 +193,8 @@ namespace _744Project.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);

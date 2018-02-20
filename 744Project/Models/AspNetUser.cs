@@ -14,6 +14,7 @@ namespace _744Project.Models
             AspNetUserClaims = new HashSet<AspNetUserClaim>();
             AspNetUserLogins = new HashSet<AspNetUserLogin>();
             AspNetRoles = new HashSet<AspNetRole>();
+            SecurityQuestions = new HashSet<SecurityQuestions>();
         }
 
         public string Id { get; set; }
@@ -51,5 +52,8 @@ namespace _744Project.Models
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetRole> AspNetRoles { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SecurityQuestions> SecurityQuestions { get; set; }
     }
 }

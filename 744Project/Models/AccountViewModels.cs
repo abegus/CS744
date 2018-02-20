@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace _744Project.Models
 {
@@ -58,13 +59,15 @@ namespace _744Project.Models
         [Display(Name = "Password")]
         public string Password { get; set; }
 
-       // [DataType(DataType.Text)]
-        //[Display(Name = "SecurityQuestion")]
-        //public string SecurityQuestion { get; set; }
-
+        //[Required]
         //[DataType(DataType.Text)]
-        //[Display(Name = "AnswerSecurity")]
-        //public string AnswerSecurity { get; set; }
+        //[Display(Name = "Security Question")]
+        //public string SecuriyQuestion { get; set; }
+
+        //[Required]
+        //[DataType(DataType.Password)]
+        //[Display(Name = "Answer")]
+        //public string AnswerToSecurityQuestion { get; set; }
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
@@ -87,6 +90,19 @@ namespace _744Project.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+       // [Required]
+        //[DataType(DataType.Text)]
+        //[Display(Name = "Security Question")]
+        //public string SecuriyQuestion { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "Answer")]
+        public string AnswerToSecurityQuestion { get; set; }
+
+        //[Required]  this is the list of questions from the database (you made them)
+        public IQueryable<Questions> questions { get; set; }
     }
 
     public class ResetPasswordViewModel
