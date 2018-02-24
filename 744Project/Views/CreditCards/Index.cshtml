@@ -4,60 +4,67 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div class="container">
+    <h2>Index</h2>
+    <div class="panel panel-default">
+        <div class="panel-body">
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Account.accountNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Customer.customerFirstname)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.cardNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.cardExpirationDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.cardSecurityCode)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.cardMaxAllowed)
-        </th>
-        <th></th>
-    </tr>
+            <p>
+                @Html.ActionLink("Create New", "Create")
+            </p>
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Account.accountNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Customer.customerFirstname)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.cardNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.cardExpirationDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.cardSecurityCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.cardMaxAllowed)
+                    </th>
+                    <th></th>
+                </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Account.accountNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Customer.customerFirstname)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.cardNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.cardExpirationDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.cardSecurityCode)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.cardMaxAllowed)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.cardID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.cardID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.cardID })
-        </td>
-    </tr>
-}
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Account.accountNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Customer.customerFirstname)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.cardNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.cardExpirationDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.cardSecurityCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.cardMaxAllowed)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.cardID }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.cardID }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.cardID })
+                        </td>
+                    </tr>
+                }
 
-</table>
+            </table>
+            </div>
+</div>
+</div>

@@ -4,69 +4,77 @@
     ViewBag.Title = "Delete";
 }
 
-<h2>Delete</h2>
+<div class="container">
+    <h2>Delete</h2>
+    <div class="panel panel-default">
+        <div class="panel-body">
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>CreditCard</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Account.accountNumber)
-        </dt>
+            <h3>Are you sure you want to delete this?</h3>
+            <div>
+                <h4>Credit Card</h4>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Account.accountNumber)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Account.accountNumber)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.Account.accountNumber)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Customer.customerFirstname)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Customer.customerFirstname)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Customer.customerFirstname)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.Customer.customerFirstname)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.cardNumber)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.cardNumber)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.cardNumber)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.cardNumber)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.cardExpirationDate)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.cardExpirationDate)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.cardExpirationDate)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.cardExpirationDate)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.cardSecurityCode)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.cardSecurityCode)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.cardSecurityCode)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.cardSecurityCode)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.cardMaxAllowed)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.cardMaxAllowed)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.cardMaxAllowed)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.cardMaxAllowed)
+                    </dd>
 
-    </dl>
+                </dl>
 
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
 
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
-        </div>
-    }
+                    <div class="form-actions no-color">
+                        <input type="submit" value="Delete" class="btn btn-default" /> |
+                        @Html.ActionLink("Back to List", "Index")
+                    </div>
+                }
+            </div>
+
+</div>
+</div>
 </div>

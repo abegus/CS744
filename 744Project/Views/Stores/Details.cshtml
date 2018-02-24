@@ -4,39 +4,46 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<div class="container">
+    <h2>Details</h2>
+    <div class="panel panel-default">
+        <div class="panel-body">
 
-<div>
-    <h4>Store</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Relay.relayName)
-        </dt>
+            <div>
+                <h4>Store</h4>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Relay.relayName)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Relay.relayName)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.Relay.relayName)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.storeName)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.storeName)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.storeName)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.storeName)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.storeWeight)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.storeWeight)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.storeWeight)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.storeWeight)
+                    </dd>
 
-    </dl>
+                </dl>
+            </div>
+            <p>
+                @Html.ActionLink("Edit", "Edit", new { id = Model.storeID }) |
+                @Html.ActionLink("Back to List", "Index")
+            </p>
+
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.storeID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+</div>
+</div>

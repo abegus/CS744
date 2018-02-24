@@ -4,87 +4,94 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<div class="container">
+    <h2>Details</h2>
+    <div class="panel panel-default">
+        <div class="panel-body">
 
-<div>
-    <h4>Customer</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.customerFirstname)
-        </dt>
+            <div>
+                <h4>Customer</h4>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.customerFirstname)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.customerFirstname)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.customerFirstname)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.middleName)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.middleName)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.middleName)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.middleName)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.customerLastname)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.customerLastname)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.customerLastname)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.customerLastname)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.customerPhone)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.customerPhone)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.customerPhone)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.customerPhone)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.customerSSN)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.customerSSN)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.customerSSN)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.customerSSN)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.customerAddress)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.customerAddress)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.customerAddress)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.customerAddress)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.customerCity)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.customerCity)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.customerCity)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.customerCity)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.customerState)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.customerState)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.customerState)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.customerState)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.customerZip)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.customerZip)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.customerZip)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.customerZip)
+                    </dd>
 
-    </dl>
+                </dl>
+            </div>
+            <p>
+                @Html.ActionLink("Edit", "Edit", new { id = Model.customerID }) |
+                @Html.ActionLink("Back to List", "Index")
+            </p>
+
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.customerID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+</div>
+</div>

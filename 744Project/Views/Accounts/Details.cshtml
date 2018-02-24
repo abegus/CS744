@@ -3,110 +3,113 @@
 @{
     ViewBag.Title = "Details";
 }
+<div class="container">
+    <h2>Details</h2>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div>
+                <h4>Account</h4>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Customer.customerFirstname)
 
-<h2>Details</h2>
+                    </dt>
 
-<div>
-    <h4>Account</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>            
-            @Html.DisplayNameFor(model => model.Customer.customerFirstname)
+                    <dd>
+                        @Html.DisplayFor(model => model.Customer.customerFirstname)
+                    </dd>
 
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.accountNumber)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Customer.customerFirstname)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.accountNumber)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.accountNumber)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.accountBalance)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.accountNumber)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.accountBalance)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.accountBalance)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.accountName)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.accountBalance)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.accountName)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.accountName)
-        </dt>
+                </dl>
+            </div>
+            <p>
+                @Html.ActionLink("Edit", "Edit", new { id = Model.accountID }) |
+                @Html.ActionLink("Back to List", "Index")
+            </p>
 
-        <dd>
-            @Html.DisplayFor(model => model.accountName)
-        </dd>
 
-    </dl>
+
+
+
+            @*The below is to show cards for the selected account:*@
+            <div>
+                <table class="table">
+                    @* I was going to write a count loop and hide the below table headers if there is no credit card assigned to an account *@
+                    @* but Dr. Kasi spicifically says that each account should have at least one credit card, and an account will not be created without a credit card*@
+                    <tr>
+                        <th>
+                            <h5>Credit Card ID</h5>
+                        </th>
+                        <th>
+                            <h5>Credit Card Number</h5>
+                        </th>
+                        <th>
+                            <h5>Credit Card Expiration Date</h5>
+                        </th>
+                        <th>
+                            <h5>Credit Card Security Code</h5>
+                        </th>
+                        <th>
+                            <h5>Credit Card Max Allowed</h5>
+                        </th>
+                        <th></th>
+                    </tr>
+
+                    @foreach (var item in Model.CreditCards)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.cardID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.cardNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.cardExpirationDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.cardSecurityCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.cardMaxAllowed)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "../CreditCards/Edit", new { id = item.cardID }) |
+                                @Html.ActionLink("Details", "../CreditCards/Details", new { id = item.cardID }) |
+                                @Html.ActionLink("Delete", "../CreditCards/Delete", new { id = item.cardID })
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+            </div>
+
+
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.accountID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
-
-
-
-
-
-@*The below is to show cards for the selected account:*@
-<div>    
-    <table class="table">
-        @* I was going to write a count loop and hide the below table headers if there is no credit card assigned to an account *@
-        @* but Dr. Kasi spicifically says that each account should have at least one credit card, and an account will not be created without a credit card*@
-    <tr>
-        <th>
-            <h5>Credit Card ID</h5>
-        </th>
-        <th>
-            <h5>Credit Card Number</h5>
-        </th>
-        <th>
-            <h5>Credit Card Expiration Date</h5>
-        </th>
-        <th>
-            <h5>Credit Card Security Code</h5>
-        </th>
-        <th>
-            <h5>Credit Card Max Allowed</h5>
-        </th>
-        <th></th>
-    </tr>
-
-        @foreach (var item in Model.CreditCards)
-        {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.cardID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.cardNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.cardExpirationDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.cardSecurityCode)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.cardMaxAllowed)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "../CreditCards/Edit", new { id = item.cardID }) |
-            @Html.ActionLink("Details", "../CreditCards/Details", new { id = item.cardID }) |
-            @Html.ActionLink("Delete", "../CreditCards/Delete", new { id = item.cardID })
-        </td>
-    </tr>
-        }
-
-    </table>
-</div>
-
-
-
+        </div>
+    </div>
 
