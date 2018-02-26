@@ -222,7 +222,6 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\CreditCardsController.cs" />
-    <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\NetworkController.cs" />
@@ -279,6 +278,30 @@
     <Compile Include="Migrations\201802192114303_qwe.Designer.cs">
       <DependentUpon>201802192114303_qwe.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802261812276_CustomersDropped.cs" />
+    <Compile Include="Migrations\201802261812276_CustomersDropped.Designer.cs">
+      <DependentUpon>201802261812276_CustomersDropped.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802261826170_CustomersDropped1.cs" />
+    <Compile Include="Migrations\201802261826170_CustomersDropped1.Designer.cs">
+      <DependentUpon>201802261826170_CustomersDropped1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802261838283_CustomersDropped2.cs" />
+    <Compile Include="Migrations\201802261838283_CustomersDropped2.Designer.cs">
+      <DependentUpon>201802261838283_CustomersDropped2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802261840085_CustomersDropped3.cs" />
+    <Compile Include="Migrations\201802261840085_CustomersDropped3.Designer.cs">
+      <DependentUpon>201802261840085_CustomersDropped3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802261843577_CustomersDropped4.cs" />
+    <Compile Include="Migrations\201802261843577_CustomersDropped4.Designer.cs">
+      <DependentUpon>201802261843577_CustomersDropped4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802261852005_CustomersDropped5.cs" />
+    <Compile Include="Migrations\201802261852005_CustomersDropped5.Designer.cs">
+      <DependentUpon>201802261852005_CustomersDropped5.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -287,7 +310,6 @@
     <Compile Include="Models\AspNetUserClaim.cs" />
     <Compile Include="Models\AspNetUserLogin.cs" />
     <Compile Include="Models\CreditCard.cs" />
-    <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\C__MigrationHistory.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -521,16 +543,10 @@
     <Content Include="Views\Accounts\Details.cshtml" />
     <Content Include="Views\Accounts\Edit.cshtml" />
     <Content Include="Views\Accounts\Index.cshtml" />
-    <Content Include="Views\CreditCards\Create.cshtml" />
     <Content Include="Views\CreditCards\Delete.cshtml" />
     <Content Include="Views\CreditCards\Details.cshtml" />
     <Content Include="Views\CreditCards\Edit.cshtml" />
     <Content Include="Views\CreditCards\Index.cshtml" />
-    <Content Include="Views\Customers\Create.cshtml" />
-    <Content Include="Views\Customers\Delete.cshtml" />
-    <Content Include="Views\Customers\Details.cshtml" />
-    <Content Include="Views\Customers\Edit.cshtml" />
-    <Content Include="Views\Customers\Index.cshtml" />
     <Content Include="Views\Network\Create.cshtml" />
     <Content Include="Views\Network\Delete.cshtml" />
     <Content Include="Views\Network\Details.cshtml" />
@@ -541,6 +557,7 @@
     <Content Include="Views\RelayToRelayConnections\Details.cshtml" />
     <Content Include="Views\RelayToRelayConnections\Edit.cshtml" />
     <Content Include="Views\RelayToRelayConnections\Index.cshtml" />
+    <Content Include="Views\CreditCards\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -595,6 +612,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802192114303_qwe.resx">
       <DependentUpon>201802192114303_qwe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802261812276_CustomersDropped.resx">
+      <DependentUpon>201802261812276_CustomersDropped.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802261826170_CustomersDropped1.resx">
+      <DependentUpon>201802261826170_CustomersDropped1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802261838283_CustomersDropped2.resx">
+      <DependentUpon>201802261838283_CustomersDropped2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802261840085_CustomersDropped3.resx">
+      <DependentUpon>201802261840085_CustomersDropped3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802261843577_CustomersDropped4.resx">
+      <DependentUpon>201802261843577_CustomersDropped4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802261852005_CustomersDropped5.resx">
+      <DependentUpon>201802261852005_CustomersDropped5.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.addmiddlename.resources" />
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.initialcreate.resources" />

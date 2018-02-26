@@ -18,7 +18,7 @@ namespace _744Project.Models
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<CreditCard> CreditCards { get; set; }
-        public virtual DbSet<Customer> Customers { get; set; }
+        //public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<ProcessCenter> ProcessCenters { get; set; }
         public virtual DbSet<ProcessCenterTransaction> ProcessCenterTransactions { get; set; }
         public virtual DbSet<Relay> Relays { get; set; }

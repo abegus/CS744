@@ -17,21 +17,14 @@ namespace _744Project.Controllers
         // GET: Accounts
         public ActionResult Index()
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            var accounts = db.Accounts.Include(a => a.Customer);
+            //var accounts = db.Accounts.Include(a => a.Customer);
+            var accounts = db.Accounts;
             return View(accounts.ToList());
         }
 
         // GET: Accounts/Details/5
         public ActionResult Details(int? id)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Home");
-            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -47,12 +40,7 @@ namespace _744Project.Controllers
         // GET: Accounts/Create
         public ActionResult Create()
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            ViewBag.customerID = new SelectList(db.Customers, "customerID", "customerFirstname");
+            //ViewBag.customerID = new SelectList(db.Customers, "customerID", "customerFirstname");
             return View();
         }
 
@@ -63,11 +51,6 @@ namespace _744Project.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "accountID,accountNumber,accountBalance,customerID,accountName")] Account account)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
             if (ModelState.IsValid)
             {
                 db.Accounts.Add(account);
@@ -75,18 +58,13 @@ namespace _744Project.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.customerID = new SelectList(db.Customers, "customerID", "customerFirstname", account.customerID);
+            //ViewBag.customerID = new SelectList(db.Customers, "customerID", "customerFirstname", account.customerID);
             return View(account);
         }
 
         // GET: Accounts/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -96,7 +74,7 @@ namespace _744Project.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.customerID = new SelectList(db.Customers, "customerID", "customerFirstname", account.customerID);
+            //ViewBag.customerID = new SelectList(db.Customers, "customerID", "customerFirstname", account.customerID);
             return View(account);
         }
 
@@ -107,29 +85,19 @@ namespace _744Project.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "accountID,accountNumber,accountBalance,customerID,accountName")] Account account)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
             if (ModelState.IsValid)
             {
                 db.Entry(account).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.customerID = new SelectList(db.Customers, "customerID", "customerFirstname", account.customerID);
+            //ViewBag.customerID = new SelectList(db.Customers, "customerID", "customerFirstname", account.customerID);
             return View(account);
         }
 
         // GET: Accounts/Delete/5
         public ActionResult Delete(int? id)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -147,11 +115,6 @@ namespace _744Project.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
             Account account = db.Accounts.Find(id);
             db.Accounts.Remove(account);
             db.SaveChanges();

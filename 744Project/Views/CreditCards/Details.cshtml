@@ -22,12 +22,27 @@
                     </dd>
 
                     <dt>
-                        @Html.DisplayNameFor(model => model.Customer.customerFirstname)
+                        @Html.DisplayNameFor(model => model.firstName)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.Customer.customerFirstname)
+                        @Html.DisplayFor(model => model.firstName)
                     </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.lastName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.lastName)
+                    </dd>
+
+                    @*<dt>
+            @Html.DisplayNameFor(model => model.Customer.customerFirstname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Customer.customerFirstname)
+        </dd>*@
 
                     <dt>
                         @Html.DisplayNameFor(model => model.cardNumber)

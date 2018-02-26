@@ -25,12 +25,12 @@ namespace _744Project.Models
         [StringLength(50)]
         public string accountBalance { get; set; }
 
-        public int? customerID { get; set; }
+        //public int? customerID { get; set; }
         [Required]
         [Display(Name = "Account Name")]
         public string accountName { get; set; }
 
-        public virtual Customer Customer { get; set; }
+        //public virtual Customer Customer { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CreditCard> CreditCards { get; set; }

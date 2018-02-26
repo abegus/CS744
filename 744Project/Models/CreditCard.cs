@@ -16,6 +16,7 @@ namespace _744Project.Models
         [Display(Name = "Card ID")]
         [Key]
         public int cardID { get; set; }
+        
         [Required]
         [Display(Name = "Card Number")]
         [StringLength(50)]
@@ -34,12 +35,22 @@ namespace _744Project.Models
         public string cardMaxAllowed { get; set; }
 
         public int? accountID { get; set; }
+        //
+        [Required]
+        [Display(Name = "First Name")]
+        [StringLength(50)]
+        public string firstName { get; set; }
+        [Required]
+        [Display(Name = "Last Name")]
+        [StringLength(50)]
+        public string lastName { get; set; }
+        //
 
-        public int? customerID { get; set; }
+        //public int? customerID { get; set; }
 
         public virtual Account Account { get; set; }
 
-        public virtual Customer Customer { get; set; }
+        //public virtual Customer Customer { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Transaction> Transactions { get; set; }
