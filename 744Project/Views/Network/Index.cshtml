@@ -73,6 +73,8 @@
 <script>
 	var jsonData = @Html.Raw(Json.Encode(Model));
 
+	var processingCenter = 0;
+
 	var NetworkElements = {
 		nodes: [],
 		edges: []
@@ -85,8 +87,8 @@
 		for (var p in jsonData.networkEntities) {
 			var xLocation = 0;
 			var yLocation = 0;
-			console.log(p);
-			console.log(jsonData.networkEntities[p].type);
+			//console.log(p);
+			//console.log(jsonData.networkEntities[p].type);
 			//if it is a store
 			if (jsonData.networkEntities[p].type == 0) {
 				NetworkElements.nodes.push({ data: { id: p, color: 'yellow', shape: 'square', category: 0 }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
@@ -96,6 +98,7 @@
 				NetworkElements.nodes.push({ data: { id: p, color: 'blue', shape: 'circle', category: 1 }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
 			}
 			else {
+				processingCenter = p;
 				NetworkElements.nodes.push({ data: { id: p, color: 'red', shape: 'triangle', category: 2 }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
 			}
 			//NetworkElements.nodes.push({ data: { id: p } });
@@ -104,7 +107,7 @@
 		console.log("===========================================================================================");
 		for(var q in jsonData.connections){
 			//console.log(jsonData.connections[q]);
-			NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2 } });
+			NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight} });
 		}
 
 		return NetworkElements;
@@ -124,15 +127,26 @@
 					content: 'data(id)',
 					'curve-style': 'bezier'
 				}
-			}],
+			},
+			{
+				selector: 'edge',
+				style: {
+					'label': 'data(weight)'
+				}
+			}
+		],
 		layout: {
 			name: 'preset'
 		},
 		elements: convertToCytoscape()
 	});	
 
+
+	testData()
 	function testData() {
-		alert("here..");
+		console.log(NetworkElements);
+		console.log(processingCenter);
+		console.log(cy.getElementById(processingCenter));
 		return testData;
 	}
 	
@@ -169,6 +183,39 @@
 			}
 		});
 	}
+
+
+	cy.nodes().animate({
+		style: { 'background-color': 'cyan' }
+	}, {
+			duration: 5000,
+			complete: function () {
+				console.log('Animation complete');
+			}
+		});
+
+	console.log('Animating nodes...');
+
+	setTimeout(function () {
+		console.log('Stopping nodes animation');
+		cy.nodes().stop();
+	}, 2500);
+
+	cy.$('#1').on('tap', function (evt) {
+		console.log('tap ' + evt.target.id());
+	});
+
+	var dijkstra = cy.elements().dijkstra(cy.getElementById(processingCenter), function (edge) {
+		//console.log(processingCenter);
+		//console.log(cy.elements());
+		return edge.data('weight');
+	});
+
+	cy.on('click', 'node', function (evt) {
+		console.log('clicked ' + this.id());
+		var pathToJ = dijkstra.pathTo(cy.getElementById(this.id()));
+		console.log(pathToJ);
+	});
 
 </script>
 }
