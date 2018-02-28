@@ -11,9 +11,9 @@ namespace _744Project
     {
         
         //This will the connection string from the file Web.config and store it as a string:
-        String connectionString = ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString;        
+        static string connectionString = ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString;        
 
-        public string getConnectionString()
+        public static string getConnectionString()
         {
             SqlConnection connect = new SqlConnection(connectionString);
             return connectionString;
