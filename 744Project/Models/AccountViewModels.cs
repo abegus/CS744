@@ -50,8 +50,8 @@ namespace _744Project.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
+        [Display(Name = "Username")]
+       // [EmailAddress]
         public string Email { get; set; }
 
         [Required]
@@ -76,8 +76,8 @@ namespace _744Project.Models
     public class RegisterViewModel
     {
         [Required]
-        [EmailAddress]
-        [Display(Name = "Email")]
+        //[EmailAddress]
+        [Display(Name = "Username")]
         public string Email { get; set; }
 
         [Required]
