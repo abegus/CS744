@@ -1,0 +1,85 @@
+﻿@model IEnumerable<_744Project.Models.Transaction>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="container">
+    <h2>Index</h2>
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+            <p>
+                @Html.ActionLink("Create New", "Create")
+            </p>
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Account.accountNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CreditCard.cardNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.transactionTime)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.transactionAmount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.transactionType)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.transactionMerchant)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.transactionStatus)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.connectionID)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Account.accountNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreditCard.cardNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.transactionTime)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.transactionAmount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.transactionType)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.transactionMerchant)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.transactionStatus)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.connectionID)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.transactionID }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.transactionID }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.transactionID }) |
+                            @Html.ActionLink("Encrypt", "Encrypt", new { id = item.transactionID }) |
+                            @Html.ActionLink("Decrypt", "Decrypt", new { id = item.transactionID })
+
+                        </td>
+                    </tr>
+                }
+
+            </table>
+       </div>
+    </div>
+</div>
