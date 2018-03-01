@@ -13,8 +13,15 @@ namespace _744Project
     public class Encryption
     {
         //This is to get the connection string from the configuration file:
-        static string connString = getConnection();
+        static string connString;/* = getConnection();*/
         SqlConnection connect = new SqlConnection(connString);
+        public Encryption()
+        {
+            connString = getConnection();
+            PasswordHash = "P@@Sw0rd";
+            SaltKey = "S@LT&KEY";
+            VIKey = "@1B2c3D4e5F6g7H8";
+        }
         public static string getConnection()
         {
             string conn = Configuration.getConnectionString();
@@ -55,9 +62,9 @@ namespace _744Project
             //encrypt each string in the transactions except the transactionID, cardID, and AccountID. 
             //I also noticed that we still have the "connectionID". I just ignored it.
             transactionAmount = encrypt(transactionAmount);
-            transactionType = encrypt(transactionType);
+            transactionType = encrypt(transactionType); 
             transactionMerchant = encrypt(transactionMerchant);
-            transactionStatus = encrypt(transactionStatus);
+            //transactionStatus = encrypt(transactionStatus); //The transaction status cannot be encrypted because its value is either True or False.
             //Now update the selected transaction:
             cmd.CommandText = "update Transactions set transactionAmount = '" + transactionAmount + "' ,    " +
                 "transactionType = '" + transactionType + "' , transactionMerchant = '" + transactionMerchant + "' , " +
@@ -100,7 +107,7 @@ namespace _744Project
             transactionAmount = decrypt(transactionAmount);
             transactionType = decrypt(transactionType);
             transactionMerchant = decrypt(transactionMerchant);
-            transactionStatus = decrypt(transactionStatus);
+            //transactionStatus = decrypt(transactionStatus); //The transaction status cannot be decrypted because its value is either True or False.
             //Now update the selected transaction:
             cmd.CommandText = "update Transactions set transactionAmount = '" + transactionAmount + "' ,    " +
                 "transactionType = '" + transactionType + "' , transactionMerchant = '" + transactionMerchant + "' , " +
@@ -119,9 +126,12 @@ namespace _744Project
          https://social.msdn.microsoft.com/Forums/vstudio/en-US/d6a2836a-d587-4068-8630-94f4fb2a2aeb/encrypt-and-decrypt-a-string-in-c?forum=csharpgeneral             
          */
         //------------------------ENCRYPTION KEYS------------------------------
-        static readonly string PasswordHash = "P@@Sw0rd";
-        static readonly string SaltKey = "S@LT&KEY";
-        static readonly string VIKey = "@1B2c3D4e5F6g7H8";
+        //static readonly string PasswordHash = "P@@Sw0rd";
+        //static readonly string SaltKey = "S@LT&KEY";
+        //static readonly string VIKey = "@1B2c3D4e5F6g7H8";    
+        static string PasswordHash;
+        static string SaltKey;
+        static string VIKey;
         //------------------------ENCRYPTION METHOD------------------------------
         public static string encrypt(string plainText)
         {
@@ -149,6 +159,8 @@ namespace _744Project
         //------------------------DECRYPTION METHOD------------------------------
         public static string decrypt(string encryptedText)
         {
+            try
+            {
             byte[] cipherTextBytes = Convert.FromBase64String(encryptedText);
             byte[] keyBytes = new Rfc2898DeriveBytes(PasswordHash, Encoding.ASCII.GetBytes(SaltKey)).GetBytes(256 / 8);
             var symmetricKey = new RijndaelManaged() { Mode = CipherMode.CBC, Padding = PaddingMode.None };
@@ -157,11 +169,20 @@ namespace _744Project
             var memoryStream = new MemoryStream(cipherTextBytes);
             var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read);
             byte[] plainTextBytes = new byte[cipherTextBytes.Length];
-
             int decryptedByteCount = cryptoStream.Read(plainTextBytes, 0, plainTextBytes.Length);
             memoryStream.Close();
             cryptoStream.Close();
             return Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount).TrimEnd("\0".ToCharArray());
+            }
+            catch (Exception)
+            {
+                //decryptedByteCount = 0;
+                return encryptedText;
+            }
+            //
+            //memoryStream.Close();
+            //cryptoStream.Close();
+            //return Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount).TrimEnd("\0".ToCharArray());
         }
 
 

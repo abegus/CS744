@@ -14,19 +14,16 @@ namespace _744Project.Controllers
     {
         private MasterModel db = new MasterModel();
         Encryption encryption = new Encryption();
-        public ActionResult Encrypt(string id)
-        {
-            encryption.encryptAndStoreTransaction(id);
-        
 
+        public ActionResult Encrypt(string id)
+        {            
+            encryption.encryptAndStoreTransaction(id);        
             return RedirectToAction("index", "Transactions");
         }
 
         public ActionResult Decrypt(string id)
-        {
+        {         
             encryption.decryptAndStoreTransaction(id);
-
-
             return RedirectToAction("index", "Transactions");
         }
 
