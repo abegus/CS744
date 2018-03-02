@@ -13,22 +13,59 @@ namespace _744Project.Models
         {
             CreditCards = new HashSet<CreditCard>();
             Transactions = new HashSet<Transaction>();
-        }        
+        }
         [Display(Name = "Account ID")]
         public int accountID { get; set; }
-        [Required]
+        //[Required]
         [Display(Name = "Account Number")]
         [StringLength(50)]
         public string accountNumber { get; set; }
         [Required]
         [Display(Name = "Account Balance")]
-        [StringLength(50)]
-        public string accountBalance { get; set; }
-
+        //[StringLength(50)]
+        public decimal accountBalance { get; set; }
         //public int? customerID { get; set; }
         [Required]
+        [StringLength(150, MinimumLength = 2)]
         [Display(Name = "Account Name")]
         public string accountName { get; set; }
+
+        //
+        [Required]
+        [Display(Name = "First Name")]
+        [StringLength(15, MinimumLength = 2)]
+        public string accountFirstName { get; set; }
+        [Required]
+        [Display(Name = "Last Name")]
+        [StringLength(15, MinimumLength = 2)]
+        public string accountLastName { get; set; }
+        [Required]
+        [Display(Name = "Address")]
+        [StringLength(100)]
+        public string accountAddress { get; set; }
+        [Required]
+        [Display(Name = "City")]
+        [StringLength(50, MinimumLength = 2)]
+        public string accountCity { get; set; }
+        [Required]
+        [Display(Name = "State")]
+        [StringLength(50, MinimumLength = 2)]
+        public string accountState { get; set; }
+        [Required]
+        [Display(Name = "Zip Code")]
+        [StringLength(5, MinimumLength = 5)]
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Zip Code must be 5 digits")]
+        public string accountZip { get; set; }        
+        [Required]
+        [Display(Name = "Phone")]
+        [StringLength(10, MinimumLength = 10)]
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Phone number must be 10 digits")]
+        public string accountPhone { get; set; }
+        [Required]
+        [Range(0, 100000)]
+        [Display(Name = "Maximum Allowed")]
+        public int accountMax { get; set; }
+        //
 
         //public virtual Customer Customer { get; set; }
 

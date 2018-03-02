@@ -15,8 +15,8 @@
             <table class="table">
                 <tr>
                     @*<th>
-                        @Html.DisplayNameFor(model => model.Customer.customerFirstname)
-                    </th>*@
+            @Html.DisplayNameFor(model => model.Customer.customerFirstname)
+        </th>*@
                     <th>
                         @Html.DisplayNameFor(model => model.accountNumber)
                     </th>
@@ -26,30 +26,98 @@
                     <th>
                         @Html.DisplayNameFor(model => model.accountName)
                     </th>
+
+                    @*AddColumn("dbo.Accounts", "accountFirstName", c => c.String(nullable: false, maxLength: 15));
+        AddColumn("dbo.Accounts", "accountLastName", c => c.String(nullable: false, maxLength: 15));
+        AddColumn("dbo.Accounts", "accountAddress", c => c.String(nullable: false, maxLength: 100));
+        AddColumn("dbo.Accounts", "accountCity", c => c.String(nullable: false, maxLength: 50));
+        AddColumn("dbo.Accounts", "accountState", c => c.String(nullable: false, maxLength: 50));
+        AddColumn("dbo.Accounts", "accountZip", c => c.String(nullable: false, maxLength: 5));
+        AddColumn("dbo.Accounts", "accountPhone", c => c.String(nullable: false, maxLength: 10));
+        AddColumn("dbo.Accounts", "accountMax", c => c.Int(nullable: false));*@
+
+                    <th>
+                        @Html.DisplayNameFor(model => model.accountFirstName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.accountLastName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.accountAddress)
+                    </th>
+
+                    <th>
+                        @Html.DisplayNameFor(model => model.accountCity)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.accountState)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.accountZip)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.accountPhone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.accountMax)
+                    </th>
+
+
+
+
+
                     <th></th>
                 </tr>
 
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        @*<td>
-                            @Html.DisplayFor(modelItem => item.Customer.customerFirstname)
-                        </td>*@
-                        <td>
-                            @Html.DisplayFor(modelItem => item.accountNumber)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.accountBalance)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.accountName)
-                        </td>
-                        <td>
-                            @Html.ActionLink("Edit", "Edit", new { id = item.accountID }) |
-                            @Html.ActionLink("Details", "Details", new { id = item.accountID }) |
-                            @Html.ActionLink("Delete", "Delete", new { id = item.accountID })
-                        </td>
-                    </tr>
+                <tr>
+                    @*<td>
+            @Html.DisplayFor(modelItem => item.Customer.customerFirstname)
+        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.accountNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.accountBalance)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.accountName)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.accountFirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.accountLastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.accountAddress)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.accountCity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.accountState)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.accountZip)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.accountPhone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.accountMax)
+                    </td>                    
+
+
+
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.accountID }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.accountID }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.accountID })
+                    </td>
+                </tr>
                 }
 
             </table>

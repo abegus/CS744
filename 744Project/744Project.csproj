@@ -304,6 +304,30 @@
     <Compile Include="Migrations\201802261852005_CustomersDropped5.Designer.cs">
       <DependentUpon>201802261852005_CustomersDropped5.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803020418129_generatedCards.cs" />
+    <Compile Include="Migrations\201803020418129_generatedCards.Designer.cs">
+      <DependentUpon>201803020418129_generatedCards.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803020444002_accounts.cs" />
+    <Compile Include="Migrations\201803020444002_accounts.Designer.cs">
+      <DependentUpon>201803020444002_accounts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803020510102_creditcards.cs" />
+    <Compile Include="Migrations\201803020510102_creditcards.Designer.cs">
+      <DependentUpon>201803020510102_creditcards.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803020535177_new.cs" />
+    <Compile Include="Migrations\201803020535177_new.Designer.cs">
+      <DependentUpon>201803020535177_new.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803020556210_FinalAccounts.cs" />
+    <Compile Include="Migrations\201803020556210_FinalAccounts.Designer.cs">
+      <DependentUpon>201803020556210_FinalAccounts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803020600436_phone.cs" />
+    <Compile Include="Migrations\201803020600436_phone.Designer.cs">
+      <DependentUpon>201803020600436_phone.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -316,6 +340,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MasterModel.cs" />
+    <Compile Include="Models\newCardNumbers.cs" />
     <Compile Include="Models\NodePosition.cs" />
     <Compile Include="Models\ProcessCenter.cs" />
     <Compile Include="Models\ProcessCenterTransaction.cs" />
@@ -540,15 +565,6 @@
     <Content Include="Views\Stores\Details.cshtml" />
     <Content Include="Views\Stores\Edit.cshtml" />
     <Content Include="Views\Stores\Index.cshtml" />
-    <Content Include="Views\Accounts\Create.cshtml" />
-    <Content Include="Views\Accounts\Delete.cshtml" />
-    <Content Include="Views\Accounts\Details.cshtml" />
-    <Content Include="Views\Accounts\Edit.cshtml" />
-    <Content Include="Views\Accounts\Index.cshtml" />
-    <Content Include="Views\CreditCards\Delete.cshtml" />
-    <Content Include="Views\CreditCards\Details.cshtml" />
-    <Content Include="Views\CreditCards\Edit.cshtml" />
-    <Content Include="Views\CreditCards\Index.cshtml" />
     <Content Include="Views\Network\Create.cshtml" />
     <Content Include="Views\Network\Delete.cshtml" />
     <Content Include="Views\Network\Details.cshtml" />
@@ -559,13 +575,22 @@
     <Content Include="Views\RelayToRelayConnections\Details.cshtml" />
     <Content Include="Views\RelayToRelayConnections\Edit.cshtml" />
     <Content Include="Views\RelayToRelayConnections\Index.cshtml" />
-    <Content Include="Views\CreditCards\Create.cshtml" />
     <Content Include="Views\Account\SecurityQuestion.cshtml" />
     <Content Include="Views\Transactions\Create.cshtml" />
     <Content Include="Views\Transactions\Delete.cshtml" />
     <Content Include="Views\Transactions\Details.cshtml" />
     <Content Include="Views\Transactions\Edit.cshtml" />
     <Content Include="Views\Transactions\Index.cshtml" />
+    <Content Include="Views\Accounts\Create.cshtml" />
+    <Content Include="Views\Accounts\Delete.cshtml" />
+    <Content Include="Views\Accounts\Details.cshtml" />
+    <Content Include="Views\Accounts\Edit.cshtml" />
+    <Content Include="Views\Accounts\Index.cshtml" />
+    <Content Include="Views\CreditCards\Create.cshtml" />
+    <Content Include="Views\CreditCards\Delete.cshtml" />
+    <Content Include="Views\CreditCards\Details.cshtml" />
+    <Content Include="Views\CreditCards\Edit.cshtml" />
+    <Content Include="Views\CreditCards\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -638,6 +663,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802261852005_CustomersDropped5.resx">
       <DependentUpon>201802261852005_CustomersDropped5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803020418129_generatedCards.resx">
+      <DependentUpon>201803020418129_generatedCards.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803020444002_accounts.resx">
+      <DependentUpon>201803020444002_accounts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803020510102_creditcards.resx">
+      <DependentUpon>201803020510102_creditcards.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803020535177_new.resx">
+      <DependentUpon>201803020535177_new.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803020556210_FinalAccounts.resx">
+      <DependentUpon>201803020556210_FinalAccounts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803020600436_phone.resx">
+      <DependentUpon>201803020600436_phone.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.addmiddlename.resources" />
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.initialcreate.resources" />

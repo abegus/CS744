@@ -15,7 +15,7 @@ namespace _744Project
         //The below is the server's connection string. I tried to get it dynamically but that failed. For the moment, this works:
         static string connectionString = "data source=MURCSP84\\MSSQLSERVER01;initial catalog=NetworkDB;MultipleActiveResultSets=True;App=EntityFramework;user id=sa; password=AbeNanSaleh123";
         //The below is Saleh's personal connection string:
-        //static string connectionString =  "data source=R14\\SALEH;initial catalog=NetworkDB;Trusted_Connection=True;MultipleActiveResultSets=True;App=EntityFramework";
+        //static string connectionString = "data source=R14\\SALEH;initial catalog=NetworkDB;Trusted_Connection=True;MultipleActiveResultSets=True;App=EntityFramework";
 
         public static string getConnectionString()
         {
