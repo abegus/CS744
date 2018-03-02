@@ -328,6 +328,14 @@
     <Compile Include="Migrations\201803020600436_phone.Designer.cs">
       <DependentUpon>201803020600436_phone.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803021806565_acc.cs" />
+    <Compile Include="Migrations\201803021806565_acc.Designer.cs">
+      <DependentUpon>201803021806565_acc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803021924459_joinedcredits.cs" />
+    <Compile Include="Migrations\201803021924459_joinedcredits.Designer.cs">
+      <DependentUpon>201803021924459_joinedcredits.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -359,6 +367,7 @@
     <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\AccountsCreditsViewModel.cs" />
     <Compile Include="ViewModels\NetworkViewModel.cs" />
     <Compile Include="ViewModels\NodeConfiguration.cs" />
   </ItemGroup>
@@ -681,6 +690,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803020600436_phone.resx">
       <DependentUpon>201803020600436_phone.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803021806565_acc.resx">
+      <DependentUpon>201803021806565_acc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803021924459_joinedcredits.resx">
+      <DependentUpon>201803021924459_joinedcredits.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.addmiddlename.resources" />
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.initialcreate.resources" />

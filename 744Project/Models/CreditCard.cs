@@ -4,6 +4,7 @@ namespace _744Project.Models
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Data.Entity;
     using System.Data.Entity.Spatial;
 
     public partial class CreditCard
@@ -34,15 +35,16 @@ namespace _744Project.Models
         [Display(Name = "Card Maximum Allowed")]
         [Range(0, 100000)]
         public int cardMaxAllowed { get; set; }
-
+        [Required]
+        [Display(Name = "Account Number")]
         public int? accountID { get; set; }
         //
         [Required]
-        [Display(Name = "First Name")]
+        [Display(Name = "Card First Name")]
         [StringLength(15, MinimumLength = 2)]
         public string firstName { get; set; }
         [Required]
-        [Display(Name = "Last Name")]
+        [Display(Name = "Card Last Name")]
         [StringLength(15, MinimumLength = 2)]
         public string lastName { get; set; }
         //
@@ -55,5 +57,7 @@ namespace _744Project.Models
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Transaction> Transactions { get; set; }
+
+        
     }
 }

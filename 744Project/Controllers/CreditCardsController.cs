@@ -174,8 +174,10 @@ namespace _744Project.Controllers
             int totalCardsForTheaccount = Convert.ToInt32(cmd.ExecuteScalar());
             if (totalCardsForTheaccount > 1)
                 theLastCard = false;
-            else
+            else if (totalCardsForTheaccount == 1)
                 theLastCard = true;
+            else
+                theLastCard = false;
             //Close the connection to the database:
             connect.Close();
             return theLastCard;

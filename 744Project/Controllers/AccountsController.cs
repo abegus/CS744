@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using _744Project.Models;
+using _744Project.ViewModels;
 
 namespace _744Project.Controllers
 {
@@ -42,7 +43,15 @@ namespace _744Project.Controllers
         // GET: Accounts/Create
         public ActionResult Create()
         {
-            return View();
+            //return View();
+            //
+            //var account = db.Accounts;
+            //var creditCard = db.CreditCards;
+            var vModel = new AccountsCreditsViewModel();
+            //vModel.account = account;
+            //vModel.creditCard = creditCard;            
+            return View(vModel);
+            //
         }
 
         // POST: Accounts/Create
@@ -50,12 +59,19 @@ namespace _744Project.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "accountID,accountNumber,accountBalance,accountName,accountFirstName,accountLastName,accountAddress,accountCity,accountState,accountZip,accountPhone,accountMax")] Account account)
+        public ActionResult Create([Bind(Include = "accountID,accountNumber,accountBalance,accountName,accountFirstName,accountLastName,accountAddress,accountCity,accountState,accountZip,accountPhone,accountMax")] Account account,
+            [Bind(Include = "cardID, cardNumber, cardExpirationDate, cardSecurityCode, cardMaxAllowed, accountID, firstName, lastName")] CreditCard creditCard)
         {
             if (ModelState.IsValid)
             {
-                db.Accounts.Add(account);
+                //db.CreditCards.Add(creditCard);                
+                //db.Accounts.Add(account);
+                //db.SaveChanges();
+
+                db.Accounts.Add(account);                
                 db.SaveChanges();
+                saveCreditCard(creditCard.cardID, creditCard.cardNumber, creditCard.cardExpirationDate, creditCard.cardSecurityCode, creditCard.cardMaxAllowed, 
+                    account.accountID, creditCard.firstName, creditCard.lastName);
                 //The below is to to get the last created accountID and copy it to the account number
                 //I could not think of a better way to represent the account number other than having it as the id itself:
                 duplicateAccountNumberFromAccountId();
@@ -63,6 +79,15 @@ namespace _744Project.Controllers
             }
 
             return View(account);
+        }
+        public void saveCreditCard(int cardID, long cardNumber, DateTime cardExpirationDate, string cardSecurityCode, int cardMaxAllowed, int accountID, string firstName, string lastName)
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "insert into CreditCards (cardNumber, cardExpirationDate, cardSecurityCode, cardMaxAllowed, accountID, firstName, lastName) " +
+                "values ('"+cardNumber+"', '"+cardExpirationDate+"', '"+cardSecurityCode+"', '"+cardMaxAllowed+"', '"+accountID+"', '"+firstName+"', '"+lastName+"') ";
+            cmd.ExecuteScalar();
+            connect.Close();
         }
         public void duplicateAccountNumberFromAccountId()
         {

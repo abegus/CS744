@@ -4,6 +4,7 @@ namespace _744Project.Models
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Data.Entity;
     using System.Data.Entity.Spatial;
 
     public partial class Account
@@ -32,11 +33,11 @@ namespace _744Project.Models
 
         //
         [Required]
-        [Display(Name = "First Name")]
+        [Display(Name = "Account First Name")]
         [StringLength(15, MinimumLength = 2)]
         public string accountFirstName { get; set; }
         [Required]
-        [Display(Name = "Last Name")]
+        [Display(Name = "Account Last Name")]
         [StringLength(15, MinimumLength = 2)]
         public string accountLastName { get; set; }
         [Required]
@@ -64,7 +65,7 @@ namespace _744Project.Models
         public string accountPhone { get; set; }
         [Required]
         [Range(0, 100000)]
-        [Display(Name = "Maximum Allowed")]
+        [Display(Name = "Account Maximum Allowed")]
         public int accountMax { get; set; }
         //
 
@@ -75,5 +76,7 @@ namespace _744Project.Models
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Transaction> Transactions { get; set; }
+
+        
     }
 }
