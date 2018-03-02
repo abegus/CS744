@@ -43,6 +43,7 @@ namespace _744Project.Models
         [Display(Name = "Address")]
         [StringLength(100)]
         public string accountAddress { get; set; }
+        //
         [Required]
         [Display(Name = "City")]
         [StringLength(50, MinimumLength = 2)]
