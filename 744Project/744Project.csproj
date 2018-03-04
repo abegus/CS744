@@ -352,6 +352,10 @@
     <Compile Include="Migrations\201803041830018_update database.Designer.cs">
       <DependentUpon>201803041830018_update database.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803042035111_saleh.cs" />
+    <Compile Include="Migrations\201803042035111_saleh.Designer.cs">
+      <DependentUpon>201803042035111_saleh.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -610,12 +614,12 @@
     <Content Include="Views\Accounts\Details.cshtml" />
     <Content Include="Views\Accounts\Edit.cshtml" />
     <Content Include="Views\Accounts\Index.cshtml" />
+    <Content Include="Views\Accounts\Create.cshtml" />
     <Content Include="Views\CreditCards\Create.cshtml" />
     <Content Include="Views\CreditCards\Delete.cshtml" />
     <Content Include="Views\CreditCards\Details.cshtml" />
     <Content Include="Views\CreditCards\Edit.cshtml" />
     <Content Include="Views\CreditCards\Index.cshtml" />
-    <Content Include="Views\Accounts\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -724,6 +728,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803041830018_update database.resx">
       <DependentUpon>201803041830018_update database.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803042035111_saleh.resx">
+      <DependentUpon>201803042035111_saleh.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.addmiddlename.resources" />
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.initialcreate.resources" />
