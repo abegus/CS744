@@ -185,7 +185,7 @@
 	}
 
 
-	cy.nodes().animate({
+	/*cy.nodes().animate({
 		style: { 'background-color': 'cyan' }
 	}, {
 			duration: 5000,
@@ -199,12 +199,12 @@
 	setTimeout(function () {
 		console.log('Stopping nodes animation');
 		cy.nodes().stop();
-	}, 2500);
+	}, 2500);*/
 
-	cy.$('#1').on('tap', function (evt) {
+	/*cy.$('#1').on('tap', function (evt) {
 		console.log('tap ' + evt.target.id());
 	});
-
+	*/
 	var dijkstra = cy.elements().dijkstra(cy.getElementById(processingCenter), function (edge) {
 		//console.log(processingCenter);
 		//console.log(cy.elements());
@@ -213,9 +213,77 @@
 
 	cy.on('click', 'node', function (evt) {
 		console.log('clicked ' + this.id());
+
 		var pathToJ = dijkstra.pathTo(cy.getElementById(this.id()));
+
+		//var i = 0;
+
+		var i = pathToJ.length
+		console.log(i);
+
+
 		console.log(pathToJ);
+		console.log("=============================================================");
+
+		recursivePath(pathToJ, pathToJ[i - 1], i - 1);
+	
+		
 	});
+
+	function recursivePath(stack, item, i) {
+
+
+		var ann = cy.getElementById(item._private.data.id).animation({
+			style: {
+				'background-color': 'purple',
+				'width': 50
+			},
+			duration: 500
+			});
+		///ann.play();
+
+		ann
+			.play() // start
+			.promise('completed').then(function () { // on next completed
+				i--;
+				if (i >= 0) {
+					return recursivePath(stack, stack[i], i);
+				}
+				return backTrackAnimation(stack, stack[0], 0);
+				/*jAni
+					.reverse() // switch animation direction
+					.rewind() // optional but makes intent clear
+					.play() // start again
+					;*/
+			})
+			;
+	}
+	function backTrackAnimation(stack, item, i) {
+		var ann = cy.getElementById(item._private.data.id).animation({
+			style: {
+				'background-color': 'green',
+				'width': 25
+			},
+			duration: 500
+		});
+		///ann.play();
+
+		ann
+			.play() // start
+			.promise('completed').then(function () { // on next completed
+				i++;
+				if (i < stack.length) {
+					return backTrackAnimation(stack, stack[i], i);
+				}
+				return;
+				/*jAni
+					.reverse() // switch animation direction
+					.rewind() // optional but makes intent clear
+					.play() // start again
+					;*/
+			})
+			;
+	}
 
 </script>
 }
