@@ -36,6 +36,9 @@ namespace _744Project.Models
 
         public DateTime? LockoutEndDateUtc { get; set; }
 
+        [Display(Name = "What's your favourite fruit?")]
+        public string answerToSecurity { get; set; }
+
         public bool LockoutEnabled { get; set; }
 
         public int AccessFailedCount { get; set; }
