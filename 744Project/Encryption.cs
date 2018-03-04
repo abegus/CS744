@@ -13,7 +13,7 @@ namespace _744Project
     public class Encryption
     {
         //This is to get the connection string from the configuration file:
-        static string connString;/* = getConnection();*/
+        static string connString = getConnection();
         SqlConnection connect = new SqlConnection(connString);
         public Encryption()
         {
@@ -40,14 +40,34 @@ namespace _744Project
             cmd.CommandText = "select count(*) from Transactions where transactionId = '"+transactionId+"' ";
             //Store the result as an integer value:
             int count = Convert.ToInt32(cmd.ExecuteScalar());
+            //Check if the transaction is already encrypted or not:
+            int isEncrypted = checkIfEncrypted(transactionId);
             //IDs are unique and there will be either one ID or none. If the ID exists, the result will be 1:
-            if (count > 0)
+            if (count > 0 && isEncrypted != 1)
                 storeAsEncrypted(transactionId);
             //Close the connection to the database:
             connect.Close();
         }
+        public int checkIfEncrypted(string transactionId)
+        {
+            int isEncrypted = 3; //Assuming that it's null. 3 = null.
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select encryptedFlag from Transactions where transactionId = '" + transactionId + "' ";
+            string strIsEncryptedValue = cmd.ExecuteScalar().ToString();            
+            if (!string.IsNullOrEmpty(strIsEncryptedValue))
+            {
+                //isEncryptedValue = Convert.ToInt32(strIsEncryptedValue);
+                if (strIsEncryptedValue.Equals("False")) //If decrypted
+                    isEncrypted = 0;
+                else if (strIsEncryptedValue.Equals("True")) // If encrypted
+                    isEncrypted = 1;
+                //Otherwise, isEncrypted will remain 3 as NULL in my code.
+            }
+            return isEncrypted;
+        }
         public void storeAsEncrypted(string transactionId)
-        {            
+        {
+                       
             SqlCommand cmd = connect.CreateCommand();
             cmd.CommandType = CommandType.Text;
             //Get the transaction information from the database:
@@ -62,14 +82,16 @@ namespace _744Project
             //encrypt each string in the transactions except the transactionID, cardID, and AccountID. 
             //I also noticed that we still have the "connectionID". I just ignored it.
             transactionAmount = encrypt(transactionAmount);
-            transactionType = encrypt(transactionType); 
+            transactionType = encrypt(transactionType);
             transactionMerchant = encrypt(transactionMerchant);
             //transactionStatus = encrypt(transactionStatus); //The transaction status cannot be encrypted because its value is either True or False.
             //Now update the selected transaction:
             cmd.CommandText = "update Transactions set transactionAmount = '" + transactionAmount + "' ,    " +
                 "transactionType = '" + transactionType + "' , transactionMerchant = '" + transactionMerchant + "' , " +
-                "transactionStatus = '" + transactionStatus + "' where transactionId = '" + transactionId + "' ";
+                "transactionStatus = '" + transactionStatus + "' , encryptedFlag = 1 " +
+                "where transactionId = '" + transactionId + "' ";
             cmd.ExecuteScalar();
+            
         }
         public void decryptAndStoreTransaction(string transactionId)
         {
@@ -83,8 +105,10 @@ namespace _744Project
             cmd.CommandText = "select count(*) from Transactions where transactionId = '" + transactionId + "' ";
             //Store the result as an integer value:
             int count = Convert.ToInt32(cmd.ExecuteScalar());
+            //Check if the transaction is already encrypted or not:
+            int isEncrypted = checkIfEncrypted(transactionId);
             //IDs are unique and there will be either one ID or none. If the ID exists, the result will be 1:
-            if (count > 0)
+            if (count > 0 && isEncrypted != 0)
                 storeAsDecrypted(transactionId);
             //Close the connection to the database:
             connect.Close();
@@ -111,7 +135,9 @@ namespace _744Project
             //Now update the selected transaction:
             cmd.CommandText = "update Transactions set transactionAmount = '" + transactionAmount + "' ,    " +
                 "transactionType = '" + transactionType + "' , transactionMerchant = '" + transactionMerchant + "' , " +
-                "transactionStatus = '" + transactionStatus + "' where transactionId = '" + transactionId + "' ";
+                "transactionStatus = '" + transactionStatus + "' , encryptedFlag = 0 " +
+                "where transactionId = '" + transactionId + "' ";
+                
             cmd.ExecuteScalar();
         }
 
