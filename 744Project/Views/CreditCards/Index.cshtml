@@ -14,9 +14,7 @@
             </p>
             <table class="table">
                 <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Account.accountNumber)
-                    </th>
+                   
                     <th>
                         @Html.DisplayNameFor(model => model.cardNumber)
                     </th>
@@ -35,9 +33,7 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Account.accountNumber)
-                        </td>
+                        
                         @*<td>
                             @Html.DisplayFor(modelItem => item.Customer.customerFirstname)
                         </td>*@

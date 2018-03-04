@@ -12,13 +12,13 @@
                 <h4>Transaction</h4>
                 <hr />
                 <dl class="dl-horizontal">
-                    <dt>
+                    @*<dt>
                         @Html.DisplayNameFor(model => model.Account.accountNumber)
                     </dt>
 
                     <dd>
                         @Html.DisplayFor(model => model.Account.accountNumber)
-                    </dd>
+                    </dd>*@
 
                     <dt>
                         @Html.DisplayNameFor(model => model.CreditCard.cardNumber)
@@ -68,13 +68,6 @@
                         @Html.DisplayFor(model => model.transactionStatus)
                     </dd>
 
-                    <dt>
-                        @Html.DisplayNameFor(model => model.connectionID)
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.connectionID)
-                    </dd>
 
                 </dl>
             </div>

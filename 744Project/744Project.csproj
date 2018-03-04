@@ -348,6 +348,10 @@
     <Compile Include="Migrations\201803041526380_new.Designer.cs">
       <DependentUpon>201803041526380_new.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803041830018_update database.cs" />
+    <Compile Include="Migrations\201803041830018_update database.Designer.cs">
+      <DependentUpon>201803041830018_update database.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -717,6 +721,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803041526380_new.resx">
       <DependentUpon>201803041526380_new.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803041830018_update database.resx">
+      <DependentUpon>201803041830018_update database.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.addmiddlename.resources" />
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.initialcreate.resources" />
