@@ -46,6 +46,8 @@ namespace _744Project.Models
         [Required]
         public int? cardID { get; set; }
 
+
+
        /* [Display(Name = "Account ID")]
         [Required]
         public int? accountID { get; set; }
