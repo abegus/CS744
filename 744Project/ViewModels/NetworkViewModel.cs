@@ -15,12 +15,14 @@ namespace _744Project.ViewModels
 
         public List<IpConnection> connections; // a list of the connections between NetworkEntities    (connections)
         public Dictionary<String, NetworkEntity> networkEntities; //Key: IP, Value: NetworkEntiy. a list of data objects from the Network.  (store, relay, PC)
+        public List<Transaction> transactions; // grabs all encrypted transactions
         //public JsonData jsonData;
 
         public NetworkViewModel()
         {
             connections = new List<IpConnection>();
             networkEntities = new Dictionary<string, NetworkEntity>();
+            transactions = (from trans in db.Transactions select trans).ToList();  //trans.encryptedFlag
 
             var storeToRelays = from store in db.Stores select store;
             //connections = 
