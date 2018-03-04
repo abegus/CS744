@@ -53,6 +53,7 @@ namespace _744Project.Controllers
         public ActionResult Create()
         {
             ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardSecurityCode");
+           // ViewBag.storeID = new SelectList(db.Stores, "?", "?");
             return View();
         }
 
@@ -61,14 +62,22 @@ namespace _744Project.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "transactionID,transactionTime,transactionAmount,transactionType,transactionMerchant,transactionStatus,encryptedFlag,cardID")] Transaction transaction)
+        public ActionResult Create([Bind(Include = "transactionID,transactionTime,transactionAmount,transactionType,transactionMerchant,transactionStatus,encryptedFlag,cardID")] Transaction transaction) // and the storeId
         {
             if (ModelState.IsValid)
             {
                 db.Transactions.Add(transaction);
+                //to get he storeId, you have to send an additional string through the from on Transaction/Create. 
+                StoreTransaction st = new StoreTransaction();
+                //st.storeID = storeId;
+                st.transactionID = transaction.transactionID;
+
+                db.StoreTransactions.Add(st);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
+
 
             ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardSecurityCode", transaction.cardID);
             return View(transaction);
