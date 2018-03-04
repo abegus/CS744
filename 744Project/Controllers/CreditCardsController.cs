@@ -58,13 +58,35 @@ namespace _744Project.Controllers
             {
                 db.CreditCards.Add(creditCard);
                 db.SaveChanges();
+                //Get a random card number from the table NewCardNumbers and store it in cardNumber of table CreditCards:
+                getRandomCardNumber(creditCard.cardID);
                 return RedirectToAction("Index");
             }
 
             ViewBag.accountID = new SelectList(db.Accounts, "accountID", "accountNumber", creditCard.accountID);
             return View(creditCard);
         }
-
+        public void getRandomCardNumber(int cardID)
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            //Count the number of rows in the table we are getting the data from:
+            cmd.CommandText = "select count(*) from NewCardNumbers";
+            int totalRandomNumbers = Convert.ToInt32(cmd.ExecuteScalar());
+            if (totalRandomNumbers > 0) //For now this is not needed, but it's a better practice to ensure that we have results from NewCardNumbers.
+            {
+                Random random = new Random();
+                //get a random number from the total number of rows:
+                int randomRow = random.Next(1, totalRandomNumbers);
+                //select the cardNumber from the random number:
+                cmd.CommandText = "select cardNumber from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY cardID ASC) ,* FROM NewCardNumbers) as t where rowNum = '"+randomRow+"' ";
+                //Store it in a string. (Its actual value is long, but it doesn't matter since string will accept almost anything and when storing back to the other table there won't be an issue)
+                string cardNumber = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "update CreditCards set cardNumber = '"+cardNumber+"' where cardID = '"+cardID+"' ";
+                cmd.ExecuteScalar();
+            }
+            connect.Close();
+        }
         // GET: CreditCards/Edit/5
         public ActionResult Edit(int? id)
         {

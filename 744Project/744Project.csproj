@@ -316,10 +316,6 @@
     <Compile Include="Migrations\201803020510102_creditcards.Designer.cs">
       <DependentUpon>201803020510102_creditcards.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201803020535177_new.cs" />
-    <Compile Include="Migrations\201803020535177_new.Designer.cs">
-      <DependentUpon>201803020535177_new.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201803020556210_FinalAccounts.cs" />
     <Compile Include="Migrations\201803020556210_FinalAccounts.Designer.cs">
       <DependentUpon>201803020556210_FinalAccounts.cs</DependentUpon>
@@ -336,6 +332,22 @@
     <Compile Include="Migrations\201803021924459_joinedcredits.Designer.cs">
       <DependentUpon>201803021924459_joinedcredits.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803041231571_addedGenerateCardNumbersTable.cs" />
+    <Compile Include="Migrations\201803041231571_addedGenerateCardNumbersTable.Designer.cs">
+      <DependentUpon>201803041231571_addedGenerateCardNumbersTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803041254258_addedCardNumbers.cs" />
+    <Compile Include="Migrations\201803041254258_addedCardNumbers.Designer.cs">
+      <DependentUpon>201803041254258_addedCardNumbers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803041345184_afterError.cs" />
+    <Compile Include="Migrations\201803041345184_afterError.Designer.cs">
+      <DependentUpon>201803041345184_afterError.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803041526380_new.cs" />
+    <Compile Include="Migrations\201803041526380_new.Designer.cs">
+      <DependentUpon>201803041526380_new.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -348,7 +360,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MasterModel.cs" />
-    <Compile Include="Models\newCardNumbers.cs" />
+    <Compile Include="Models\NewCardNumbers.cs" />
     <Compile Include="Models\NodePosition.cs" />
     <Compile Include="Models\ProcessCenter.cs" />
     <Compile Include="Models\ProcessCenterTransaction.cs" />
@@ -590,7 +602,6 @@
     <Content Include="Views\Transactions\Details.cshtml" />
     <Content Include="Views\Transactions\Edit.cshtml" />
     <Content Include="Views\Transactions\Index.cshtml" />
-    <Content Include="Views\Accounts\Create.cshtml" />
     <Content Include="Views\Accounts\Delete.cshtml" />
     <Content Include="Views\Accounts\Details.cshtml" />
     <Content Include="Views\Accounts\Edit.cshtml" />
@@ -600,6 +611,7 @@
     <Content Include="Views\CreditCards\Details.cshtml" />
     <Content Include="Views\CreditCards\Edit.cshtml" />
     <Content Include="Views\CreditCards\Index.cshtml" />
+    <Content Include="Views\Accounts\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -682,9 +694,6 @@
     <EmbeddedResource Include="Migrations\201803020510102_creditcards.resx">
       <DependentUpon>201803020510102_creditcards.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803020535177_new.resx">
-      <DependentUpon>201803020535177_new.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803020556210_FinalAccounts.resx">
       <DependentUpon>201803020556210_FinalAccounts.cs</DependentUpon>
     </EmbeddedResource>
@@ -696,6 +705,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803021924459_joinedcredits.resx">
       <DependentUpon>201803021924459_joinedcredits.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803041231571_addedGenerateCardNumbersTable.resx">
+      <DependentUpon>201803041231571_addedGenerateCardNumbersTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803041254258_addedCardNumbers.resx">
+      <DependentUpon>201803041254258_addedCardNumbers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803041345184_afterError.resx">
+      <DependentUpon>201803041345184_afterError.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803041526380_new.resx">
+      <DependentUpon>201803041526380_new.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.addmiddlename.resources" />
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.initialcreate.resources" />

@@ -7,13 +7,13 @@ namespace _744Project.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class _new : IMigrationMetadata
+    public sealed partial class addedGenerateCardNumbersTable : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(_new));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(addedGenerateCardNumbersTable));
         
         string IMigrationMetadata.Id
         {
-            get { return "201803020535177_new"; }
+            get { return "201803041231571_addedGenerateCardNumbersTable"; }
         }
         
         string IMigrationMetadata.Source

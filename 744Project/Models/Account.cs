@@ -22,8 +22,8 @@ namespace _744Project.Models
         [StringLength(50)]
         public string accountNumber { get; set; }
         [Required]
+        //[Range( , 9999999999999999)]
         [Display(Name = "Account Balance")]
-        //[StringLength(50)]
         public decimal accountBalance { get; set; }
         //public int? customerID { get; set; }
         [Required]

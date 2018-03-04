@@ -49,7 +49,7 @@ namespace _744Project.Controllers
             //var creditCard = db.CreditCards;
             var vModel = new AccountsCreditsViewModel();
             //vModel.account = account;
-            //vModel.creditCard = creditCard;            
+            //vModel.creditCard = creditCard;
             return View(vModel);
             //
         }
@@ -59,27 +59,80 @@ namespace _744Project.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "accountID,accountNumber,accountBalance,accountName,accountFirstName,accountLastName,accountAddress,accountCity,accountState,accountZip,accountPhone,accountMax")] Account account,
+        public ActionResult Create([Bind(Include = "accountID, accountNumber,accountBalance,accountName,accountFirstName,accountLastName,accountAddress,accountCity,accountState,accountZip,accountPhone,accountMax")] Account account,
             [Bind(Include = "cardID, cardNumber, cardExpirationDate, cardSecurityCode, cardMaxAllowed, accountID, firstName, lastName")] CreditCard creditCard)
         {
-            if (ModelState.IsValid)
+            var vModel = new AccountsCreditsViewModel();
+
+
+
+            //if (ModelState.IsValid)
+            //{
+            //db.CreditCards.Add(creditCard);                
+            //db.Accounts.Add(account);
+            //db.SaveChanges();
+            if (account.accountBalance > 9999999999999999 || account.accountBalance < -9999999999999999)
             {
-                //db.CreditCards.Add(creditCard);                
-                //db.Accounts.Add(account);
-                //db.SaveChanges();
-
-                db.Accounts.Add(account);                
-                db.SaveChanges();
-                saveCreditCard(creditCard.cardID, creditCard.cardNumber, creditCard.cardExpirationDate, creditCard.cardSecurityCode, creditCard.cardMaxAllowed, 
-                    account.accountID, creditCard.firstName, creditCard.lastName);
-                //The below is to to get the last created accountID and copy it to the account number
-                //I could not think of a better way to represent the account number other than having it as the id itself:
-                duplicateAccountNumberFromAccountId();
-                return RedirectToAction("Index");
+                ModelState.AddModelError("account.accountBalance", "The balance must between -9999999999999999 and 9999999999999999");
+                return View(vModel.account);
             }
-
-            return View(account);
+            db.Accounts.Add(account);                
+            db.SaveChanges();                
+            //The below is to to get the last created accountID and copy it to the account number
+            //I could not think of a better way to represent the account number other than having it as the id itself:
+            int lastAccountId = duplicateAccountNumberFromAccountId();
+            saveCreditCard(creditCard.cardID, creditCard.cardNumber, creditCard.cardExpirationDate, creditCard.cardSecurityCode, creditCard.cardMaxAllowed,
+                lastAccountId, creditCard.firstName, creditCard.lastName);
+            //Get the last card ID which is for the one just created:
+            int lastCardId = getLastCardId();
+            //Get a random card number from the table NewCardNumbers and store it in cardNumber of table CreditCards:
+            getRandomCardNumber(lastCardId);
+                return RedirectToAction("Index");
+            //}            
+            //return View(vModel.account);
+            //return View(account);
         }
+        public int getLastCardId()
+        {
+            connect.Open();
+            //Call a CreateCommand method from the SQLCommand class to use it for writing queries:
+            SqlCommand cmd = connect.CreateCommand();
+            //Define the type of SQL commands as text:
+            cmd.CommandType = CommandType.Text;
+            //get the number of rows in the CreditCards table:
+            cmd.CommandText = "select count(*) from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY cardID ASC) ,* FROM CreditCards) as t";
+            int totalRows = Convert.ToInt32(cmd.ExecuteScalar());
+            //Select the last card ID:
+            cmd.CommandText = "select cardID from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY cardId ASC) ,* FROM CreditCards) as t where rowNum = '" + totalRows + "' ";
+            int cardId = Convert.ToInt32(cmd.ExecuteScalar());            
+            connect.Close();
+            return cardId;
+        }
+        public void getRandomCardNumber(int cardID)
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            //Count the number of rows in the table we are getting the data from:
+            cmd.CommandText = "select count(*) from NewCardNumbers";
+            int totalRandomNumbers = Convert.ToInt32(cmd.ExecuteScalar());
+            if (totalRandomNumbers > 0) //For now this is not needed, but it's a better practice to ensure that we have results from NewCardNumbers.
+            {
+                Random random = new Random();
+                //get a random number from the total number of rows:
+                int randomRow = random.Next(1, totalRandomNumbers);
+                //select the cardNumber from the random number:
+                cmd.CommandText = "select cardNumber from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY cardID ASC) ,* FROM NewCardNumbers) as t where rowNum = '" + randomRow + "' ";
+                //Store it in a string. (Its actual value is long, but it doesn't matter since string will accept almost anything and when storing back to the other table there won't be an issue)
+                string cardNumber = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "update CreditCards set cardNumber = '" + cardNumber + "' where cardID = '" + cardID + "' ";
+                cmd.ExecuteScalar();
+                //Now, delete the generated card number from the NewCardNumbers table to avoid duplicates:
+                cmd.CommandText = "delete from NewCardNumbers where cardNumber = '"+cardNumber+"' ";
+                cmd.ExecuteScalar();
+            }
+            connect.Close();
+        }
+
         public void saveCreditCard(int cardID, long cardNumber, DateTime cardExpirationDate, string cardSecurityCode, int cardMaxAllowed, int accountID, string firstName, string lastName)
         {
             connect.Open();
@@ -89,7 +142,7 @@ namespace _744Project.Controllers
             cmd.ExecuteScalar();
             connect.Close();
         }
-        public void duplicateAccountNumberFromAccountId()
+        public int duplicateAccountNumberFromAccountId()
         {
             connect.Open();
             //Call a CreateCommand method from the SQLCommand class to use it for writing queries:
@@ -104,8 +157,9 @@ namespace _744Project.Controllers
             int accountId = Convert.ToInt32(cmd.ExecuteScalar());
             //Now, update the accountNumber and set equal to accountID:
             cmd.CommandText = "update accounts set accountNumber = '" + accountId + "' where accountID = '" + accountId + "'  ";
-            cmd.ExecuteScalar();
+            cmd.ExecuteScalar();            
             connect.Close();
+            return accountId;
         }
         // GET: Accounts/Edit/5
         public ActionResult Edit(int? id)
@@ -138,10 +192,18 @@ namespace _744Project.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(account).State = EntityState.Modified;
-                db.SaveChanges();
-                //Change the accountNumber again to match the accountID:
-                changeAccountNumberToAccountID(editId);
-                return RedirectToAction("Index");
+                if (account.accountBalance > 9999999999999999 || account.accountBalance < -9999999999999999)
+                {
+                    ModelState.AddModelError("accountBalance", "The balance must between -9999999999999999 and 9999999999999999");
+                    return View(account);
+                }
+                else
+                {
+                    db.SaveChanges();
+                    //Change the accountNumber again to match the accountID:
+                    changeAccountNumberToAccountID(editId);
+                    return RedirectToAction("Index");
+                }
             }
             return View(account);
         }

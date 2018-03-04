@@ -9,10 +9,9 @@ namespace _744Project.ViewModels
 {
     public class AccountsCreditsViewModel
     {
-        private MasterModel db = new MasterModel();       
-        public CreditCard creditCard { get; set; }
+        //private MasterModel db = new MasterModel();
         public Account account { get; set; }
-    
+        public CreditCard creditCard { get; set; }
     }
 
 }

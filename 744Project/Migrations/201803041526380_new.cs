@@ -7,12 +7,10 @@ namespace _744Project.Migrations
     {
         public override void Up()
         {
-            AlterColumn("dbo.CreditCards", "cardSecurityCode", c => c.String(nullable: false, maxLength: 3));
         }
         
         public override void Down()
         {
-            AlterColumn("dbo.CreditCards", "cardSecurityCode", c => c.Int(nullable: false));
         }
     }
 }
