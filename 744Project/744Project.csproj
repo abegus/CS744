@@ -232,6 +232,139 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802051741030_initialcreate.cs" />
+    <Compile Include="Migrations\201802051741030_initialcreate.Designer.cs">
+      <DependentUpon>201802051741030_initialcreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802051834116_add middle name.cs" />
+    <Compile Include="Migrations\201802051834116_add middle name.Designer.cs">
+      <DependentUpon>201802051834116_add middle name.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802051917266_reset.cs" />
+    <Compile Include="Migrations\201802051917266_reset.Designer.cs">
+      <DependentUpon>201802051917266_reset.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802081944141_updating card dates.cs" />
+    <Compile Include="Migrations\201802081944141_updating card dates.Designer.cs">
+      <DependentUpon>201802081944141_updating card dates.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802110224262_Add IP address colunm.cs" />
+    <Compile Include="Migrations\201802110224262_Add IP address colunm.Designer.cs">
+      <DependentUpon>201802110224262_Add IP address colunm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802132232494_relay to realy.cs" />
+    <Compile Include="Migrations\201802132232494_relay to realy.Designer.cs">
+      <DependentUpon>201802132232494_relay to realy.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802161506351_newRequiredFields.cs" />
+    <Compile Include="Migrations\201802161506351_newRequiredFields.Designer.cs">
+      <DependentUpon>201802161506351_newRequiredFields.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802171854380_node position.cs" />
+    <Compile Include="Migrations\201802171854380_node position.Designer.cs">
+      <DependentUpon>201802171854380_node position.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802192103413_qwer.cs" />
+    <Compile Include="Migrations\201802192103413_qwer.Designer.cs">
+      <DependentUpon>201802192103413_qwer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802192104553_asp.cs" />
+    <Compile Include="Migrations\201802192104553_asp.Designer.cs">
+      <DependentUpon>201802192104553_asp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802192106553_qwert.cs" />
+    <Compile Include="Migrations\201802192106553_qwert.Designer.cs">
+      <DependentUpon>201802192106553_qwert.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802192114303_qwe.cs" />
+    <Compile Include="Migrations\201802192114303_qwe.Designer.cs">
+      <DependentUpon>201802192114303_qwe.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802261812276_CustomersDropped.cs" />
+    <Compile Include="Migrations\201802261812276_CustomersDropped.Designer.cs">
+      <DependentUpon>201802261812276_CustomersDropped.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802261826170_CustomersDropped1.cs" />
+    <Compile Include="Migrations\201802261826170_CustomersDropped1.Designer.cs">
+      <DependentUpon>201802261826170_CustomersDropped1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802261838283_CustomersDropped2.cs" />
+    <Compile Include="Migrations\201802261838283_CustomersDropped2.Designer.cs">
+      <DependentUpon>201802261838283_CustomersDropped2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802261840085_CustomersDropped3.cs" />
+    <Compile Include="Migrations\201802261840085_CustomersDropped3.Designer.cs">
+      <DependentUpon>201802261840085_CustomersDropped3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802261843577_CustomersDropped4.cs" />
+    <Compile Include="Migrations\201802261843577_CustomersDropped4.Designer.cs">
+      <DependentUpon>201802261843577_CustomersDropped4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802261852005_CustomersDropped5.cs" />
+    <Compile Include="Migrations\201802261852005_CustomersDropped5.Designer.cs">
+      <DependentUpon>201802261852005_CustomersDropped5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803020418129_generatedCards.cs" />
+    <Compile Include="Migrations\201803020418129_generatedCards.Designer.cs">
+      <DependentUpon>201803020418129_generatedCards.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803020444002_accounts.cs" />
+    <Compile Include="Migrations\201803020444002_accounts.Designer.cs">
+      <DependentUpon>201803020444002_accounts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803020510102_creditcards.cs" />
+    <Compile Include="Migrations\201803020510102_creditcards.Designer.cs">
+      <DependentUpon>201803020510102_creditcards.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803020556210_FinalAccounts.cs" />
+    <Compile Include="Migrations\201803020556210_FinalAccounts.Designer.cs">
+      <DependentUpon>201803020556210_FinalAccounts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803020600436_phone.cs" />
+    <Compile Include="Migrations\201803020600436_phone.Designer.cs">
+      <DependentUpon>201803020600436_phone.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803021806565_acc.cs" />
+    <Compile Include="Migrations\201803021806565_acc.Designer.cs">
+      <DependentUpon>201803021806565_acc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803021924459_joinedcredits.cs" />
+    <Compile Include="Migrations\201803021924459_joinedcredits.Designer.cs">
+      <DependentUpon>201803021924459_joinedcredits.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803041231571_addedGenerateCardNumbersTable.cs" />
+    <Compile Include="Migrations\201803041231571_addedGenerateCardNumbersTable.Designer.cs">
+      <DependentUpon>201803041231571_addedGenerateCardNumbersTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803041254258_addedCardNumbers.cs" />
+    <Compile Include="Migrations\201803041254258_addedCardNumbers.Designer.cs">
+      <DependentUpon>201803041254258_addedCardNumbers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803041345184_afterError.cs" />
+    <Compile Include="Migrations\201803041345184_afterError.Designer.cs">
+      <DependentUpon>201803041345184_afterError.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803041526380_new.cs" />
+    <Compile Include="Migrations\201803041526380_new.Designer.cs">
+      <DependentUpon>201803041526380_new.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803041830018_update database.cs" />
+    <Compile Include="Migrations\201803041830018_update database.Designer.cs">
+      <DependentUpon>201803041830018_update database.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803041954040_security questions.cs" />
+    <Compile Include="Migrations\201803041954040_security questions.Designer.cs">
+      <DependentUpon>201803041954040_security questions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803042026348_lockout for users.cs" />
+    <Compile Include="Migrations\201803042026348_lockout for users.Designer.cs">
+      <DependentUpon>201803042026348_lockout for users.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803042037482_update.cs" />
+    <Compile Include="Migrations\201803042037482_update.Designer.cs">
+      <DependentUpon>201803042037482_update.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AspNetRole.cs" />
@@ -252,7 +385,7 @@
     <Compile Include="Models\RelayToProcessCenterConnection.cs" />
     <Compile Include="Models\RelayToRelayConnection.cs" />
     <Compile Include="Models\RelayTransaction.cs" />
-    <Compile Include="Models\SecurityQuestions.cs" />
+    <Compile Include="Models\SecurityQuestion.cs" />
     <Compile Include="Models\Store.cs" />
     <Compile Include="Models\StoreTransaction.cs" />
     <Compile Include="Models\sysdiagram.cs" />
@@ -514,6 +647,105 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Migrations\201802051741030_initialcreate.resx">
+      <DependentUpon>201802051741030_initialcreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802051834116_add middle name.resx">
+      <DependentUpon>201802051834116_add middle name.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802051917266_reset.resx">
+      <DependentUpon>201802051917266_reset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802081944141_updating card dates.resx">
+      <DependentUpon>201802081944141_updating card dates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802110224262_Add IP address colunm.resx">
+      <DependentUpon>201802110224262_Add IP address colunm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802132232494_relay to realy.resx">
+      <DependentUpon>201802132232494_relay to realy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802161506351_newRequiredFields.resx">
+      <DependentUpon>201802161506351_newRequiredFields.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802171854380_node position.resx">
+      <DependentUpon>201802171854380_node position.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802192103413_qwer.resx">
+      <DependentUpon>201802192103413_qwer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802192104553_asp.resx">
+      <DependentUpon>201802192104553_asp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802192106553_qwert.resx">
+      <DependentUpon>201802192106553_qwert.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802192114303_qwe.resx">
+      <DependentUpon>201802192114303_qwe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802261812276_CustomersDropped.resx">
+      <DependentUpon>201802261812276_CustomersDropped.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802261826170_CustomersDropped1.resx">
+      <DependentUpon>201802261826170_CustomersDropped1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802261838283_CustomersDropped2.resx">
+      <DependentUpon>201802261838283_CustomersDropped2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802261840085_CustomersDropped3.resx">
+      <DependentUpon>201802261840085_CustomersDropped3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802261843577_CustomersDropped4.resx">
+      <DependentUpon>201802261843577_CustomersDropped4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802261852005_CustomersDropped5.resx">
+      <DependentUpon>201802261852005_CustomersDropped5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803020418129_generatedCards.resx">
+      <DependentUpon>201803020418129_generatedCards.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803020444002_accounts.resx">
+      <DependentUpon>201803020444002_accounts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803020510102_creditcards.resx">
+      <DependentUpon>201803020510102_creditcards.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803020556210_FinalAccounts.resx">
+      <DependentUpon>201803020556210_FinalAccounts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803020600436_phone.resx">
+      <DependentUpon>201803020600436_phone.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803021806565_acc.resx">
+      <DependentUpon>201803021806565_acc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803021924459_joinedcredits.resx">
+      <DependentUpon>201803021924459_joinedcredits.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803041231571_addedGenerateCardNumbersTable.resx">
+      <DependentUpon>201803041231571_addedGenerateCardNumbersTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803041254258_addedCardNumbers.resx">
+      <DependentUpon>201803041254258_addedCardNumbers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803041345184_afterError.resx">
+      <DependentUpon>201803041345184_afterError.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803041526380_new.resx">
+      <DependentUpon>201803041526380_new.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803041830018_update database.resx">
+      <DependentUpon>201803041830018_update database.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803041954040_security questions.resx">
+      <DependentUpon>201803041954040_security questions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803042026348_lockout for users.resx">
+      <DependentUpon>201803042026348_lockout for users.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803042037482_update.resx">
+      <DependentUpon>201803042037482_update.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.addmiddlename.resources" />
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.initialcreate.resources" />
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.reset.resources" />

@@ -94,6 +94,7 @@ namespace _744Project.Controllers
         }
         public int getLastCardId()
         {
+
             connect.Open();
             //Call a CreateCommand method from the SQLCommand class to use it for writing queries:
             SqlCommand cmd = connect.CreateCommand();

@@ -8,7 +8,20 @@
 <script src="@Url.Content("~/Scripts/cytoscape.js")" type="text/javascript"></script>
 
 <div class="row">
-	<div style="width: 80%;
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="col-sm-4">
+			</div>
+			<div class="col-sm-4">
+				<h3 style="text-align: center;vertical-align: middle;">Network Layout</h3>
+			</div>
+			<div class="col-sm-4" style=" display: flex; align-items: center; justify-content: center;">
+				<input id="clickMe" style="display: block; margin-top: 10px;" class="btn btn-default" type="button" value="Save Configuration" onclick="exportPositions();" />
+			</div>
+		</div>
+	</div>
+
+	<!--<div style="width: 80%;
         height: 10%;
         position: absolute;
         top: 8%;
@@ -23,11 +36,16 @@
 			<h3 style="text-align: center;vertical-align: middle;">Network Layout</h3>
 		</div>
 		<div class="col-sm-4" style=" display: flex; align-items: center; justify-content: center;">
-			<input id="clickMe"   style="display: block; margin-top: 10px;" class="btn btn-default" type="button" value="Save Configuration" onclick="exportPositions();" />
+			<input id="clickMe" style="display: block; margin-top: 10px;" class="btn btn-default" type="button" value="Save Configuration" onclick="exportPositions();" />
 		</div>
 
+	</div>-->
+
+	<div class="panel panel-default" style=" height: 500px; width:100%;">
+		<div id="cy" class="panel-body" style="height: 500px; width:100%;">
 		</div>
-	<div class="" id="cy" style="width: 80%;
+	</div>
+	<!--<div class="" id="cy" style="width: 80%;
         height: 60%;
         position: absolute;
         top: 20%;
@@ -36,9 +54,37 @@
 		border-radius: 5px;
 		background-color:white;
 	 ">
+	</div>-->
+
+
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-4">
+					<h3>Transactions</h3>
+					<dl>
+						@foreach (var trans in Model.transactions)
+						{
+							<dt>@trans.transactionID</dt>
+								<dd><button>Send</button></dd>
+						}
+					</dl>
+				</div>
+			</div>
+			<div class="col-sm-4" style="color:Red;text-align: center;vertical-align: middle; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
+				Processing Center
+			</div>
+			<div class="col-sm-4" style="color:Blue;text-align: center;vertical-align: middle; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
+				Relay
+			</div>
+			<div class="col-sm-4" style="color:Yellow;text-align: center;vertical-align: middle; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
+				Store
+			</div>
+
+		</div>
 	</div>
 
-	<div style="width: 80%;
+			<!--<div style="width: 80%;
         height: 5%;
         position: absolute;
         top: 82%;
@@ -46,32 +92,25 @@
 		border: 2px solid gray;
 		border-radius: 5px;
 		background-color:white;">
-		<div class="col-sm-4" style="color:Red;text-align: center;vertical-align: middle; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
-			Processing Center
-		</div>
-		<div class="col-sm-4" style="color:Blue;text-align: center;vertical-align: middle; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
-			Relay
-		</div>
-		<div class="col-sm-4" style="color:Yellow;text-align: center;vertical-align: middle; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
-			Store
-		</div>
-	</div>
-</div>
+				
+				
+			</div>
+		</div>-->
 
-<style type="text/css">
-	body {
-		background-image: url(../../stock-internet.jpg);
-	}
-	
-</style>
+		<style type="text/css">
+			body {
+				background-image: url(../../stock-internet.jpg);
+			}
+		</style>
 
 
 
 
-@section Scripts{
+		@section Scripts{
 
-<script>
+			<script>
 	var jsonData = @Html.Raw(Json.Encode(Model));
+	console.log(jsonData);
 
 	var processingCenter = 0;
 
@@ -102,7 +141,7 @@
 				NetworkElements.nodes.push({ data: { id: p, color: 'red', shape: 'triangle', category: 2 }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
 			}
 			//NetworkElements.nodes.push({ data: { id: p } });
-			
+
 		}
 		console.log("===========================================================================================");
 		for(var q in jsonData.connections){
@@ -139,7 +178,7 @@
 			name: 'preset'
 		},
 		elements: convertToCytoscape()
-	});	
+	});
 
 
 	testData()
@@ -149,7 +188,7 @@
 		console.log(cy.getElementById(processingCenter));
 		return testData;
 	}
-	
+
 
 	function exportPositions() {//cy
 		var list = [];
@@ -161,12 +200,12 @@
 			obj['type'] = nodes[i].category;
 			list.push(obj);
 		}
-		
+
 
 		list = JSON.stringify({
 			'nodePosition': list
 		});
-		
+
 
 		console.log(list);
 
@@ -226,8 +265,8 @@
 		console.log("=============================================================");
 
 		recursivePath(pathToJ, pathToJ[i - 1], i - 1);
-	
-		
+
+
 	});
 
 	function recursivePath(stack, item, i) {
@@ -285,5 +324,5 @@
 			;
 	}
 
-</script>
-}
+			</script>
+		}

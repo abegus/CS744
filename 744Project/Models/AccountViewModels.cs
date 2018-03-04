@@ -61,13 +61,13 @@ namespace _744Project.Models
 
         //[Required]
         //[DataType(DataType.Text)]
-        //[Display(Name = "Security Question")]
-        //public string SecuriyQuestion { get; set; }
+        [Display(Name = "Security Question")]
+        public string SecuriyQuestion { get; set; }
 
         //[Required]
         //[DataType(DataType.Password)]
-        //[Display(Name = "Answer")]
-        //public string AnswerToSecurityQuestion { get; set; }
+        [Display(Name = "Answer")]
+        public string AnswerToSecurityQuestion { get; set; }
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }

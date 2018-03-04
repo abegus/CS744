@@ -59,8 +59,12 @@ namespace _744Project.Controllers
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
+            LoginViewModel model = new LoginViewModel();
+            model.SecuriyQuestion = db.Questions.Find(1).QuestionText;
 
-            return View();
+            ViewBag.Security = "";
+            return View(model);
+
         }
 
         //
@@ -74,6 +78,41 @@ namespace _744Project.Controllers
             {
                 return View(model);
             }
+
+            var curLoginUser = (from usr in db.AspNetUsers where usr.Email == model.Email select usr).First();
+            var expectedAnswer = (from sec in db.SecurityQuestions
+                                  where sec.AspNetUserID == curLoginUser.Id && sec.QuestionID == 1
+                                  select sec
+                                  ).First();
+
+            
+
+            if(curLoginUser.numFailedAttempts > 3)
+            {
+                ViewBag.Lockout = "Locked out";
+                return View(model);
+            }
+
+            //no answer in the database
+            if(expectedAnswer == null)
+            {
+                ViewBag.Security = "No such Security quesiton exists";
+                return View(model);
+                //return nothing works
+
+            }
+            //answer is in the database, but the answer provided by the user doesnt match
+            else if (!expectedAnswer.Answer.Equals(model.AnswerToSecurityQuestion))
+            {
+                curLoginUser.numFailedAttempts++;
+                db.SaveChanges();
+                ViewBag.Security = "Security question incorrect";
+                return View(model);
+                //return not the same
+            }
+            //else it works and continue
+
+            DateTime test = new DateTime();
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             UserManager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(10);
@@ -84,14 +123,22 @@ namespace _744Project.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    curLoginUser.numFailedAttempts = 0;
+                    db.SaveChanges();
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
+                    curLoginUser.numFailedAttempts++;
+                    db.SaveChanges();
+
+                    return View(model);
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
+                    curLoginUser.numFailedAttempts++;
+                    db.SaveChanges();
                     return View(model);
             }
         }
