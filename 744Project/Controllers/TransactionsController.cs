@@ -16,13 +16,13 @@ namespace _744Project.Controllers
         Encryption encryption = new Encryption();
 
         public ActionResult Encrypt(string id)
-        {            
-            encryption.encryptAndStoreTransaction(id);        
+        {
+            encryption.encryptAndStoreTransaction(id);
             return RedirectToAction("index", "Transactions");
         }
 
         public ActionResult Decrypt(string id)
-        {         
+        {
             encryption.decryptAndStoreTransaction(id);
             return RedirectToAction("index", "Transactions");
         }
@@ -30,7 +30,7 @@ namespace _744Project.Controllers
         // GET: Transactions
         public ActionResult Index()
         {
-            var transactions = db.Transactions.Include(t => t.Account).Include(t => t.CreditCard);
+            var transactions = db.Transactions.Include(t => t.CreditCard);
             return View(transactions.ToList());
         }
 
@@ -52,8 +52,7 @@ namespace _744Project.Controllers
         // GET: Transactions/Create
         public ActionResult Create()
         {
-            ViewBag.accountID = new SelectList(db.Accounts, "accountID", "accountNumber");
-            ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardNumber");
+            ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardSecurityCode");
             return View();
         }
 
@@ -62,7 +61,7 @@ namespace _744Project.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "transactionID,transactionTime,transactionAmount,transactionType,transactionMerchant,transactionStatus,cardID,connectionID,accountID")] Transaction transaction)
+        public ActionResult Create([Bind(Include = "transactionID,transactionTime,transactionAmount,transactionType,transactionMerchant,transactionStatus,encryptedFlag,cardID")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
@@ -71,8 +70,7 @@ namespace _744Project.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.accountID = new SelectList(db.Accounts, "accountID", "accountNumber", transaction.accountID);
-            ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardNumber", transaction.cardID);
+            ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardSecurityCode", transaction.cardID);
             return View(transaction);
         }
 
@@ -88,8 +86,7 @@ namespace _744Project.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.accountID = new SelectList(db.Accounts, "accountID", "accountNumber", transaction.accountID);
-            ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardNumber", transaction.cardID);
+            ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardSecurityCode", transaction.cardID);
             return View(transaction);
         }
 
@@ -98,7 +95,7 @@ namespace _744Project.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "transactionID,transactionTime,transactionAmount,transactionType,transactionMerchant,transactionStatus,cardID,connectionID,accountID")] Transaction transaction)
+        public ActionResult Edit([Bind(Include = "transactionID,transactionTime,transactionAmount,transactionType,transactionMerchant,transactionStatus,encryptedFlag,cardID")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
@@ -106,8 +103,7 @@ namespace _744Project.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.accountID = new SelectList(db.Accounts, "accountID", "accountNumber", transaction.accountID);
-            ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardNumber", transaction.cardID);
+            ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardSecurityCode", transaction.cardID);
             return View(transaction);
         }
 

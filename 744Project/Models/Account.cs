@@ -13,7 +13,7 @@ namespace _744Project.Models
         public Account()
         {
             CreditCards = new HashSet<CreditCard>();
-            Transactions = new HashSet<Transaction>();
+            //Transactions = new HashSet<Transaction>();
         }
         [Display(Name = "Account ID")]
         public int accountID { get; set; }
@@ -74,8 +74,8 @@ namespace _744Project.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CreditCard> CreditCards { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Transaction> Transactions { get; set; }
+        /*[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Transaction> Transactions { get; set; }*/
 
         
     }

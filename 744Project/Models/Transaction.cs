@@ -15,29 +15,42 @@ namespace _744Project.Models
             RelayTransactions = new HashSet<RelayTransaction>();
             StoreTransactions = new HashSet<StoreTransaction>();
         }
-
+     
         public int transactionID { get; set; }
 
+        [Display(Name = "Transaction Time")]
+        [Required]
         public DateTime? transactionTime { get; set; }
 
-        [StringLength(50)]
+        [Display(Name = "Transaction Amount")]
+        [Required]
+        [StringLength(50, MinimumLength = 2)]
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Transaction Amount must be digits.")]
         public string transactionAmount { get; set; }
 
-        [StringLength(50)]
+        [Display(Name = "Transaction Type")]
+        [Required]
+        [StringLength(50, MinimumLength = 2)]
         public string transactionType { get; set; }
 
-        [StringLength(100)]
+        [Display(Name = "Transaction Merchant")]
+        [Required]
+        [StringLength(100, MinimumLength = 2, ErrorMessage = "The transaction Merchant length is two at least")]
         public string transactionMerchant { get; set; }
 
         public bool? transactionStatus { get; set; }
 
+        public bool? encryptedFlag { get; set; }
+
+        [Display(Name = "Card ID")]
+        [Required]
         public int? cardID { get; set; }
 
-        public int? connectionID { get; set; }
-
+       /* [Display(Name = "Account ID")]
+        [Required]
         public int? accountID { get; set; }
 
-        public virtual Account Account { get; set; }
+        public virtual Account Account { get; set; }*/
 
         public virtual CreditCard CreditCard { get; set; }
 

@@ -14,9 +14,9 @@
             </p>
             <table class="table">
                 <tr>
-                    <th>
+                    @*<th>
                         @Html.DisplayNameFor(model => model.Account.accountNumber)
-                    </th>
+                    </th>*@
                     <th>
                         @Html.DisplayNameFor(model => model.CreditCard.cardNumber)
                     </th>
@@ -35,18 +35,16 @@
                     <th>
                         @Html.DisplayNameFor(model => model.transactionStatus)
                     </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.connectionID)
-                    </th>
+                 
                     <th></th>
                 </tr>
 
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>
+                        @*<td>
                             @Html.DisplayFor(modelItem => item.Account.accountNumber)
-                        </td>
+                        </td>*@
                         <td>
                             @Html.DisplayFor(modelItem => item.CreditCard.cardNumber)
                         </td>
@@ -65,9 +63,7 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.transactionStatus)
                         </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.connectionID)
-                        </td>
+                       
                         <td>
                             @Html.ActionLink("Edit", "Edit", new { id = item.transactionID }) |
                             @Html.ActionLink("Details", "Details", new { id = item.transactionID }) |

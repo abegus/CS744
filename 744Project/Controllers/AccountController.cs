@@ -73,7 +73,7 @@ namespace _744Project.Controllers
             {
                 return View(model);
             }
-
+            DateTime test = new DateTime();
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             UserManager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(10);
