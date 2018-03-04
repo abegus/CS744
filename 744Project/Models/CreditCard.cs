@@ -4,6 +4,7 @@ namespace _744Project.Models
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Data.Entity;
     using System.Data.Entity.Spatial;
 
     public partial class CreditCard
@@ -16,33 +17,35 @@ namespace _744Project.Models
         [Display(Name = "Card ID")]
         [Key]
         public int cardID { get; set; }
-        
-        [Required]
+
+        //[Required]
         [Display(Name = "Card Number")]
-        [StringLength(50)]
-        public string cardNumber { get; set; }
+        //[Range(1000000000000000, 9999999999999999, ErrorMessage = "Card Number must be 16 digits and not starting with a zero ")]
+        public Int64 cardNumber { get; set; }
         [Required]
         [Display(Name = "Card Expiration Date")]
         [DataType(DataType.Date)]
         public DateTime cardExpirationDate { get; set; }
         [Required]
         [Display(Name = "Card Security Code")]
-        [StringLength(50)]
+        [StringLength(3, MinimumLength = 3)]
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Security Code must be 3 digits")]
         public string cardSecurityCode { get; set; }
         [Required]
         [Display(Name = "Card Maximum Allowed")]
-        [StringLength(50)]
-        public string cardMaxAllowed { get; set; }
-
+        [Range(0, 100000)]
+        public int cardMaxAllowed { get; set; }
+        [Required]
+        [Display(Name = "Account Number")]
         public int? accountID { get; set; }
         //
         [Required]
-        [Display(Name = "First Name")]
-        [StringLength(50)]
+        [Display(Name = "Card First Name")]
+        [StringLength(15, MinimumLength = 2)]
         public string firstName { get; set; }
         [Required]
-        [Display(Name = "Last Name")]
-        [StringLength(50)]
+        [Display(Name = "Card Last Name")]
+        [StringLength(15, MinimumLength = 2)]
         public string lastName { get; set; }
         //
 
@@ -54,5 +57,7 @@ namespace _744Project.Models
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Transaction> Transactions { get; set; }
+
+        
     }
 }

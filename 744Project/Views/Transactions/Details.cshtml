@@ -1,0 +1,87 @@
+﻿@model _744Project.Models.Transaction
+
+@{
+    ViewBag.Title = "Details";
+}
+<div class="container">
+    <h2>Details</h2>
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+            <div>
+                <h4>Transaction</h4>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Account.accountNumber)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Account.accountNumber)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.CreditCard.cardNumber)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.CreditCard.cardNumber)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.transactionTime)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.transactionTime)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.transactionAmount)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.transactionAmount)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.transactionType)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.transactionType)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.transactionMerchant)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.transactionMerchant)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.transactionStatus)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.transactionStatus)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.connectionID)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.connectionID)
+                    </dd>
+
+                </dl>
+            </div>
+            <p>
+                @Html.ActionLink("Edit", "Edit", new { id = Model.transactionID }) |
+                @Html.ActionLink("Back to List", "Index")
+            </p>
+</div>
+</div>
+</div>

@@ -12,13 +12,13 @@
                 <hr />
                 <dl class="dl-horizontal">
                     @*<dt>
-                        @Html.DisplayNameFor(model => model.Customer.customerFirstname)
+            @Html.DisplayNameFor(model => model.Customer.customerFirstname)
 
-                    </dt>
+        </dt>
 
-                    <dd>
-                        @Html.DisplayFor(model => model.Customer.customerFirstname)
-                    </dd>*@
+        <dd>
+            @Html.DisplayFor(model => model.Customer.customerFirstname)
+        </dd>*@
 
                     <dt>
                         @Html.DisplayNameFor(model => model.accountNumber)
@@ -44,6 +44,55 @@
                         @Html.DisplayFor(model => model.accountName)
                     </dd>
 
+                    <dt>
+                        @Html.DisplayNameFor(model => model.accountFirstName)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.accountFirstName)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.accountLastName)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.accountLastName)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.accountAddress)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.accountAddress)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.accountCity)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.accountCity)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.accountState)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.accountState)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.accountZip)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.accountZip)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.accountPhone)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.accountPhone)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.accountMax)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.accountMax)
+                    </dd>
+
                 </dl>
             </div>
             <p>
@@ -61,48 +110,61 @@
                     @* I was going to write a count loop and hide the below table headers if there is no credit card assigned to an account *@
                     @* but Dr. Kasi spicifically says that each account should have at least one credit card, and an account will not be created without a credit card*@
                     <tr>
+                        @*<th>
+            <h5>Credit Card ID</h5>
+        </th>*@
                         <th>
-                            <h5>Credit Card ID</h5>
+                            <h5>Card Number</h5>
                         </th>
                         <th>
-                            <h5>Credit Card Number</h5>
+                            <h5>Expiration Date</h5>
                         </th>
                         <th>
-                            <h5>Credit Card Expiration Date</h5>
+                            <h5>Security Code</h5>
                         </th>
                         <th>
-                            <h5>Credit Card Security Code</h5>
+                            <h5>Card First Name</h5>
                         </th>
                         <th>
-                            <h5>Credit Card Max Allowed</h5>
+                            <h5>Card Last Name</h5>
                         </th>
+                        @*<th>
+            <h5>Credit Card Max Allowed</h5>
+        </th>*@
                         <th></th>
                     </tr>
 
                     @foreach (var item in Model.CreditCards)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.cardID)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.cardNumber)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.cardExpirationDate)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.cardSecurityCode)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.cardMaxAllowed)
-                            </td>
-                            <td>
-                                @Html.ActionLink("Edit", "../CreditCards/Edit", new { id = item.cardID }) |
-                                @Html.ActionLink("Details", "../CreditCards/Details", new { id = item.cardID }) |
-                                @Html.ActionLink("Delete", "../CreditCards/Delete", new { id = item.cardID })
-                            </td>
-                        </tr>
+                    <tr>
+                        @*<td>
+            @Html.DisplayFor(modelItem => item.cardID)
+        </td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.cardNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.cardExpirationDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.cardSecurityCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.firstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.lastName)
+                        </td>
+
+                        @*<td>
+            @Html.DisplayFor(modelItem => item.cardMaxAllowed)
+        </td>*@
+                        <td>
+                            @Html.ActionLink("Edit", "../CreditCards/Edit", new { id = item.cardID }) |
+                            @Html.ActionLink("Details", "../CreditCards/Details", new { id = item.cardID }) |
+                            @Html.ActionLink("Delete", "../CreditCards/Delete", new { id = item.cardID })
+                        </td>
+                    </tr>
                     }
 
                 </table>
