@@ -14,13 +14,15 @@ namespace _744Project.Models
             AspNetUserClaims = new HashSet<AspNetUserClaim>();
             AspNetUserLogins = new HashSet<AspNetUserLogin>();
             AspNetRoles = new HashSet<AspNetRole>();
-            SecurityQuestions = new HashSet<SecurityQuestions>();
+            SecurityQuestions = new HashSet<SecurityQuestion>();
         }
 
         public string Id { get; set; }
 
         [StringLength(256)]
         public string Email { get; set; }
+
+        public int numFailedAttempts { get; set; }
 
         public bool EmailConfirmed { get; set; }
 
@@ -54,6 +56,6 @@ namespace _744Project.Models
         public virtual ICollection<AspNetRole> AspNetRoles { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SecurityQuestions> SecurityQuestions { get; set; }
+        public virtual ICollection<SecurityQuestion> SecurityQuestions { get; set; }
     }
 }

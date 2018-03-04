@@ -352,6 +352,18 @@
     <Compile Include="Migrations\201803041830018_update database.Designer.cs">
       <DependentUpon>201803041830018_update database.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803041954040_security questions.cs" />
+    <Compile Include="Migrations\201803041954040_security questions.Designer.cs">
+      <DependentUpon>201803041954040_security questions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803042026348_lockout for users.cs" />
+    <Compile Include="Migrations\201803042026348_lockout for users.Designer.cs">
+      <DependentUpon>201803042026348_lockout for users.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803042037482_update.cs" />
+    <Compile Include="Migrations\201803042037482_update.Designer.cs">
+      <DependentUpon>201803042037482_update.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -373,7 +385,7 @@
     <Compile Include="Models\RelayToProcessCenterConnection.cs" />
     <Compile Include="Models\RelayToRelayConnection.cs" />
     <Compile Include="Models\RelayTransaction.cs" />
-    <Compile Include="Models\SecurityQuestions.cs" />
+    <Compile Include="Models\SecurityQuestion.cs" />
     <Compile Include="Models\Store.cs" />
     <Compile Include="Models\StoreTransaction.cs" />
     <Compile Include="Models\sysdiagram.cs" />
@@ -724,6 +736,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803041830018_update database.resx">
       <DependentUpon>201803041830018_update database.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803041954040_security questions.resx">
+      <DependentUpon>201803041954040_security questions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803042026348_lockout for users.resx">
+      <DependentUpon>201803042026348_lockout for users.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803042037482_update.resx">
+      <DependentUpon>201803042037482_update.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.addmiddlename.resources" />
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.initialcreate.resources" />

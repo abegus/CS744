@@ -23,6 +23,7 @@ namespace _744Project.ViewModels
             connections = new List<IpConnection>();
             networkEntities = new Dictionary<string, NetworkEntity>();
             transactions = (from trans in db.Transactions select trans).ToList();  //trans.encryptedFlag
+            
 
             var storeToRelays = from store in db.Stores select store;
             //connections = 
@@ -128,6 +129,14 @@ namespace _744Project.ViewModels
             return new Tuple<decimal, decimal>(nc.x, nc.y);
         }
 
+
+    }
+
+    public class EncryptedTransaction
+    {
+        public string Id { get; set; }
+        public string cardId { get; set; }
+        public string storeIp { get; set; }
 
     }
 
