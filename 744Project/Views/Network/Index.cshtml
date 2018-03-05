@@ -8,11 +8,11 @@
 <script src="@Url.Content("~/Scripts/cytoscape.js")" type="text/javascript"></script>
 
 <div class="row">
-	<div class="panel panel-default">
+	<div class="panel panel-default" style="margin-top:10px">
 		<div class="panel-body">
 			<div class="col-sm-4">
-				<button class="PauseButton">pause</button>
-				<button class="PlayButton">play</button>
+				<button class="PauseButton btn btn-danger">pause</button>
+				<button class="PlayButton btn btn-success">play</button>
 			</div>
 			<div class="col-sm-4">
 				<h3 style="text-align: center;vertical-align: middle;">Network Layout</h3>
@@ -41,7 +41,7 @@
 							<td>@trans.Id</td>
 							<td>@trans.storeIp</td>
 							<td>@trans.transactionAmount</td>
-							<td><button class="SendTransaction" id="@trans.storeIp">Send</button></td>
+							<td><button class="SendTransaction btn btn-default" id="@trans.storeIp">Send</button></td>
 						</tr>
 					}
 				</table>
@@ -233,8 +233,9 @@
 	function recursivePath(stack, item, i) {
 		var ann = cy.getElementById(item._private.data.id).animation({
 			style: {
-				'background-color': 'purple',
-				'width': 50
+				'background-color': 'white',
+				'width': 50,
+				'height': 50
 			},
 			duration: 1000
 			});
@@ -247,7 +248,7 @@
 				ann.reverse().rewind().play();
 				animations.pop();
 				if (i > 0) { // was >=
-					return recursivePath(stack, stack[i], i - 1); // i
+					return recursivePath(stack, stack[i], i ); // i
 				}
 				return backTrackAnimation(stack, stack[0], 0);
 		});
@@ -258,7 +259,8 @@
 		var ann = cy.getElementById(item._private.data.id).animation({
 			style: {
 				'background-color': 'green',
-				'width': 25
+				'width': 50,
+				'height':50
 			},
 			duration: 1000
 		});
