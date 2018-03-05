@@ -158,6 +158,7 @@ namespace _744Project.Controllers
         }
         public void checkAttachedTransactionsForTransaction(int id, string tableName, string tableId)
         {
+            connect.Open();
             SqlCommand cmd = connect.CreateCommand();
             cmd.CommandText = "select count(*) from "+tableName+" where transactionID = '" + id + "'  ";
             int totalTransactionsForCard = Convert.ToInt32(cmd.ExecuteScalar());
@@ -175,6 +176,7 @@ namespace _744Project.Controllers
                     cmd.ExecuteScalar();
                 }
             }
+            connect.Close();
         }
 
         public void checkAttachedTransactions(int id)
@@ -189,25 +191,27 @@ namespace _744Project.Controllers
                 //count the related cards for the selected account:
                 cmd.CommandText = "select count(*) from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY transactionID ASC) ,* FROM transactions where cardID = '" + id + "') as t";
                 int totalTransactions = Convert.ToInt32(cmd.ExecuteScalar());
+                connect.Close();
                 for (int i = 1; i <= totalTransactions; i++)
                 {
                     //select the transactionID for the selected credit card:
                     cmd.CommandText = "select transactionID from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY transactionID ASC) ,* FROM Transactions where cardID = '" + id + "') as t where rowNum = '"+i+"' ";
                     int transactionID = Convert.ToInt32(cmd.ExecuteScalar());
-                    //check if there is a transaction in the ProcessCenterTransactions:
-                    //checkAttachedProcessTransactions(transactionID);
+                    //check if there is a transaction in the ProcessCenterTransactions:                    
                     checkAttachedTransactionsForTransaction(transactionID, "ProcessCenterTransactions", "processCenterTransactionID");
                     //check if there is a transaction in StoreTransactions:
                     checkAttachedTransactionsForTransaction(transactionID, "StoreTransactions", "storeTransactionID");
                     //check if there is a transaction in RelayTransactions:
                     checkAttachedTransactionsForTransaction(transactionID, "RelayTransactions", "relayTransactionID");                    
                 }
+                connect.Open();
                 //Now, delete the transaction from the Transactions table:
                 cmd.CommandText = "delete from transactions where cardID = '" + id + "' ";
                 cmd.ExecuteScalar();
+                //Close the connection to the database:
+                connect.Close();
             }
-            //Close the connection to the database:
-            connect.Close();
+            
         }
         public Boolean lastCardForAccount(int cardId)
         {

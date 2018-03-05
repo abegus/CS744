@@ -64,7 +64,7 @@ namespace _744Project.Models
         [RegularExpression("^[0-9]*$", ErrorMessage = "Phone number must be 10 digits")]
         public string accountPhone { get; set; }
         [Required]
-        [Range(0, 100000)]
+        [Range(0, 25000)]
         [Display(Name = "Account Maximum Allowed")]
         public int accountMax { get; set; }
         //
