@@ -60,10 +60,9 @@ namespace _744Project.Controllers
             ViewBag.ReturnUrl = returnUrl;
             LoginViewModel model = new LoginViewModel();
             Random index = new Random();
-            var randomIndex = index.Next(1, 3);
-            model.SecuriyQuestion = db.Questions.Find(1).QuestionText;
-            model.Index = randomIndex;
-            ViewBag.Security = "";
+            var randomIndex = index.Next(1, 4);
+            model.SecuriyQuestion = db.Questions.Find(randomIndex).QuestionText;
+            ViewBag.Security ="";
             return View(model);
 
         }
@@ -80,14 +79,24 @@ namespace _744Project.Controllers
                 return View(model);
             }
 
+            
             var answers = model.AnswerToSecurityQuestion;
-            var QuestionID = (from ans in db.SecurityQuestions where ans.Answer == answers select ans.QuestionID).First();
-
-            var curLoginUser = (from usr in db.AspNetUsers where usr.Email == model.Email select usr).First();
-            var expectedAnswer = (from sec in db.SecurityQuestions
-                                  where sec.AspNetUserID == curLoginUser.Id && sec.QuestionID == 1
-                                  select sec
-                                  ).First();
+            var question = model.SecuriyQuestion;
+            var QuestionIDUser = (from ans in db.SecurityQuestions where ans.Answer == answers select ans).FirstOrDefault();
+            
+            if(QuestionIDUser == null)
+            {
+                ViewBag.Security = "No such Security quesiton exists";
+                model.SecuriyQuestion = question;
+                return View(model);
+            }
+            var QuestionID = QuestionIDUser.QuestionID;
+                var curLoginUser = (from usr in db.AspNetUsers where usr.Email == model.Email select usr).First();
+                var expectedAnswer = (from sec in db.SecurityQuestions
+                                      where sec.AspNetUserID == curLoginUser.Id && sec.QuestionID == QuestionID
+                                      select sec
+                                      ).First();
+            
 
             
 
@@ -145,6 +154,7 @@ namespace _744Project.Controllers
                     db.SaveChanges();
                     return View(model);
             }
+
         }
 
         //
