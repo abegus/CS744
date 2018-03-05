@@ -52,7 +52,7 @@ namespace _744Project.Controllers
         // GET: Transactions/Create
         public ActionResult Create()
         {
-            ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardSecurityCode");
+            ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardNumber");
             // ViewBag.storeID = new SelectList(db.Stores, "?", "?");
             ViewBag.storeID = new SelectList(db.Stores, "storeID", "storeName");
             return View();
@@ -81,7 +81,8 @@ namespace _744Project.Controllers
 
 
 
-            ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardSecurityCode", transaction.cardID);
+            ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardNumber", transaction.cardID);
+            ViewBag.storeID = new SelectList(db.Stores, "storeID", "storeName", transaction.storeID);
             return View(transaction);
         }
 
@@ -97,7 +98,8 @@ namespace _744Project.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardSecurityCode", transaction.cardID);
+            ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardNumber", transaction.cardID);
+            ViewBag.storeID = new SelectList(db.Stores, "storeID", "storeName", transaction.storeID);
             return View(transaction);
         }
 
@@ -106,7 +108,7 @@ namespace _744Project.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "transactionID,transactionTime,transactionAmount,transactionType,transactionMerchant,transactionStatus,encryptedFlag,cardID")] Transaction transaction)
+        public ActionResult Edit([Bind(Include = "transactionID,transactionTime,transactionAmount,transactionType,transactionMerchant,transactionStatus,encryptedFlag,cardID,storeID")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
@@ -114,7 +116,8 @@ namespace _744Project.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardSecurityCode", transaction.cardID);
+            ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardNumber", transaction.cardID);
+            ViewBag.storeID = new SelectList(db.Stores, "storeID", "storeName", transaction.storeID);
             return View(transaction);
         }
 

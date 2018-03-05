@@ -25,7 +25,7 @@ namespace _744Project.Models
         [Display(Name = "Transaction Amount")]
         [Required]
         [StringLength(50, MinimumLength = 2)]
-        [RegularExpression("^[0-9]*$", ErrorMessage = "Transaction Amount must be digits.")]
+        [RegularExpression("^[0-9]+[.]*[0-9]*$", ErrorMessage = "Transaction Amount must be digits.")]
         public string transactionAmount { get; set; }
 
         [Display(Name = "Transaction Type")]
