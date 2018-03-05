@@ -99,9 +99,19 @@ namespace _744Project.Controllers
             {
                 return HttpNotFound();
             }
+            //To get the cardID then use it when calling the POST method:
+            if (id != null)
+            {
+                cardID = Convert.ToInt32(id);
+                cardNumber = creditCard.cardNumber;
+            }
+
             ViewBag.accountID = new SelectList(db.Accounts, "accountID", "accountNumber", creditCard.accountID);
             return View(creditCard);
         }
+        //To store the value of cardID and cardNumber:
+        static int cardID;
+        static long cardNumber;
 
         // POST: CreditCards/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -114,10 +124,21 @@ namespace _744Project.Controllers
             {
                 db.Entry(creditCard).State = EntityState.Modified;
                 db.SaveChanges();
+                //Change the accountNumber again to match the accountID:
+                changeCardNumberToPreviousCardNumber(cardID, cardNumber);
                 return RedirectToAction("Index");
             }
-            ViewBag.accountID = new SelectList(db.Accounts, "accountID", "accountNumber", creditCard.accountID);
+            ViewBag.accountID = new SelectList(db.Accounts, "accountID", "accountNumber", creditCard.accountID);            
             return View(creditCard);
+        }
+        public void changeCardNumberToPreviousCardNumber(int oldCardId, long newCardNumber)// was int newCardNumber
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = "update CreditCards set cardNumber = '" + newCardNumber + "' where cardID = '" + oldCardId + "' ";
+            cmd.ExecuteScalar();
+            connect.Close();
         }
 
         // GET: CreditCards/Delete/5
