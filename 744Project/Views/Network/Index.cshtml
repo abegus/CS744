@@ -11,6 +11,8 @@
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<div class="col-sm-4">
+				<button class="PauseButton">pause</button>
+				<button class="PlayButton">play</button>
 			</div>
 			<div class="col-sm-4">
 				<h3 style="text-align: center;vertical-align: middle;">Network Layout</h3>
@@ -20,56 +22,30 @@
 			</div>
 		</div>
 	</div>
-
-	<!--<div style="width: 80%;
-        height: 10%;
-        position: absolute;
-        top: 8%;
-        left: 10%;
-		border: 2px solid gray;
-		border-radius: 5px;
-		background-color:white;
-	 ">
-		<div class="col-sm-4">
-		</div>
-		<div class="col-sm-4">
-			<h3 style="text-align: center;vertical-align: middle;">Network Layout</h3>
-		</div>
-		<div class="col-sm-4" style=" display: flex; align-items: center; justify-content: center;">
-			<input id="clickMe" style="display: block; margin-top: 10px;" class="btn btn-default" type="button" value="Save Configuration" onclick="exportPositions();" />
-		</div>
-
-	</div>-->
+	</div>
 
 	<div class="panel panel-default" style=" height: 500px; width:100%;">
 		<div id="cy" class="panel-body" style="height: 500px; width:100%;">
 		</div>
 	</div>
-	<!--<div class="" id="cy" style="width: 80%;
-        height: 60%;
-        position: absolute;
-        top: 20%;
-        left: 10%;
-		border: 2px solid gray;
-		border-radius: 5px;
-		background-color:white;
-	 ">
-	</div>-->
 
 
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<div class="row">
-				<div class="col-md-4">
-					<h3>Transactions</h3>
-					<dl>
-						@foreach (var trans in Model.transactions)
-						{
-							<dt>@trans.transactionID</dt>
-								<dd><button>Send</button></dd>
-						}
-					</dl>
-				</div>
+				<table class="table table-bordered">
+					<tr><th>Transaction Id</th><th>Store Ip</th><th>Encrypted Amount</th><th>Action</th></tr>
+					@foreach (var trans in Model.transactions)
+					{
+						<tr>
+							<td>@trans.Id</td>
+							<td>@trans.storeIp</td>
+							<td>@trans.transactionAmount</td>
+							<td><button class="SendTransaction" id="@trans.storeIp">Send</button></td>
+						</tr>
+					}
+				</table>
+				
 			</div>
 			<div class="col-sm-4" style="color:Red;text-align: center;vertical-align: middle; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
 				Processing Center
@@ -84,18 +60,6 @@
 		</div>
 	</div>
 
-			<!--<div style="width: 80%;
-        height: 5%;
-        position: absolute;
-        top: 82%;
-        left: 10%;
-		border: 2px solid gray;
-		border-radius: 5px;
-		background-color:white;">
-				
-				
-			</div>
-		</div>-->
 
 		<style type="text/css">
 			body {
@@ -106,9 +70,15 @@
 
 
 
-		@section Scripts{
+@section Scripts{
 
-			<script>
+	<script>
+
+	/* ================================================================================================
+										Cytoscape SETUP SECTION
+	===================================================================================================*/
+
+	//This converts the Model into JSON data
 	var jsonData = @Html.Raw(Json.Encode(Model));
 	console.log(jsonData);
 
@@ -119,39 +89,7 @@
 		edges: []
 	};
 
-	function convertToCytoscape() {
-		//alert("hi");
-		console.log("Hello..");
-		console.log(jsonData.networkEntities);
-		for (var p in jsonData.networkEntities) {
-			var xLocation = 0;
-			var yLocation = 0;
-			//console.log(p);
-			//console.log(jsonData.networkEntities[p].type);
-			//if it is a store
-			if (jsonData.networkEntities[p].type == 0) {
-				NetworkElements.nodes.push({ data: { id: p, color: 'yellow', shape: 'square', category: 0 }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
-			}
-			//if it is a relay
-			else if (jsonData.networkEntities[p].type == 1) {
-				NetworkElements.nodes.push({ data: { id: p, color: 'blue', shape: 'circle', category: 1 }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
-			}
-			else {
-				processingCenter = p;
-				NetworkElements.nodes.push({ data: { id: p, color: 'red', shape: 'triangle', category: 2 }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
-			}
-			//NetworkElements.nodes.push({ data: { id: p } });
-
-		}
-		console.log("===========================================================================================");
-		for(var q in jsonData.connections){
-			//console.log(jsonData.connections[q]);
-			NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight} });
-		}
-
-		return NetworkElements;
-	}
-
+	//initializes the Cytoscape object. (This is what the graph is)
 	var cy = cytoscape({
 		container: document.getElementById('cy'),
 		style: [
@@ -177,19 +115,46 @@
 		layout: {
 			name: 'preset'
 		},
+		//RIGHT HERE IS WHERE I GET THE ELEMENTS FROM THE MODEL
 		elements: convertToCytoscape()
 	});
 
 
-	testData()
-	function testData() {
-		console.log(NetworkElements);
-		console.log(processingCenter);
-		console.log(cy.getElementById(processingCenter));
-		return testData;
+	// This function converts the JSON representation of the Model into the Cytoscape elements
+	function convertToCytoscape() {
+		//alert("hi");
+		//console.log("Hello..");
+		console.log(jsonData.networkEntities);
+		for (var p in jsonData.networkEntities) {
+			var xLocation = 0;
+			var yLocation = 0;
+			//if it is a store
+			if (jsonData.networkEntities[p].type == 0) {
+				NetworkElements.nodes.push({ data: { id: p, color: 'yellow', shape: 'square', category: 0 }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
+			}
+			//if it is a relay
+			else if (jsonData.networkEntities[p].type == 1) {
+				NetworkElements.nodes.push({ data: { id: p, color: 'blue', shape: 'circle', category: 1 }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
+			}
+			else {
+				processingCenter = p;
+				NetworkElements.nodes.push({ data: { id: p, color: 'red', shape: 'triangle', category: 2 }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
+			}
+		}
+		//console.log("===========================================================================================");
+		for (var q in jsonData.connections) {
+			//console.log(jsonData.connections[q]);
+			NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight } });
+		}
+
+		return NetworkElements;
 	}
 
+	/* ================================================================================================
+										EXPORT NODE POSITION SECTION
+	===================================================================================================*/
 
+	// this sends the (X,Y) locations of the nodes to the database to be stored.
 	function exportPositions() {//cy
 		var list = [];
 		var nodes = cy.nodes();
@@ -223,106 +188,128 @@
 		});
 	}
 
+		
 
-	/*cy.nodes().animate({
-		style: { 'background-color': 'cyan' }
-	}, {
-			duration: 5000,
-			complete: function () {
-				console.log('Animation complete');
-			}
-		});
+	/* ================================================================================================
+										ANIMATION SECTION
+	===================================================================================================*/
+	var animations = [];
 
-	console.log('Animating nodes...');
-
-	setTimeout(function () {
-		console.log('Stopping nodes animation');
-		cy.nodes().stop();
-	}, 2500);*/
-
-	/*cy.$('#1').on('tap', function (evt) {
-		console.log('tap ' + evt.target.id());
-	});
-	*/
+	//Calculates the shortest path to the Processing Center
 	var dijkstra = cy.elements().dijkstra(cy.getElementById(processingCenter), function (edge) {
 		//console.log(processingCenter);
 		//console.log(cy.elements());
 		return edge.data('weight');
 	});
 
-	cy.on('click', 'node', function (evt) {
-		console.log('clicked ' + this.id());
-
-		var pathToJ = dijkstra.pathTo(cy.getElementById(this.id()));
-
-		//var i = 0;
-
-		var i = pathToJ.length
-		console.log(i);
-
-
+	// When one of the transaction "Send" buttons are clicked, this is called which starts the animation 
+	$(".SendTransaction").click(function () {
+		// Holds the product ID of the clicked element
+		var storeIp = $(this).attr('id');
+		//console.log(storeIp);
+		var pathToJ = dijkstra.pathTo(cy.getElementById(storeIp));
+		var i = pathToJ.length;
+		/*console.log(i);
 		console.log(pathToJ);
-		console.log("=============================================================");
-
+		console.log("=============================================================");*/
 		recursivePath(pathToJ, pathToJ[i - 1], i - 1);
-
-
 	});
 
+	//Starts the animation on the click of a node
+	cy.on('click', 'node', function (evt) {
+		console.log('clicked ' + this.id());
+		var pathToJ = dijkstra.pathTo(cy.getElementById(this.id()));
+		var i = pathToJ.length;
+		/*console.log(i);
+		console.log(pathToJ);
+		console.log("=============================================================");*/
+		recursivePath(pathToJ, pathToJ[i - 1], i - 1);
+	});
+
+
+	//This function recursively calls itself to do the animation from node to node. the elements from the Store to the Processing
+	// Center are stored in the 'stack' parameter, while the current element is the 'item', and the current index is 'i'.
+	//once this is done, it calls the promise function, which reverses the animation by calling backTrackAnimation
 	function recursivePath(stack, item, i) {
-
-
 		var ann = cy.getElementById(item._private.data.id).animation({
 			style: {
 				'background-color': 'purple',
 				'width': 50
 			},
-			duration: 500
+			duration: 1000
 			});
-		///ann.play();
+		animations.push(ann);
 
 		ann
 			.play() // start
 			.promise('completed').then(function () { // on next completed
 				i--;
-				if (i >= 0) {
-					return recursivePath(stack, stack[i], i);
+				ann.reverse().rewind().play();
+				animations.pop();
+				if (i > 0) { // was >=
+					return recursivePath(stack, stack[i], i - 1); // i
 				}
 				return backTrackAnimation(stack, stack[0], 0);
-				/*jAni
-					.reverse() // switch animation direction
-					.rewind() // optional but makes intent clear
-					.play() // start again
-					;*/
-			})
-			;
+		});
 	}
+
+	//This function is exactly the same as the recursivePath function, except it goes from the ProcessingCenter back to the Store.
 	function backTrackAnimation(stack, item, i) {
 		var ann = cy.getElementById(item._private.data.id).animation({
 			style: {
 				'background-color': 'green',
 				'width': 25
 			},
-			duration: 500
+			duration: 1000
 		});
-		///ann.play();
+		animations.push(ann);
 
 		ann
 			.play() // start
 			.promise('completed').then(function () { // on next completed
+				ann.reverse().rewind().play();
+				animations.pop();
 				i++;
 				if (i < stack.length) {
 					return backTrackAnimation(stack, stack[i], i);
 				}
+				resetElements(stack);
 				return;
-				/*jAni
-					.reverse() // switch animation direction
-					.rewind() // optional but makes intent clear
-					.play() // start again
-					;*/
-			})
-			;
+			});
 	}
 
-			</script>
-		}
+	//Not used yet, but this method is called once the animation is complete.
+	function resetElements(stack) {
+		/*console.log("DONE+====================");
+		cy.style().resetToDefault() ;
+		stack.forEach(function (element) {
+			console.log(element);
+		});*/
+	}
+
+
+		/* ================================================================================================
+										PAUSE/PLAY SECTION
+		===================================================================================================*/
+
+
+		//Working on pause and play, however it only works with one element on the "animation list" at a time.
+		//This is because there are multiple "threads"/"listeners" which begin each animation cycle, so the animations
+		//aren't running concurrently. To do more than one, there will have to be a way to either tie them together,
+		//or use some sort of javascript Mutex / Lock that must be used .
+		$(".PauseButton").click(function () {
+			console.log("Stopped!");
+			animations.forEach(function (element) {
+				console.log(element);
+				element.pause();
+			});
+		});
+
+		$(".PlayButton").click(function () {
+			animations.forEach(function (element) {
+				console.log(element);
+				element.play();
+			});
+		});
+	</script>
+}

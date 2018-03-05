@@ -15,15 +15,17 @@ namespace _744Project.ViewModels
 
         public List<IpConnection> connections; // a list of the connections between NetworkEntities    (connections)
         public Dictionary<String, NetworkEntity> networkEntities; //Key: IP, Value: NetworkEntiy. a list of data objects from the Network.  (store, relay, PC)
-        public List<Transaction> transactions; // grabs all encrypted transactions
+        public List<EncryptedTransaction> transactions;
+        //public List<Transaction> transactions; // grabs all encrypted transactions
         //public JsonData jsonData;
 
         public NetworkViewModel()
         {
             connections = new List<IpConnection>();
             networkEntities = new Dictionary<string, NetworkEntity>();
-            transactions = (from trans in db.Transactions select trans).ToList();  //trans.encryptedFlag
-            
+            transactions = new List<EncryptedTransaction>();
+            getTransactions();
+
 
             var storeToRelays = from store in db.Stores select store;
             //connections = 
@@ -33,11 +35,20 @@ namespace _744Project.ViewModels
             //connections.AddRange(
             convertRelayConnections(relayToRelays);
 
-            var relayToPC= from rpc in db.RelayToProcessCenterConnections select rpc;
+            var relayToPC = from rpc in db.RelayToProcessCenterConnections select rpc;
             //connections.AddRange(
             convertRelayProcessingConnections(relayToPC);
 
-            
+
+        }
+
+        private void getTransactions()
+        {
+            List<Transaction> tranList = (from trans in db.Transactions where trans.encryptedFlag == true select trans).ToList();  //trans.encryptedFlag
+            foreach(var trans in tranList)
+            {
+                transactions.Add(new EncryptedTransaction(trans));
+            }
         }
 
         private List<IpConnection> convertStoresToIpConnections(IEnumerable<Store> stores)
@@ -134,9 +145,22 @@ namespace _744Project.ViewModels
 
     public class EncryptedTransaction
     {
-        public string Id { get; set; }
-        public string cardId { get; set; }
+        public int Id { get; set; }
+        public int? cardId { get; set; }
         public string storeIp { get; set; }
+        public bool? transactionStatus { get; set; }
+        public string transactionAmount { get; set; }
+        public bool? encryptedFlag { get; set; }
+
+        public EncryptedTransaction(Transaction trans)
+        {
+            this.Id = trans.transactionID;
+            this.cardId = trans.cardID;
+            this.transactionStatus = trans.transactionStatus;
+            this.storeIp = trans.StoreTransactions.FirstOrDefault().Store.storeIP;
+            this.encryptedFlag = trans.encryptedFlag;
+            this.transactionAmount = trans.transactionAmount;
+        }
 
     }
 
