@@ -141,6 +141,15 @@ namespace _744Project.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Transaction transaction = db.Transactions.Find(id);
+            //Call a class CreditCardsController:
+            CreditCardsController credit = new CreditCardsController();
+            //check if there is a transaction in the ProcessCenterTransactions:
+            credit.checkAttachedTransactionsForTransaction(id, "ProcessCenterTransactions", "processCenterTransactionID");
+            //check if there is a transaction in StoreTransactions:
+            credit.checkAttachedTransactionsForTransaction(id, "StoreTransactions", "storeTransactionID");
+            //check if there is a transaction in RelayTransactions:
+            credit.checkAttachedTransactionsForTransaction(id, "RelayTransactions", "relayTransactionID");
+            //End
             db.Transactions.Remove(transaction);
             db.SaveChanges();
             return RedirectToAction("Index");
