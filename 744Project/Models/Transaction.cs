@@ -34,13 +34,15 @@ namespace _744Project.Models
         public string transactionType { get; set; }
 
         [Display(Name = "Transaction Merchant")]
-        [Required]
-        [StringLength(100, MinimumLength = 2, ErrorMessage = "The transaction Merchant length is two at least")]
+        //[Required]
+        //[StringLength(100, MinimumLength = 2, ErrorMessage = "The transaction Merchant length is two at least")]
         public string transactionMerchant { get; set; }
 
         public bool? transactionStatus { get; set; }
 
         public bool? encryptedFlag { get; set; }
+
+        //public bool? sentFlag { get; set; }
 
         [Display(Name = "Card ID")]
         [Required]
