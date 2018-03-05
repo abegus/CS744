@@ -79,8 +79,10 @@ namespace _744Project.Controllers
             {
                 return View(model);
             }
-            //var index = model.Index;
-            //var modes = model.Email;
+
+            var answers = model.AnswerToSecurityQuestion;
+            var QuestionID = (from ans in db.SecurityQuestions where ans.Answer == answers select ans.QuestionID).First();
+
             var curLoginUser = (from usr in db.AspNetUsers where usr.Email == model.Email select usr).First();
             var expectedAnswer = (from sec in db.SecurityQuestions
                                   where sec.AspNetUserID == curLoginUser.Id && sec.QuestionID == 1
