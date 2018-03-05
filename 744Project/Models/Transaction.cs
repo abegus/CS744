@@ -46,13 +46,16 @@ namespace _744Project.Models
         [Required]
         public int? cardID { get; set; }
 
-
-
-       /* [Display(Name = "Account ID")]
+        [Display(Name = "Store ID")]
         [Required]
-        public int? accountID { get; set; }
+        [StringLength(50)]
+        public string storeID { get; set; }
 
-        public virtual Account Account { get; set; }*/
+        /* [Display(Name = "Account ID")]
+         [Required]
+         public int? accountID { get; set; }
+
+         public virtual Account Account { get; set; }*/
 
         public virtual CreditCard CreditCard { get; set; }
 

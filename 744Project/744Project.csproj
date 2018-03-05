@@ -364,6 +364,10 @@
     <Compile Include="Migrations\201803042355099_aftergettingManyErrors.Designer.cs">
       <DependentUpon>201803042355099_aftergettingManyErrors.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803050057576_transactionmodel.cs" />
+    <Compile Include="Migrations\201803050057576_transactionmodel.Designer.cs">
+      <DependentUpon>201803050057576_transactionmodel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -745,6 +749,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803042355099_aftergettingManyErrors.resx">
       <DependentUpon>201803042355099_aftergettingManyErrors.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803050057576_transactionmodel.resx">
+      <DependentUpon>201803050057576_transactionmodel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.addmiddlename.resources" />
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.initialcreate.resources" />
