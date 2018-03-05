@@ -112,7 +112,7 @@ namespace _744Project.Controllers
             }
             //else it works and continue
 
-            DateTime test = new DateTime();
+            
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             UserManager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(10);

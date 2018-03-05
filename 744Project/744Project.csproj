@@ -348,10 +348,6 @@
     <Compile Include="Migrations\201803041526380_new.Designer.cs">
       <DependentUpon>201803041526380_new.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201803041830018_update database.cs" />
-    <Compile Include="Migrations\201803041830018_update database.Designer.cs">
-      <DependentUpon>201803041830018_update database.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201803041954040_security questions.cs" />
     <Compile Include="Migrations\201803041954040_security questions.Designer.cs">
       <DependentUpon>201803041954040_security questions.cs</DependentUpon>
@@ -363,6 +359,10 @@
     <Compile Include="Migrations\201803042037482_update.cs" />
     <Compile Include="Migrations\201803042037482_update.Designer.cs">
       <DependentUpon>201803042037482_update.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803042355099_aftergettingManyErrors.cs" />
+    <Compile Include="Migrations\201803042355099_aftergettingManyErrors.Designer.cs">
+      <DependentUpon>201803042355099_aftergettingManyErrors.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
@@ -734,9 +734,6 @@
     <EmbeddedResource Include="Migrations\201803041526380_new.resx">
       <DependentUpon>201803041526380_new.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803041830018_update database.resx">
-      <DependentUpon>201803041830018_update database.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803041954040_security questions.resx">
       <DependentUpon>201803041954040_security questions.cs</DependentUpon>
     </EmbeddedResource>
@@ -745,6 +742,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803042037482_update.resx">
       <DependentUpon>201803042037482_update.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803042355099_aftergettingManyErrors.resx">
+      <DependentUpon>201803042355099_aftergettingManyErrors.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.addmiddlename.resources" />
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.initialcreate.resources" />
