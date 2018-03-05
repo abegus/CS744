@@ -24,7 +24,7 @@ namespace _744Project.Models
         public Int64 cardNumber { get; set; }
         [Required]
         [Display(Name = "Card Expiration Date")]
-        [DataType(DataType.Date)]        
+        [DataType(DataType.Date)]
         public DateTime cardExpirationDate { get; set; }
         [Required]
         [Display(Name = "Card Security Code")]
@@ -58,6 +58,6 @@ namespace _744Project.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Transaction> Transactions { get; set; }
 
-        
-    }
+
+    } 
 }

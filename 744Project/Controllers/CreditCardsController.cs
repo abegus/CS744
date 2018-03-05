@@ -156,6 +156,26 @@ namespace _744Project.Controllers
                 }
             }
         }
+        public void checkAttachedTransactionsForTransaction(int id, string tableName, string tableId)
+        {
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select count(*) from "+tableName+" where transactionID = '" + id + "'  ";
+            int totalTransactionsForCard = Convert.ToInt32(cmd.ExecuteScalar());
+            if (totalTransactionsForCard > 0)//if it's true, then there are transactions for that card and they need to be deleted as well.
+            {
+                //count the related cards for the selected account:
+                cmd.CommandText = "select count(*) from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY "+tableId+" ASC) ,* FROM " +tableName+" where transactionID = '" + id + "') as t";
+                int totalTransactions = Convert.ToInt32(cmd.ExecuteScalar());
+                for (int i = 1; i <= totalTransactions; i++)
+                {
+                    //select the ProcessCenterTransactionID for the selected transaction:
+                    cmd.CommandText = "select "+tableId+" from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY "+tableId+" ASC) ,* FROM "+tableName+" where transactionID = '" + id + "') as t where rowNum = '"+i+"' ";
+                    int attachedTransactionID = Convert.ToInt32(cmd.ExecuteScalar());
+                    cmd.CommandText = "delete from "+tableName+" where transactionID = '" + id + "' ";
+                    cmd.ExecuteScalar();
+                }
+            }
+        }
 
         public void checkAttachedTransactions(int id)
         {
@@ -172,13 +192,19 @@ namespace _744Project.Controllers
                 for (int i = 1; i <= totalTransactions; i++)
                 {
                     //select the transactionID for the selected credit card:
-                    cmd.CommandText = "select transactionID from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY transactionID ASC) ,* FROM Transactions where cardID = '" + id + "') as t";
+                    cmd.CommandText = "select transactionID from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY transactionID ASC) ,* FROM Transactions where cardID = '" + id + "') as t where rowNum = '"+i+"' ";
                     int transactionID = Convert.ToInt32(cmd.ExecuteScalar());
-                    //check if there is a transaction in the process center:
-                    checkAttachedProcessTransactions(transactionID);
-                    cmd.CommandText = "delete from transactions where cardID = '" + id + "' ";
-                    cmd.ExecuteScalar();
+                    //check if there is a transaction in the ProcessCenterTransactions:
+                    //checkAttachedProcessTransactions(transactionID);
+                    checkAttachedTransactionsForTransaction(transactionID, "ProcessCenterTransactions", "processCenterTransactionID");
+                    //check if there is a transaction in StoreTransactions:
+                    checkAttachedTransactionsForTransaction(transactionID, "StoreTransactions", "storeTransactionID");
+                    //check if there is a transaction in RelayTransactions:
+                    checkAttachedTransactionsForTransaction(transactionID, "RelayTransactions", "relayTransactionID");                    
                 }
+                //Now, delete the transaction from the Transactions table:
+                cmd.CommandText = "delete from transactions where cardID = '" + id + "' ";
+                cmd.ExecuteScalar();
             }
             //Close the connection to the database:
             connect.Close();
@@ -215,7 +241,7 @@ namespace _744Project.Controllers
             Boolean theLastCard = lastCardForAccount(id);
             if (!theLastCard) //if there is another card in its account, delete it.
             {
-                //Check if there transactions associated with that credit card:
+                //Check if there are transactions associated with that credit card:
                 checkAttachedTransactions(id);
                 db.CreditCards.Remove(creditCard);
                 db.SaveChanges();

@@ -253,22 +253,22 @@ namespace _744Project.Controllers
             connect.Close();
             return thereIs;
         }
-        public void checkAttachedProcessTransactions(int id)
+        public void checkAttachedTransactionsForTransaction(int id, string tableName, string tableId)
         {
             SqlCommand cmd = connect.CreateCommand();
-            cmd.CommandText = "select count(*) from ProcessCenterTransactions where transactionID = '" + id + "'  ";
+            cmd.CommandText = "select count(*) from " + tableName + " where transactionID = '" + id + "'  ";
             int totalTransactionsForCard = Convert.ToInt32(cmd.ExecuteScalar());
             if (totalTransactionsForCard > 0)//if it's true, then there are transactions for that card and they need to be deleted as well.
             {
                 //count the related cards for the selected account:
-                cmd.CommandText = "select count(*) from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY ProcessCenterTransactionID ASC) ,* FROM ProcessCenterTransactions where transactionID = '" + id + "') as t";
+                cmd.CommandText = "select count(*) from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY " + tableId + " ASC) ,* FROM " + tableName + " where transactionID = '" + id + "') as t";
                 int totalTransactions = Convert.ToInt32(cmd.ExecuteScalar());
                 for (int i = 1; i <= totalTransactions; i++)
                 {
                     //select the ProcessCenterTransactionID for the selected transaction:
-                    cmd.CommandText = "select ProcessCenterTransactionID from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY ProcessCenterTransactionID ASC) ,* FROM ProcessCenterTransactions where transactionID = '" + id + "') as t";
-                    int ProcessCenterTransactionID = Convert.ToInt32(cmd.ExecuteScalar());
-                    cmd.CommandText = "delete from ProcessCenterTransactionID where transactionID = '" + id + "' ";
+                    cmd.CommandText = "select " + tableId + " from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY " + tableId + " ASC) ,* FROM " + tableName + " where transactionID = '" + id + "') as t where rowNum = '" + i + "' ";
+                    int attachedTransactionID = Convert.ToInt32(cmd.ExecuteScalar());
+                    cmd.CommandText = "delete from " + tableName + " where transactionID = '" + id + "' ";
                     cmd.ExecuteScalar();
                 }
             }
@@ -288,11 +288,16 @@ namespace _744Project.Controllers
                     //select the transactionID for the selected credit card:
                     cmd.CommandText = "select transactionID from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY transactionID ASC) ,* FROM Transactions where cardID = '" + id + "') as t";
                     int transactionID = Convert.ToInt32(cmd.ExecuteScalar());
-                    //check if there is a transaction in the process center:
-                    checkAttachedProcessTransactions(transactionID);
-                    cmd.CommandText = "delete from transactions where cardID = '" + id + "' ";
-                    cmd.ExecuteScalar();
+                    //checkAttachedProcessTransactions(transactionID);
+                    checkAttachedTransactionsForTransaction(transactionID, "ProcessCenterTransactions", "processCenterTransactionID");
+                    //check if there is a transaction in StoreTransactions:
+                    checkAttachedTransactionsForTransaction(transactionID, "StoreTransactions", "storeTransactionID");
+                    //check if there is a transaction in RelayTransactions:
+                    checkAttachedTransactionsForTransaction(transactionID, "RelayTransactions", "relayTransactionID");                    
                 }
+                //Now, delete the transaction from the Transactions table:
+                cmd.CommandText = "delete from transactions where cardID = '" + id + "' ";
+                cmd.ExecuteScalar();
             }
         }
 
@@ -310,14 +315,14 @@ namespace _744Project.Controllers
             for (int i = 1; i <= totalCards; i++)
             {
                 //select the cardID for the selected account:
-                cmd.CommandText = "select cardID from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY cardID ASC) ,* FROM CreditCards where accountID = '" + id + "') as t";
+                cmd.CommandText = "select cardID from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY cardID ASC) ,* FROM CreditCards where accountID = '" + id + "') as t where rowNum = '"+i+"' ";
                 int cardID = Convert.ToInt32(cmd.ExecuteScalar());
                 //check if the selected card has any transactions attached to it and delete them:
-                checkAttachedTransactions(cardID);
-                //Now, delete the card from the database:                
-                cmd.CommandText = "delete from CreditCards where accountID = '" + id + "' ";
-                cmd.ExecuteScalar();
+                checkAttachedTransactions(cardID);               
             }
+            //Now, delete the card from the database:                
+            cmd.CommandText = "delete from CreditCards where accountID = '" + id + "' ";
+            cmd.ExecuteScalar();
             //Close the connection to the database:
             connect.Close();
         }
