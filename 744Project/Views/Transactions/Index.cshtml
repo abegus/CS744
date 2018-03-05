@@ -33,7 +33,7 @@
                         @Html.DisplayNameFor(model => model.transactionMerchant)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.storeID)
+                       <p>Store IP</p>
                     </th>
                  
                     <th></th>
@@ -61,7 +61,7 @@
                             @Html.DisplayFor(modelItem => item.transactionMerchant)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.storeID)
+                            @Html.DisplayFor(modelItem => item.StoreTransactions.First().Store.storeIP)
                         </td>
                        
                         <td>

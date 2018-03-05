@@ -53,8 +53,7 @@ namespace _744Project.Controllers
         public ActionResult Create()
         {
             ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardNumber");
-            // ViewBag.storeID = new SelectList(db.Stores, "?", "?");
-            ViewBag.storeID = new SelectList(db.Stores, "storeID", "storeName");
+            ViewBag.storeID = new SelectList(db.Stores, "storeID", "storeIp");
             return View();
         }
 
