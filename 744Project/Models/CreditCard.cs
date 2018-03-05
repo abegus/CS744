@@ -33,7 +33,7 @@ namespace _744Project.Models
         public string cardSecurityCode { get; set; }
         [Required]
         [Display(Name = "Card Maximum Allowed")]
-        [Range(0, 100000)]
+        [Range(0, 25000)]
         public int cardMaxAllowed { get; set; }
         [Required]
         [Display(Name = "Account Number")]
