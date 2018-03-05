@@ -62,16 +62,26 @@ namespace _744Project.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "transactionID,transactionTime,transactionAmount,transactionType,transactionMerchant,transactionStatus,encryptedFlag,cardID,storeID")] Transaction transaction) // and the storeId
+        public ActionResult Create([Bind(Include = "transactionID,transactionTime,transactionAmount,transactionType,transactionStatus,encryptedFlag,cardID,storeID")] Transaction transaction) // and the storeId
         {
             if (ModelState.IsValid)
             {
-                db.Transactions.Add(transaction);
+                
                 //to get he storeId, you have to send an additional string through the from on Transaction/Create. 
                 StoreTransaction st = new StoreTransaction();
                 //st.storeID = storeId;
                 st.storeID = transaction.storeID;
                 st.transactionID = transaction.transactionID;
+                if(transaction.transactionType == "Debit")
+                {
+                    transaction.transactionMerchant = "Self";
+                    db.Transactions.Add(transaction);
+                }
+                else
+                {
+                    transaction.transactionMerchant = (from store in db.Stores where store.storeID == transaction.storeID select store.storeName).FirstOrDefault();
+                    db.Transactions.Add(transaction);
+                }
 
                 db.StoreTransactions.Add(st);
                 db.SaveChanges();
@@ -111,6 +121,16 @@ namespace _744Project.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (transaction.transactionType == "Debit")
+                {
+                    transaction.transactionMerchant = "Self";
+                    
+                }
+                else
+                {
+                    transaction.transactionMerchant = (from store in db.Stores where store.storeID == transaction.storeID select store.storeName).FirstOrDefault();
+                    
+                }
                 db.Entry(transaction).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

@@ -35,19 +35,26 @@
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.transactionType, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.transactionType, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.transactionType, "", new { @class = "text-danger" })
-                    </div>
+                    
+                        @*@Html.EditorFor(model => model.transactionType, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.transactionType, "", new { @class = "text-danger" })*@
+                        <div class="col-md-10">
+                            <select class="form-control" id="transactionType" name="transactionType">
+                                <option selected="selected" value="Credit">Credit</option>
+                                <option value="Debit">Debit</option>
+                            </select>
+                            <span class="field-validation-valid text-danger" data-valmsg-for="transactionType" data-valmsg-replace="true"></span>
+                        </div>
+                    
                 </div>
 
-                <div class="form-group">
+                @*<div class="form-group">
                     @Html.LabelFor(model => model.transactionMerchant, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.EditorFor(model => model.transactionMerchant, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.transactionMerchant, "", new { @class = "text-danger" })
                     </div>
-                </div>
+                </div>*@
 
                 @*<div class="form-group">
                     @Html.LabelFor(model => model.transactionStatus, htmlAttributes: new { @class = "control-label col-md-2" })

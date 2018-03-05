@@ -368,6 +368,10 @@
     <Compile Include="Migrations\201803050057576_transactionmodel.Designer.cs">
       <DependentUpon>201803050057576_transactionmodel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803052108042_non required merchant for form.cs" />
+    <Compile Include="Migrations\201803052108042_non required merchant for form.Designer.cs">
+      <DependentUpon>201803052108042_non required merchant for form.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -752,6 +756,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803050057576_transactionmodel.resx">
       <DependentUpon>201803050057576_transactionmodel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803052108042_non required merchant for form.resx">
+      <DependentUpon>201803052108042_non required merchant for form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.addmiddlename.resources" />
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.initialcreate.resources" />
