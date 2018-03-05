@@ -61,11 +61,11 @@
                     </dd>
 
                     <dt>
-                        @Html.DisplayNameFor(model => model.storeID)
+                        @Html.DisplayNameFor(model => model.StoreTransactions.First().Store.storeIP)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.cardID);
+                        @Html.DisplayFor(model => model.StoreTransactions.First().Store.storeIP);
                     </dd>
 
 

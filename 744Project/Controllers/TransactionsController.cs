@@ -81,7 +81,7 @@ namespace _744Project.Controllers
 
 
             ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardNumber", transaction.cardID);
-            ViewBag.storeID = new SelectList(db.Stores, "storeID", "storeName", transaction.storeID);
+            ViewBag.storeID = new SelectList(db.Stores, "storeID", "storeIp", transaction.storeID);
             return View(transaction);
         }
 
@@ -98,7 +98,7 @@ namespace _744Project.Controllers
                 return HttpNotFound();
             }
             ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardNumber", transaction.cardID);
-            ViewBag.storeID = new SelectList(db.Stores, "storeID", "storeName", transaction.storeID);
+            ViewBag.storeID = new SelectList(db.Stores, "storeID", "storeIp", transaction.storeID);
             return View(transaction);
         }
 
@@ -116,7 +116,7 @@ namespace _744Project.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardNumber", transaction.cardID);
-            ViewBag.storeID = new SelectList(db.Stores, "storeID", "storeName", transaction.storeID);
+            ViewBag.storeID = new SelectList(db.Stores, "storeID", "storeIp", transaction.storeID);
             return View(transaction);
         }
 
