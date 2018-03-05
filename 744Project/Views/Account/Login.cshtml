@@ -39,9 +39,13 @@
                                     <p style="color: #00B7FF">@Model.SecuriyQuestion</p>
 
                                 </div>
+								<div style="display:none" class="col-md-10">
+									@Html.PasswordFor(m => m.SecuriyQuestion, new { @class = "form-control" })
+									@Html.ValidationMessageFor(m => m.SecuriyQuestion, "", new { @class = "text-danger" })
+								</div>
                             </div>
 							<div class="form-group">
-								<div style="color:red">@ViewBag.Security</div>
+								<div  style="color:red">@ViewBag.Security</div>
 								@Html.LabelFor(m => m.AnswerToSecurityQuestion, new { @class = "col-md-2 control-label" })
 								<div class="col-md-10">
 									@Html.PasswordFor(m => m.AnswerToSecurityQuestion, new { @class = "form-control" })

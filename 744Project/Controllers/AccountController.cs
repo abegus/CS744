@@ -83,28 +83,46 @@ namespace _744Project.Controllers
             var answers = model.AnswerToSecurityQuestion;
             var question = model.SecuriyQuestion;
             var QuestionIDUser = (from ans in db.SecurityQuestions where ans.Answer == answers select ans).FirstOrDefault();
-            
-            if(QuestionIDUser == null)
+
+            int QuestionID;
+            if (QuestionIDUser != null) {
+                QuestionID= QuestionIDUser.QuestionID;
+            }
+            else
             {
-                ViewBag.Security = "No such Security quesiton exists";
-                model.SecuriyQuestion = question;
+                QuestionID = -1;
+            }
+            var curLoginUser = (from usr in db.AspNetUsers where usr.Email == model.Email select usr).First();
+
+
+
+            if (curLoginUser.numFailedAttempts > 3)
+            {
+                ViewBag.Lockout = "Locked out";
                 return View(model);
             }
-            var QuestionID = QuestionIDUser.QuestionID;
-                var curLoginUser = (from usr in db.AspNetUsers where usr.Email == model.Email select usr).First();
+
+            if (QuestionIDUser == null)
+            {
+                Random index = new Random();
+                var randomIndex = index.Next(1, 4);
+                model.SecuriyQuestion = db.Questions.Find(randomIndex).QuestionText;
+                //curLoginUser.numFailedAttempts++;
+                //db.SaveChanges();
+                //ViewBag.Security = "Security question incorrect";
+                curLoginUser.numFailedAttempts++;
+                db.SaveChanges();
+                ViewBag.Security = "Incorrect Security Question";
+                //model.SecuriyQuestion = question;
+                return View(model);
+            }
+           
                 var expectedAnswer = (from sec in db.SecurityQuestions
                                       where sec.AspNetUserID == curLoginUser.Id && sec.QuestionID == QuestionID
                                       select sec
                                       ).First();
             
 
-            
-
-            if(curLoginUser.numFailedAttempts > 3)
-            {
-                ViewBag.Lockout = "Locked out";
-                return View(model);
-            }
 
             //no answer in the database
             if(expectedAnswer == null)
@@ -117,6 +135,9 @@ namespace _744Project.Controllers
             //answer is in the database, but the answer provided by the user doesnt match
             else if (!expectedAnswer.Answer.Equals(model.AnswerToSecurityQuestion))
             {
+                Random index = new Random();
+                var randomIndex = index.Next(1, 4);
+                model.SecuriyQuestion = db.Questions.Find(randomIndex).QuestionText;
                 curLoginUser.numFailedAttempts++;
                 db.SaveChanges();
                 ViewBag.Security = "Security question incorrect";
