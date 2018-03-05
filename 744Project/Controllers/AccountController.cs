@@ -52,7 +52,6 @@ namespace _744Project.Controllers
                 _userManager = value;
             }
         }
-
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -60,8 +59,10 @@ namespace _744Project.Controllers
         {
             ViewBag.ReturnUrl = returnUrl;
             LoginViewModel model = new LoginViewModel();
+            Random index = new Random();
+            var randomIndex = index.Next(1, 3);
             model.SecuriyQuestion = db.Questions.Find(1).QuestionText;
-
+            model.Index = randomIndex;
             ViewBag.Security = "";
             return View(model);
 
@@ -78,7 +79,8 @@ namespace _744Project.Controllers
             {
                 return View(model);
             }
-
+            //var index = model.Index;
+            //var modes = model.Email;
             var curLoginUser = (from usr in db.AspNetUsers where usr.Email == model.Email select usr).First();
             var expectedAnswer = (from sec in db.SecurityQuestions
                                   where sec.AspNetUserID == curLoginUser.Id && sec.QuestionID == 1

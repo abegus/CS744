@@ -71,6 +71,8 @@ namespace _744Project.Models
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
+
+        public int Index { get; set; }
     }
 
     public class RegisterViewModel
