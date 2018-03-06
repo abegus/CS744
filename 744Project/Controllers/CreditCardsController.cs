@@ -215,9 +215,11 @@ namespace _744Project.Controllers
                 connect.Close();
                 for (int i = 1; i <= totalTransactions; i++)
                 {
+                    connect.Open();
                     //select the transactionID for the selected credit card:
                     cmd.CommandText = "select transactionID from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY transactionID ASC) ,* FROM Transactions where cardID = '" + id + "') as t where rowNum = '"+i+"' ";
                     int transactionID = Convert.ToInt32(cmd.ExecuteScalar());
+                    connect.Close();
                     //check if there is a transaction in the ProcessCenterTransactions:                    
                     checkAttachedTransactionsForTransaction(transactionID, "ProcessCenterTransactions", "processCenterTransactionID");
                     //check if there is a transaction in StoreTransactions:
