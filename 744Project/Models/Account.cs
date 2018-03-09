@@ -12,8 +12,7 @@ namespace _744Project.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Account()
         {
-            CreditCards = new HashSet<CreditCard>();
-            //Transactions = new HashSet<Transaction>();
+            CreditCards = new HashSet<CreditCard>();            
         }
         [Display(Name = "Account ID")]
         public int accountID { get; set; }

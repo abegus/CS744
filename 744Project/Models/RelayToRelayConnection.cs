@@ -21,6 +21,8 @@ namespace _744Project.Models
 
         public int? relayWeight { get; set; }
 
+        public Boolean isActive { get; set; }
+
         public virtual Relay Relay { get; set; }
         public virtual Relay Relay2 { get; set; }
     }

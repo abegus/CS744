@@ -372,6 +372,50 @@
     <Compile Include="Migrations\201803052108042_non required merchant for form.Designer.cs">
       <DependentUpon>201803052108042_non required merchant for form.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803091855167_createdRegions.cs" />
+    <Compile Include="Migrations\201803091855167_createdRegions.Designer.cs">
+      <DependentUpon>201803091855167_createdRegions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803091857356_createdRegionsTable.cs" />
+    <Compile Include="Migrations\201803091857356_createdRegionsTable.Designer.cs">
+      <DependentUpon>201803091857356_createdRegionsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803091918566_connectedRegions.cs" />
+    <Compile Include="Migrations\201803091918566_connectedRegions.Designer.cs">
+      <DependentUpon>201803091918566_connectedRegions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803092004452_addedGatewayIP.cs" />
+    <Compile Include="Migrations\201803092004452_addedGatewayIP.Designer.cs">
+      <DependentUpon>201803092004452_addedGatewayIP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803092006497_addedQueueInRelays.cs" />
+    <Compile Include="Migrations\201803092006497_addedQueueInRelays.Designer.cs">
+      <DependentUpon>201803092006497_addedQueueInRelays.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803092010181_addIsActiveIn3Tables.cs" />
+    <Compile Include="Migrations\201803092010181_addIsActiveIn3Tables.Designer.cs">
+      <DependentUpon>201803092010181_addIsActiveIn3Tables.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803092020456_removedCardLimit.cs" />
+    <Compile Include="Migrations\201803092020456_removedCardLimit.Designer.cs">
+      <DependentUpon>201803092020456_removedCardLimit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803092044439_fix.cs" />
+    <Compile Include="Migrations\201803092044439_fix.Designer.cs">
+      <DependentUpon>201803092044439_fix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803092051438_connectedRegions1.cs" />
+    <Compile Include="Migrations\201803092051438_connectedRegions1.Designer.cs">
+      <DependentUpon>201803092051438_connectedRegions1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803092056561_fixes.cs" />
+    <Compile Include="Migrations\201803092056561_fixes.Designer.cs">
+      <DependentUpon>201803092056561_fixes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803092059279_aaa.cs" />
+    <Compile Include="Migrations\201803092059279_aaa.Designer.cs">
+      <DependentUpon>201803092059279_aaa.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -389,6 +433,7 @@
     <Compile Include="Models\ProcessCenter.cs" />
     <Compile Include="Models\ProcessCenterTransaction.cs" />
     <Compile Include="Models\Questions.cs" />
+    <Compile Include="Models\Regions.cs" />
     <Compile Include="Models\Relay.cs" />
     <Compile Include="Models\RelayToProcessCenterConnection.cs" />
     <Compile Include="Models\RelayToRelayConnection.cs" />
@@ -759,6 +804,39 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803052108042_non required merchant for form.resx">
       <DependentUpon>201803052108042_non required merchant for form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803091855167_createdRegions.resx">
+      <DependentUpon>201803091855167_createdRegions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803091857356_createdRegionsTable.resx">
+      <DependentUpon>201803091857356_createdRegionsTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803091918566_connectedRegions.resx">
+      <DependentUpon>201803091918566_connectedRegions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803092004452_addedGatewayIP.resx">
+      <DependentUpon>201803092004452_addedGatewayIP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803092006497_addedQueueInRelays.resx">
+      <DependentUpon>201803092006497_addedQueueInRelays.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803092010181_addIsActiveIn3Tables.resx">
+      <DependentUpon>201803092010181_addIsActiveIn3Tables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803092020456_removedCardLimit.resx">
+      <DependentUpon>201803092020456_removedCardLimit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803092044439_fix.resx">
+      <DependentUpon>201803092044439_fix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803092051438_connectedRegions1.resx">
+      <DependentUpon>201803092051438_connectedRegions1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803092056561_fixes.resx">
+      <DependentUpon>201803092056561_fixes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803092059279_aaa.resx">
+      <DependentUpon>201803092059279_aaa.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.addmiddlename.resources" />
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.initialcreate.resources" />

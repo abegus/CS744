@@ -26,6 +26,17 @@ namespace _744Project.Models
         [StringLength(50)]
         public string relayIP { get; set; }
 
+        public int regionID { get; set; }
+
+        public Boolean isGateway { get; set; }
+
+        public int relayQueue { get; set; }
+
+        public Boolean isActive { get; set; }
+
+        public virtual Regions Region { get; set; }
+
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RelayToProcessCenterConnection> RelayToProcessCenterConnections { get; set; }
 

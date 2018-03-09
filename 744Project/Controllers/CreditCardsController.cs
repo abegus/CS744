@@ -52,7 +52,7 @@ namespace _744Project.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "cardID,cardNumber,cardExpirationDate,cardSecurityCode,cardMaxAllowed,accountID,firstName,lastName")] CreditCard creditCard)
+        public ActionResult Create([Bind(Include = "cardID,cardNumber,cardExpirationDate,cardSecurityCode, accountID,firstName,lastName")] CreditCard creditCard)
         {
             if (ModelState.IsValid)
             {
@@ -118,7 +118,7 @@ namespace _744Project.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "cardID,cardNumber,cardExpirationDate,cardSecurityCode,cardMaxAllowed,accountID,firstName,lastName")] CreditCard creditCard)
+        public ActionResult Edit([Bind(Include = "cardID,cardNumber,cardExpirationDate,cardSecurityCode,accountID,firstName,lastName")] CreditCard creditCard)
         {
             if (ModelState.IsValid)
             {
@@ -266,6 +266,11 @@ namespace _744Project.Controllers
             CreditCard creditCard = db.CreditCards.Find(id);
             //check if the credit card is the only card for its account:
             Boolean theLastCard = lastCardForAccount(id);
+            if (theLastCard)
+            {
+                ModelState.AddModelError("theLastCard", "The card you are trying to delete is the last card in its account and cannot be deleted.");
+                return View(creditCard);
+            }
             if (!theLastCard) //if there is another card in its account, delete it.
             {
                 //Check if there are transactions associated with that credit card:

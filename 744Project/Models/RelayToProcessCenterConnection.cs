@@ -18,6 +18,8 @@ namespace _744Project.Models
 
         public int? relayToProcessCenterConnectionWeight { get; set; }
 
+        public Boolean isActive { get; set; }
+
         public virtual ProcessCenter ProcessCenter { get; set; }
 
         public virtual Relay Relay { get; set; }

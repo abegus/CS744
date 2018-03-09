@@ -30,6 +30,9 @@ namespace _744Project.Models
 
         public virtual Relay Relay { get; set; }
 
+        public int regionID { get; set; }
+        public virtual Regions Region { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StoreTransaction> StoreTransactions { get; set; }
     }

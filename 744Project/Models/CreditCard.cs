@@ -31,10 +31,10 @@ namespace _744Project.Models
         [StringLength(3, MinimumLength = 3)]
         [RegularExpression("^[0-9]*$", ErrorMessage = "Security Code must be 3 digits")]
         public string cardSecurityCode { get; set; }
-        [Required]
-        [Display(Name = "Card Maximum Allowed")]
-        [Range(0, 25000)]
-        public int cardMaxAllowed { get; set; }
+        //[Required]
+        //[Display(Name = "Card Maximum Allowed")]
+        //[Range(0, 25000)]
+        //public int cardMaxAllowed { get; set; }
         [Required]
         [Display(Name = "Account Number")]
         public int? accountID { get; set; }
