@@ -16,16 +16,24 @@ namespace _744Project.ViewModels
         public List<IpConnection> connections; // a list of the connections between NetworkEntities    (connections)
         public Dictionary<String, NetworkEntity> networkEntities; //Key: IP, Value: NetworkEntiy. a list of data objects from the Network.  (store, relay, PC)
         public List<EncryptedTransaction> transactions;
+
+        public Dictionary<String, NetworkRegion> regions;   //stores a list of NetworkRegions
+        public NetworkEntity processingCenter; // the single pc
+
         //public List<Transaction> transactions; // grabs all encrypted transactions
         //public JsonData jsonData;
 
         public NetworkViewModel()
         {
+            regions = new Dictionary<string, NetworkRegion>(); // [id => NetworkRegion], ... ,
+
             connections = new List<IpConnection>();
             networkEntities = new Dictionary<string, NetworkEntity>();
             transactions = new List<EncryptedTransaction>();
-            getTransactions();
 
+            //get the transactions and regions which will populate their respective Lists
+            getTransactions();
+            getRegions();
 
             var storeToRelays = from store in db.Stores select store;
             //connections = 
@@ -38,8 +46,15 @@ namespace _744Project.ViewModels
             var relayToPC = from rpc in db.RelayToProcessCenterConnections select rpc;
             //connections.AddRange(
             convertRelayProcessingConnections(relayToPC);
+        }
 
-
+        private void getRegions()
+        {
+            var regs = db.Regions.ToList();
+            foreach(var reg in regs)
+            {
+                regions.Add(reg.regionID +"" ,new NetworkRegion(reg));
+            }
         }
 
         private void getTransactions()
@@ -56,7 +71,7 @@ namespace _744Project.ViewModels
             List<IpConnection> newConnections = new List<IpConnection>();
 
             //convert stores to connections...
-            foreach(var store in stores)
+            foreach (var store in stores)
             {
                 //add a new connection from store to relay
                 connections.Add(new IpConnection(store.storeIP, store.Relay.relayIP, store.storeWeight, false));//don't have relay to store connections inactivatable in database yet.
@@ -65,16 +80,24 @@ namespace _744Project.ViewModels
                 var location1 = getEntityLocation(store.storeIP);
 
                 //add JUST THE STORE to the network entities
-                NetworkEntity temp = new NetworkEntity(store.storeIP, 0, store.storeID, location1.Item1, location1.Item2, true, false);
-                networkEntities.Add(store.storeIP, temp);
+                NetworkEntity temp = new NetworkEntity(store.storeIP, 0, store.storeID, location1.Item1, location1.Item2, true, false, store.regionID + "");
+                
+                //OLD ADD
+                networkEntities.Add(store.storeIP, temp); 
+                //NEW ADD
+                regions[store.regionID + ""].networkEntities.Add(store.storeIP, temp);
 
-                //only add it if it doesnt already exist
-                if (!networkEntities.ContainsKey(store.Relay.relayIP))
+                //only add the relay it if it doesnt already exist
+                if (!regions[store.Relay.regionID+""].networkEntities.ContainsKey(store.Relay.relayIP))// !networkEntities.ContainsKey(store.Relay.relayIP)
                 {
                     var location2 = getEntityLocation(store.Relay.relayIP);
 
-                    NetworkEntity relay = new NetworkEntity(store.Relay.relayIP, 1, store.Relay.relayID, location2.Item1, location2.Item2, store.Relay.isActive, store.Relay.isGateway);
+                    NetworkEntity relay = new NetworkEntity(store.Relay.relayIP, 1, store.Relay.relayID, location2.Item1, location2.Item2, store.Relay.isActive, store.Relay.isGateway, store.Relay.regionID+"");
+                    
+                    //OLD ADD, REMOVE
                     networkEntities.Add(store.Relay.relayIP, relay);
+                    //NEW ADD
+                    regions[store.Relay.regionID + ""].networkEntities.Add(store.Relay.relayIP, relay);
                 }
                
             }
@@ -95,12 +118,23 @@ namespace _744Project.ViewModels
                 var location1 = getEntityLocation(relayCon.Relay.relayIP);
                 var location2 = getEntityLocation(relayCon.Relay2.relayIP);
 
-                NetworkEntity temp1 = new NetworkEntity(relayCon.Relay.relayIP, 1, relayCon.Relay.relayID, location1.Item1, location1.Item2, relayCon.Relay.isActive, relayCon.Relay.isGateway);
-                NetworkEntity temp2 = new NetworkEntity(relayCon.Relay2.relayIP, 1, relayCon.Relay2.relayID, location2.Item1, location2.Item2, relayCon.Relay2.isActive, relayCon.Relay2.isGateway);
-                if (!networkEntities.ContainsKey(relayCon.Relay.relayIP)) 
-                    networkEntities.Add(relayCon.Relay.relayIP, temp1 );
-                if (!networkEntities.ContainsKey(relayCon.Relay2.relayIP))
-                    networkEntities.Add(relayCon.Relay2.relayIP, temp2 );
+                NetworkEntity temp1 = new NetworkEntity(relayCon.Relay.relayIP, 1, relayCon.Relay.relayID, location1.Item1, location1.Item2, relayCon.Relay.isActive, relayCon.Relay.isGateway, relayCon.Relay.regionID +"");
+                NetworkEntity temp2 = new NetworkEntity(relayCon.Relay2.relayIP, 1, relayCon.Relay2.relayID, location2.Item1, location2.Item2, relayCon.Relay2.isActive, relayCon.Relay2.isGateway, relayCon.Relay2.regionID +"");
+                if (!regions[relayCon.Relay.regionID + ""].networkEntities.ContainsKey(relayCon.Relay.relayIP))
+                {//!networkEntities.ContainsKey(relayCon.Relay.relayIP)) 
+                    //OLD ADD
+                    networkEntities.Add(relayCon.Relay.relayIP, temp1);
+                    //NEW ADD
+                    regions[relayCon.Relay.regionID + ""].networkEntities.Add(relayCon.Relay.relayIP, temp1);
+                }
+                if (!regions[relayCon.Relay2.regionID + ""].networkEntities.ContainsKey(relayCon.Relay2.relayIP))
+                {
+                    //!networkEntities.ContainsKey(relayCon.Relay2.relayIP))
+                    //OLD ADD
+                    networkEntities.Add(relayCon.Relay2.relayIP, temp2);
+                    //NEW ADD
+                    regions[relayCon.Relay2.regionID + ""].networkEntities.Add(relayCon.Relay2.relayIP, temp2);
+                }
             }
 
             return newConnections;
@@ -119,12 +153,22 @@ namespace _744Project.ViewModels
                 var location1 = getEntityLocation(con.Relay.relayIP);
                 var location2 = getEntityLocation(con.ProcessCenter.processCenterIP);
 
-                NetworkEntity temp1 = new NetworkEntity(con.Relay.relayIP, 1, con.Relay.relayID,location1.Item1, location1.Item2, con.Relay.isActive, con.Relay.isGateway);
-                NetworkEntity temp2 = new NetworkEntity(con.ProcessCenter.processCenterIP, 2, con.ProcessCenter.processCenterID, location2.Item1, location2.Item2, con.Relay.isActive, con.Relay.isGateway);
-                if (!networkEntities.ContainsKey(con.Relay.relayIP))
+                NetworkEntity temp1 = new NetworkEntity(con.Relay.relayIP, 1, con.Relay.relayID,location1.Item1, location1.Item2, con.Relay.isActive, con.Relay.isGateway, con.Relay.regionID + "");
+                NetworkEntity temp2 = new NetworkEntity(con.ProcessCenter.processCenterIP, 2, con.ProcessCenter.processCenterID, location2.Item1, location2.Item2, con.Relay.isActive, con.Relay.isGateway, "PC cant have a region*");
+                if (!regions[con.Relay.regionID + ""].networkEntities.ContainsKey(con.Relay.relayIP))
+                {//(!networkEntities.ContainsKey(con.Relay.relayIP))
+                    //OLD ADD
                     networkEntities.Add(con.Relay.relayIP, temp1);
-                if (!networkEntities.ContainsKey(con.ProcessCenter.processCenterIP))
+                    //NEW ADD
+                    regions[con.Relay.regionID + ""].networkEntities.Add(con.Relay.relayIP, temp1);
+                }
+                if (processingCenter == null)
+                {//(!networkEntities.ContainsKey(con.ProcessCenter.processCenterIP))
+                    //OLD ADD
                     networkEntities.Add(con.ProcessCenter.processCenterIP, temp2);
+                    //NEW ADD
+                    processingCenter = temp2;
+                }
             }
 
             return newConnections;
@@ -188,12 +232,14 @@ namespace _744Project.ViewModels
         public string databaseId { get; set; }
         public bool isActive { get; set; }
         public bool isGateway { get; set; }
+        public string regionId { get; set; }
+
 
         //for view locations
         public decimal x { get; set; }
         public decimal y { get; set; }
 
-        public NetworkEntity(string ip, int type, string databaseId, decimal x, decimal y, bool isActive, bool isGateway)
+        public NetworkEntity(string ip, int type, string databaseId, decimal x, decimal y, bool isActive, bool isGateway, string regionId)
         {
             this.ip = ip;
             this.type = type;
@@ -202,7 +248,24 @@ namespace _744Project.ViewModels
             this.y = y;
             this.isActive = isActive;
             this.isGateway = isGateway;
+            this.regionId = regionId;
         }
         //maybe a list<Transactions>..... numTransactions....
+    }
+
+    public class NetworkRegion
+    {
+        public NetworkRegion(Regions reg)
+        {
+            this.gatewayIp = reg.gatewayIP;
+            this.name = reg.regionName;
+            this.id = reg.regionID +"";
+            this.networkEntities = new Dictionary<string, NetworkEntity>();
+        }
+
+        public string gatewayIp { get; set; }
+        public string name { get; set; }
+        public string id { get; set; }
+        public Dictionary<String, NetworkEntity> networkEntities { get; set; }
     }
 }
