@@ -1,0 +1,111 @@
+﻿@*@model IEnumerable<_744Project.Models.SecurityQuestion>*@
+@using _744Project.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="container">
+    <h2>Security Question</h2>
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+            @*<p>
+            @Html.ActionLink("Create New", "Create")
+        </p>*@
+            <form method="post" action="~/SecurityQuestions/Index">
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.SecuriyQuestion, new { @class = "col-md-2 control-label" })
+                    <div style="display:inline">
+                        <p style="color: #000a0e">@Model.SecuriyQuestion</p>
+                    </div>
+                    <div style="display:none" class="col-md-10">
+                        @Html.PasswordFor(m => m.SecuriyQuestion, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.SecuriyQuestion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+
+
+
+                <div class="form-group">
+                    <div style="color:red">@ViewBag.Security</div>
+                    @Html.LabelFor(m => m.AnswerToSecurityQuestion, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @*@Html.PasswordFor(m => m.AnswerToSecurityQuestion, new { @class = "form-control" })*@
+                        @*@Html.ValidationMessageFor(m => m.AnswerToSecurityQuestion, "", new { @class = "text-danger" })*@
+                        <input id="answer" type="password" name="answer" value="" class="form-control" />
+                        @*@Html.ValidationMessage("answer")*@
+                        @Html.ValidationMessage("answer", "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        @*<input type="submit" value="Log in" class="btn btn-default" />*@
+                        @*<form method="post" action="~/SecurityQuestions/Index">*@
+                        @*<input id="answer" type="password" value="" class="form-control" />*@
+                        <input id="submit" type="submit" value="Submit" class="btn btn-default" />
+                        @*</form>*@
+                    </div>
+                </div>
+            </form>
+
+            @*<table class="table">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.AspNetUserID)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.QuestionID)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Answer)
+                            </th>
+                            <th></th>
+                        </tr>
+
+                        @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AspNetUserID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.QuestionID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Answer)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.SecurityQuestionsID }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.SecurityQuestionsID }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.SecurityQuestionsID })
+                        </td>
+                    </tr>
+        }
+
+                    </table>*@
+
+
+            @section Scripts {
+                @*@Scripts.Render("~/bundles/jqueryval")*@
+                @*<script>
+                $(document).ready(function () {
+
+                    $("#submit").click(function () {
+                        $.getJSON('@Url.Action("Answer")', function (data) {
+                            //$("#mytext").val(data);
+                        });
+                    });
+
+                });
+            </script>*@
+            }
+
+        </div>
+    </div>
+</div>

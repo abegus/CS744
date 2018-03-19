@@ -59,10 +59,11 @@ namespace _744Project.Controllers
         {
             ViewBag.ReturnUrl = returnUrl;
             LoginViewModel model = new LoginViewModel();
-            Random index = new Random();
-            var randomIndex = index.Next(1, 4);
-            model.SecuriyQuestion = db.Questions.Find(randomIndex).QuestionText;
-            ViewBag.Security ="";
+            //SecurityQuestion model = new SecurityQuestion();
+            //Random index = new Random();
+            //var randomIndex = index.Next(1, 4);
+            //model.SecuriyQuestion = db.Questions.Find(randomIndex).QuestionText;
+            //ViewBag.Security ="";
             return View(model);
 
         }
@@ -80,21 +81,20 @@ namespace _744Project.Controllers
             }
 
             
-            var answers = model.AnswerToSecurityQuestion;
-            var question = model.SecuriyQuestion;
-            var QuestionIDUser = (from ans in db.SecurityQuestions where ans.Answer == answers select ans).FirstOrDefault();
+            //var answers = model.AnswerToSecurityQuestion;
+            //var question = model.SecuriyQuestion;
+            //var QuestionIDUser = (from ans in db.SecurityQuestions where ans.Answer == answers select ans).FirstOrDefault();
 
-            int QuestionID;
-            if (QuestionIDUser != null) {
-                QuestionID= QuestionIDUser.QuestionID;
-            }
-            else
-            {
-                QuestionID = -1;
-            }
+            //int QuestionID;
+            //if (QuestionIDUser != null) {
+            //    QuestionID= QuestionIDUser.QuestionID;
+            //}
+            //else
+            //{
+            //    QuestionID = -1;
+            //}
             var curLoginUser = (from usr in db.AspNetUsers where usr.Email == model.Email select usr).First();
-
-
+            
 
             if (curLoginUser.numFailedAttempts > 3)
             {
@@ -102,48 +102,48 @@ namespace _744Project.Controllers
                 return View(model);
             }
 
-            if (QuestionIDUser == null)
-            {
-                Random index = new Random();
-                var randomIndex = index.Next(1, 4);
-                model.SecuriyQuestion = db.Questions.Find(randomIndex).QuestionText;
-                //curLoginUser.numFailedAttempts++;
-                //db.SaveChanges();
-                //ViewBag.Security = "Security question incorrect";
-                curLoginUser.numFailedAttempts++;
-                db.SaveChanges();
-                ViewBag.Security = "Incorrect Security Question";
-                //model.SecuriyQuestion = question;
-                return View(model);
-            }
+            //if (QuestionIDUser == null)
+            //{
+            //    Random index = new Random();
+            //    var randomIndex = index.Next(1, 4);
+            //    model.SecuriyQuestion = db.Questions.Find(randomIndex).QuestionText;
+            //    //curLoginUser.numFailedAttempts++;
+            //    //db.SaveChanges();
+            //    //ViewBag.Security = "Security question incorrect";
+            //    curLoginUser.numFailedAttempts++;
+            //    db.SaveChanges();
+            //    ViewBag.Security = "Incorrect Security Question";
+            //    //model.SecuriyQuestion = question;
+            //    return View(model);
+            //}
            
-                var expectedAnswer = (from sec in db.SecurityQuestions
-                                      where sec.AspNetUserID == curLoginUser.Id && sec.QuestionID == QuestionID
-                                      select sec
-                                      ).First();
+                //var expectedAnswer = (from sec in db.SecurityQuestions
+                //                      where sec.AspNetUserID == curLoginUser.Id && sec.QuestionID == QuestionID
+                //                      select sec
+                //                      ).First();
             
 
 
             //no answer in the database
-            if(expectedAnswer == null)
-            {
-                ViewBag.Security = "No such Security quesiton exists";
-                return View(model);
-                //return nothing works
+            //if(expectedAnswer == null)
+            //{
+            //    ViewBag.Security = "No such Security quesiton exists";
+            //    return View(model);
+            //    //return nothing works
 
-            }
-            //answer is in the database, but the answer provided by the user doesnt match
-            else if (!expectedAnswer.Answer.Equals(model.AnswerToSecurityQuestion))
-            {
-                Random index = new Random();
-                var randomIndex = index.Next(1, 4);
-                model.SecuriyQuestion = db.Questions.Find(randomIndex).QuestionText;
-                curLoginUser.numFailedAttempts++;
-                db.SaveChanges();
-                ViewBag.Security = "Security question incorrect";
-                return View(model);
-                //return not the same
-            }
+            //}
+            ////answer is in the database, but the answer provided by the user doesnt match
+            //else if (!expectedAnswer.Answer.Equals(model.AnswerToSecurityQuestion))
+            //{
+            //    Random index = new Random();
+            //    var randomIndex = index.Next(1, 4);
+            //    model.SecuriyQuestion = db.Questions.Find(randomIndex).QuestionText;
+            //    curLoginUser.numFailedAttempts++;
+            //    db.SaveChanges();
+            //    ViewBag.Security = "Security question incorrect";
+            //    return View(model);
+            //    //return not the same
+            //}
             //else it works and continue
 
             
@@ -153,13 +153,15 @@ namespace _744Project.Controllers
             UserManager.MaxFailedAccessAttemptsBeforeLockout = 3;
             UserManager.UserLockoutEnabledByDefault = true;
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: true);
-            //if语句
+            //if语句           
             switch (result)
             {
                 case SignInStatus.Success:
                     curLoginUser.numFailedAttempts = 0;
                     db.SaveChanges();
-                    return RedirectToLocal(returnUrl);
+                    string id = curLoginUser.Id;                    
+                    return RedirectToAction("Index", "SecurityQuestions", new { id });                
+                    //return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
