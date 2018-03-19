@@ -33,7 +33,8 @@
                                     @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                                 </div>
                             </div>
-                            <div class="form-group">
+
+                            @*<div class="form-group">
                                 @Html.LabelFor(m => m.SecuriyQuestion, new { @class = "col-md-2 control-label" })
                                 <div style="display:inline">
                                     <p style="color: #00B7FF">@Model.SecuriyQuestion</p>
@@ -51,7 +52,8 @@
 									@Html.PasswordFor(m => m.AnswerToSecurityQuestion, new { @class = "form-control" })
 									@Html.ValidationMessageFor(m => m.AnswerToSecurityQuestion, "", new { @class = "text-danger" })
 								</div>
-							</div>
+							</div>*@
+
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
                                     <div class="checkbox">

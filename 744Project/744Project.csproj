@@ -226,6 +226,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\NetworkController.cs" />
     <Compile Include="Controllers\RelayToRelayConnectionsController.cs" />
+    <Compile Include="Controllers\SecurityQuestionsController.cs" />
     <Compile Include="Controllers\StoresController.cs" />
     <Compile Include="Controllers\TransactionsController.cs" />
     <Compile Include="Encryption.cs" />
@@ -682,6 +683,11 @@
     <Content Include="Views\CreditCards\Edit.cshtml" />
     <Content Include="Views\CreditCards\Index.cshtml" />
     <Content Include="Views\Accounts\Create.cshtml" />
+    <Content Include="Views\SecurityQuestions\Create.cshtml" />
+    <Content Include="Views\SecurityQuestions\Delete.cshtml" />
+    <Content Include="Views\SecurityQuestions\Details.cshtml" />
+    <Content Include="Views\SecurityQuestions\Edit.cshtml" />
+    <Content Include="Views\SecurityQuestions\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

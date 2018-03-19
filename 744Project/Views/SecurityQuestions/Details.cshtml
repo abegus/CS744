@@ -1,0 +1,42 @@
+﻿@model _744Project.Models.SecurityQuestion
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>SecurityQuestion</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AspNetUserID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AspNetUserID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.QuestionID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.QuestionID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Answer)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Answer)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.SecurityQuestionsID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
