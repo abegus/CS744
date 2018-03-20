@@ -89,19 +89,21 @@
 
 	//initializes the Cytoscape object. (This is what the graph is)
 	var cy = cytoscape({
-		container: document.getElementById('cy'),
-		style: [
+        container: document.getElementById('cy'),
+        style: 
+        [
 			{
 				selector: 'node',
 				style: {
 					//shape: 'data(shape)',
-					shape: 'circle',
+					//shape: 'circle',
 					'border-width': '5',
 					//'background-color': 'red',
 					'background-color': 'data(color)',
 					content: 'data(id)',
-					'curve-style': 'bezier'
-				}
+                    'curve-style': 'bezier',
+                    'shape': 'data(shape)'
+                },
 			},
 			{
 				selector: 'edge',
@@ -109,7 +111,7 @@
 					'label': 'data(weight)'
 				}
 			}
-		],
+        ],
 		layout: {
 			name: 'preset'
 		},
@@ -126,14 +128,15 @@
 			var xLocation = 0;
 			var yLocation = 0;
 			//if it is a store
-			if (jsonData.networkEntities[p].type == 0) {
-				NetworkElements.nodes.push({ data: { id: p, color: 'yellow', shape: 'square', category: 0 }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
+            if (jsonData.networkEntities[p].type == 0) {
+                //console.log("convert 形状处理");
+                NetworkElements.nodes.push({ data: { id: p, color: 'yellow', shape: 'octagon', category: 0 }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
 			}
 			//if it is a relay
 			else if (jsonData.networkEntities[p].type == 1) {
-				NetworkElements.nodes.push({ data: { id: p, color: 'blue', shape: 'circle', category: 1 }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
+                NetworkElements.nodes.push({ data: { id: p, color: 'blue', shape: 'rectangle', category: 1 }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
 			}
-			else {
+            else if (jsonData.networkEntities[p].type == 2){
 				processingCenter = p;
 				NetworkElements.nodes.push({ data: { id: p, color: 'red', shape: 'triangle', category: 2 }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
 			}
@@ -143,7 +146,7 @@
 			//console.log(jsonData.connections[q]);
 			NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight } });
 		}
-
+        console.log("看看shape是啥", NetworkElements);
 		return NetworkElements;
 	}
 
@@ -155,19 +158,17 @@
 	function exportPositions() {//cy
 		var list = [];
 		var nodes = cy.nodes();
-		for (var i = 0; i < nodes.length; i++) {
-			var obj = {};
-			obj['id'] = nodes[i].id();
-			obj['pos'] = nodes[i].position();
-			obj['type'] = nodes[i].category;
-			list.push(obj);
-		}
-
+        for (var i = 0; i < nodes.length; i++) {
+            var obj = {};
+            obj['id'] = nodes[i].id();
+            obj['pos'] = nodes[i].position();
+            obj['type'] = nodes[i].category;
+            list.push(obj);
+        }
 
 		list = JSON.stringify({
 			'nodePosition': list
 		});
-
 
 		console.log(list);
 
@@ -226,7 +227,6 @@
         // Popup info and queue
         cy.nodes().qtip({
             content: function () {
-
                 return this.id() + ", Queue: ";
             },
             position: {
