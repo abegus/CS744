@@ -4,6 +4,32 @@
     ViewBag.Title = "Network";
 }
 <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.css">
+
+
+<!--Here is where the popup MODAL javascript is going. This is for when the nodes are clicked on-->
+<div class="modal fade" id="myModal" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Network Element Overview</h4>
+			</div>
+			<div id="NodePopup" class="modal-body">
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+
+	</div>
+</div>
+<!-- End of Modal section -->
+
+
+
 <div class="row">
     <div class="panel panel-default" style="margin-top:10px">
         <div class="panel-body">
@@ -130,15 +156,15 @@
 			//if it is a store
             if (jsonData.networkEntities[p].type == 0) {
                 //console.log("convert 形状处理");
-                NetworkElements.nodes.push({ data: { id: p, color: 'yellow', shape: 'octagon', category: 0 }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
+                NetworkElements.nodes.push({ data: { id: p, color: 'yellow', shape: 'octagon', category: 0, databaseId: jsonData.networkEntities[p].databaseId }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
 			}
 			//if it is a relay
 			else if (jsonData.networkEntities[p].type == 1) {
-                NetworkElements.nodes.push({ data: { id: p, color: 'blue', shape: 'rectangle', category: 1 }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
+				NetworkElements.nodes.push({ data: { id: p, color: 'blue', shape: 'rectangle', category: 1, databaseId: jsonData.networkEntities[p].databaseId  }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
 			}
             else if (jsonData.networkEntities[p].type == 2){
 				processingCenter = p;
-				NetworkElements.nodes.push({ data: { id: p, color: 'red', shape: 'triangle', category: 2 }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
+				NetworkElements.nodes.push({ data: { id: p, color: 'red', shape: 'triangle', category: 2, databaseId: jsonData.networkEntities[p].databaseId  }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
 			}
 		}
 		//console.log("===========================================================================================");
@@ -214,33 +240,9 @@
 	});
 
 	//Starts the animation on the click of a node
-	//cy.on('click', 'node', function (evt) {
-	//	console.log('clicked ' + this.id());
-	//	var pathToJ = dijkstra.pathTo(cy.getElementById(this.id()));
-	//	var i = pathToJ.length;
-	//	/*console.log(i);
-	//	console.log(pathToJ);
-	//	console.log("=============================================================");*/
-	//	recursivePath(pathToJ, pathToJ[i - 1], i - 1);
-	//});
 
-        // Popup info and queue
-        cy.nodes().qtip({
-            content: function () {
-                return this.id() + ", Queue: ";
-            },
-            position: {
-                my: 'top center',
-                at: 'bottom center'
-            },
-            style: {
-                classes: 'qtip-bootstrap',
-                tip: {
-                    width: 16,
-                    height: 8
-                }
-            }
-        });
+
+       
 
 	//This function recursively calls itself to do the animation from node to node. the elements from the Store to the Processing
 	// Center are stored in the 'stack' parameter, while the current element is the 'item', and the current index is 'i'.
@@ -328,5 +330,60 @@
 				element.play();
 			});
 		});
+
+
+		/* ================================================================================================
+										Modal Popup section (clicking on an element in the graph)
+		===================================================================================================*/
+		// Popup info and queue
+		/*cy.nodes().qtip({
+			content: function () {
+				popupInformation( this.data('databaseId'), this.data('category') );// sending popupInformation(Id, node type)
+				return this.id() + ", Queue: ";
+				
+			},
+			position: {
+				my: 'top center',
+				at: 'bottom center'
+			},
+			style: {
+				classes: 'qtip-bootstrap',
+				tip: {
+					width: 16,
+					height: 8
+				}
+			}
+		});*/
+		cy.on('click', 'node', function (evt) {
+			popupInformation(this.data('databaseId'), this.data('category'));// sending popupInformation(Id, node type)
+			
+		});
+
+		function popupInformation(id,type) {
+			console.log(id + " clicked!");
+			//return;
+
+			if (id != null) {
+				var DEST = "/Network/GetNodeInformation?id=" +id+"&type="+type;
+				$.ajax({
+					url: DEST,
+					contentType: 'application/html; charset=utf-8',
+					type: 'GET',
+					dataType: 'html'
+
+				})
+					.success(function (result) {
+						$("#NodePopup").html(result);
+						$("#myModal").modal()
+
+					})
+					.error(function (xhr, status) {
+						alert(status);
+					})
+			}
+			else {
+				$("#NodePopup").html("");
+			}
+		}
     </script>
 }

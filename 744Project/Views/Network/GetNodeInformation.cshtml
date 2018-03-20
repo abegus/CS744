@@ -1,0 +1,33 @@
+﻿@model _744Project.ViewModels.NetworkEntityViewModel
+
+
+<div>
+	<h3>
+		@if(Model.type == 0)
+		{
+			<span>Store</span>
+		}
+		@if(Model.type == 1)
+		{
+			<span>Relay</span>
+		}
+		@if(Model.type == 0)
+		{
+			<span>Processing Center</span>
+		}
+	</h3>
+	<div>
+		<dl class="dl-horizontal">
+			<dt>Ip</dt>
+			<dd>@Model.ip</dd>
+			<dt>Active</dt>
+			<dd>@Model.isActive</dd>
+			<dt>Gateway</dt>
+			<dd>@Model.isGateway</dd>
+			<dt>Queue</dt>
+			<dd>@Model.queue<dd>
+			<dt>Region</dt>
+			<dd>@Model.region</dd>
+		</dl>
+	</div>
+</div>

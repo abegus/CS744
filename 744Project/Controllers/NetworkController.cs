@@ -66,6 +66,29 @@ namespace _744Project.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+
+        // GET: Network/GetNodeInformation
+        // This sends a database ID and a type (0: Store, 1: Relay, 2: PC). Return a view with the results
+        public PartialViewResult GetNodeInformation(string id, string type)
+        {
+            int numType = Int32.Parse(type);
+            NetworkEntityViewModel vm;
+
+            if (numType == 0)//if its a store
+            {
+                vm = new NetworkEntityViewModel(db.Stores.Find(id));
+            }
+            else if(numType == 1)//if its a relay
+            {
+                vm = new NetworkEntityViewModel(db.Relays.Find(id));
+            }
+            else//else its a PC
+            {
+                vm = new NetworkEntityViewModel(db.ProcessCenters.Find(id));
+            }
+            return PartialView(vm);
+        }
+
         // GET: Network/Details/5
         public ActionResult Details(string id)
         {
@@ -85,6 +108,7 @@ namespace _744Project.Controllers
             }
             return View(relay);
         }
+        
 
         // GET: Network/Create
         public ActionResult Create()
