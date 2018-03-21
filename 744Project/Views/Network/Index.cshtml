@@ -121,8 +121,6 @@
 			{
 				selector: 'node',
 				style: {
-					//shape: 'data(shape)',
-					//shape: 'circle',
 					'border-width': '5',
 					//'background-color': 'red',
 					'background-color': 'data(color)',
@@ -159,8 +157,12 @@
                 NetworkElements.nodes.push({ data: { id: p, color: 'yellow', shape: 'octagon', category: 0, databaseId: jsonData.networkEntities[p].databaseId }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
 			}
 			//if it is a relay
-			else if (jsonData.networkEntities[p].type == 1) {
-				NetworkElements.nodes.push({ data: { id: p, color: 'blue', shape: 'rectangle', category: 1, databaseId: jsonData.networkEntities[p].databaseId  }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
+            else if (jsonData.networkEntities[p].type == 1) {
+                if (jsonData.networkEntities[p].isGateway) {//gateway represent other color
+                    NetworkElements.nodes.push({ data: { id: p, color: 'green', shape: 'rectangle', category: 1, databaseId: jsonData.networkEntities[p].databaseId }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
+                } else {
+                    NetworkElements.nodes.push({ data: { id: p, color: 'blue', shape: 'rectangle', category: 1, databaseId: jsonData.networkEntities[p].databaseId }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
+                }
 			}
             else if (jsonData.networkEntities[p].type == 2){
 				processingCenter = p;
@@ -173,6 +175,13 @@
 			NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight } });
 		}
         console.log("看看shape是啥", NetworkElements);
+        // try to set region visually
+        //NetworkElements.nodes.push({ data: { id: 4, shape: 'rectangle' } });
+        //for (var p in NetworkElements.nodes) {
+        //    if (NetworkElements.nodes[p].ip == "192.168.0.10") {
+
+        //    }
+        //}
 		return NetworkElements;
 	}
 
