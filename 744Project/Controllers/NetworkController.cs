@@ -89,6 +89,29 @@ namespace _744Project.Controllers
             return PartialView(vm);
         }
 
+        [HttpPost]
+        public ActionResult GetNodeInformation(NetworkEntityViewModel vm)
+        {
+            if (vm.type == 0)//if its a store
+            {
+                var store = db.Stores.Find(vm.id);
+               // store.isActive()
+            }
+            else if (vm.type == 1)//if its a relay
+            {
+                var relay = db.Relays.Find(vm.id);
+                relay.isActive = !relay.isActive;
+            }
+            else//else its a PC
+            {
+                var pc = db.ProcessCenters.Find(vm.id);
+                //pc.isActive = !pc.isActive;
+            }
+            db.SaveChanges();
+            return RedirectToAction("Index");
+            //return ;
+        }
+
         // GET: Network/Details/5
         public ActionResult Details(string id)
         {
