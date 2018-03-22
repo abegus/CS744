@@ -104,7 +104,7 @@
 
 		//This converts the Model into JSON data
 		var jsonData = @Html.Raw(Json.Encode(Model));
-	console.log(jsonData);
+	   console.log(jsonData);
 
 	var processingCenter = 0;
 
@@ -135,7 +135,15 @@
 				style: {
 					'label': 'data(weight)'
 				}
-			}
+            },
+            {
+                selector: ':selected',
+                css: {
+                    'background-color': 'green',
+                    'line-color': 'black',
+                    
+                }
+            }
         ],
 		layout: {
 			name: 'preset'
@@ -148,40 +156,60 @@
 	function convertToCytoscape() {
 		//alert("hi");
 		//console.log("Hello..");
-		console.log(jsonData.networkEntities);
-		for (var p in jsonData.networkEntities) {
-			var xLocation = 0;
-			var yLocation = 0;
-			//if it is a store
-            if (jsonData.networkEntities[p].type == 0) {
-                //console.log("convert 形状处理");
-                NetworkElements.nodes.push({ data: { id: p, color: 'yellow', shape: 'octagon', category: 0, databaseId: jsonData.networkEntities[p].databaseId }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
-			}
-			//if it is a relay
-            else if (jsonData.networkEntities[p].type == 1) {
-                if (jsonData.networkEntities[p].isGateway) {//gateway represent other color
-                    NetworkElements.nodes.push({ data: { id: p, color: 'green', shape: 'rectangle', category: 1, databaseId: jsonData.networkEntities[p].databaseId }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
-                } else {
-                    NetworkElements.nodes.push({ data: { id: p, color: 'blue', shape: 'rectangle', category: 1, databaseId: jsonData.networkEntities[p].databaseId }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
+		console.log(jsonData.regions);
+		//for (var p in jsonData.networkEntities) {
+		//	var xLocation = 0;
+		//	var yLocation = 0;
+		//	//if it is a store
+  //          if (jsonData.networkEntities[p].type == 0) {
+  //              //console.log("convert 形状处理");
+  //              NetworkElements.nodes.push({ data: { id: p, color: 'yellow', shape: 'octagon', category: 0, databaseId: jsonData.networkEntities[p].databaseId }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
+		//	}
+		//	//if it is a relay
+  //          else if (jsonData.networkEntities[p].type == 1) {
+  //              if (jsonData.networkEntities[p].isGateway) {//gateway represent other color
+  //                  NetworkElements.nodes.push({ data: { id: p, color: 'green', shape: 'rectangle', category: 1, databaseId: jsonData.networkEntities[p].databaseId }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
+  //              } else {
+  //                  NetworkElements.nodes.push({ data: { id: p, color: 'blue', shape: 'rectangle', category: 1, databaseId: jsonData.networkEntities[p].databaseId }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
+  //              }
+		//	}
+  //          else if (jsonData.networkEntities[p].type == 2){
+		//		processingCenter = p;
+		//		NetworkElements.nodes.push({ data: { id: p, color: 'red', shape: 'triangle', category: 2, databaseId: jsonData.networkEntities[p].databaseId  }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
+		//	}
+		//}
+
+        //change to use region
+        NetworkElements.nodes.push({ data: { id: 1, color: 'grey', shape: 'rectangle' } });
+        NetworkElements.nodes.push({ data: { id: 2, color: 'grey', shape: 'rectangle' } });
+        NetworkElements.nodes.push({ data: { id: 3, color: 'grey', shape: 'rectangle' } });
+        NetworkElements.nodes.push({ data: { id: 4, color: 'grey', shape: 'rectangle' } });
+
+        for (var p in jsonData.regions) {
+            var xLocation = 0;
+            var yLocation = 0;
+            for (var i in jsonData.regions[p].networkEntities) {
+                 //if it is a store
+                if (jsonData.regions[p].networkEntities[i].type == 0) {
+                    NetworkElements.nodes.push({ data: { id: i, color: 'yellow', shape: 'octagon', parent: p, category: 0, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                 }
-			}
-            else if (jsonData.networkEntities[p].type == 2){
-				processingCenter = p;
-				NetworkElements.nodes.push({ data: { id: p, color: 'red', shape: 'triangle', category: 2, databaseId: jsonData.networkEntities[p].databaseId  }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
-			}
-		}
+                //if it is a relay
+                else if (jsonData.regions[p].networkEntities[i].type == 1) {
+                    if (jsonData.regions[p].networkEntities[i].isGateway) {//gateway represent other color
+                        NetworkElements.nodes.push({ data: { id: i, color: 'green', shape: 'rectangle', parent: p, category: 1, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+                    } else {
+                        NetworkElements.nodes.push({ data: { id: i, color: 'blue', shape: 'rectangle', parent: p, category: 1, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+                    }
+                }
+            }
+        }
+        //add processing center which is from processingCenter
+        NetworkElements.nodes.push({ data: { id: jsonData.processingCenter.ip, color: 'red', shape: 'triangle', category: 2, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+
 		//console.log("===========================================================================================");
 		for (var q in jsonData.connections) {
 			//console.log(jsonData.connections[q]);
 			NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight } });
-		}
-        console.log("看看shape是啥", NetworkElements);
-        // try to set region visually
-        //NetworkElements.nodes.push({ data: { id: 4, shape: 'rectangle' } });
-        for (var p in NetworkElements.nodes) {
-            if (NetworkElements.nodes[p].id == "192.168.0.10") {
-                  
-            }
         }
 		return NetworkElements;
 	}
@@ -244,7 +272,8 @@
 		//console.log(storeIp);
         var transitionID = document.getElementById(storeIp).parentNode.id;
         queue.push(transitionID);
-		var pathToJ = dijkstra.pathTo(cy.getElementById(storeIp));
+        var pathToJ = dijkstra.pathTo(cy.getElementById(storeIp));
+        console.log("pathToJ: ", pathToJ);
 		var i = pathToJ.length;
 		/*console.log(i);
 		console.log(pathToJ);
