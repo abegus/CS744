@@ -64,7 +64,7 @@
                         <td>@trans.Id</td>
                         <td>@trans.storeIp</td>
                         <td>@trans.transactionAmount</td>
-                        <td><button class="SendTransaction btn btn-default" id="@trans.storeIp">Send</button></td>
+                        <td id="@trans.Id"><button class="SendTransaction btn btn-default" id="@trans.storeIp">Send</button></td>
                     </tr>
                 }
             </table>
@@ -177,11 +177,11 @@
         console.log("看看shape是啥", NetworkElements);
         // try to set region visually
         //NetworkElements.nodes.push({ data: { id: 4, shape: 'rectangle' } });
-        //for (var p in NetworkElements.nodes) {
-        //    if (NetworkElements.nodes[p].ip == "192.168.0.10") {
-
-        //    }
-        //}
+        for (var p in NetworkElements.nodes) {
+            if (NetworkElements.nodes[p].id == "192.168.0.10") {
+                  
+            }
+        }
 		return NetworkElements;
 	}
 
@@ -226,7 +226,8 @@
 	/* ================================================================================================
 										ANIMATION SECTION
 	===================================================================================================*/
-	var animations = [];
+        var animations = [];
+        var queue = [];
 
 	//Calculates the shortest path to the Processing Center
 	var dijkstra = cy.elements().dijkstra(cy.getElementById(processingCenter), function (edge) {
@@ -240,6 +241,8 @@
 		// Holds the product ID of the clicked element
 		var storeIp = $(this).attr('id');
 		//console.log(storeIp);
+        var transitionID = document.getElementById(storeIp).parentNode.id;
+        queue.push(transitionID);
 		var pathToJ = dijkstra.pathTo(cy.getElementById(storeIp));
 		var i = pathToJ.length;
 		/*console.log(i);
