@@ -68,6 +68,7 @@ namespace _744Project.Controllers
 
         }
 
+
         //
         // POST: /Account/Login
         [HttpPost]
@@ -80,7 +81,7 @@ namespace _744Project.Controllers
                 return View(model);
             }
 
-            
+
             //var answers = model.AnswerToSecurityQuestion;
             //var question = model.SecuriyQuestion;
             //var QuestionIDUser = (from ans in db.SecurityQuestions where ans.Answer == answers select ans).FirstOrDefault();
@@ -93,8 +94,23 @@ namespace _744Project.Controllers
             //{
             //    QuestionID = -1;
             //}
-            var curLoginUser = (from usr in db.AspNetUsers where usr.Email == model.Email select usr).First();
             
+            //
+            SecurityQuestionsController security = new SecurityQuestionsController();
+            //string tempId = User.Identity.GetUserId();
+            string name = model.Email;
+            //string tempId = User.Identity.Name;
+            Boolean userExists = security.userExists(name);
+            if (!userExists)
+            {
+                ModelState.AddModelError("", "Invalid login attempt.");
+                //curLoginUser.numFailedAttempts++;
+                db.SaveChanges();
+                return View(model);
+            }
+            //
+
+            var curLoginUser = (from usr in db.AspNetUsers where usr.Email == model.Email select usr).First();            
 
             if (curLoginUser.numFailedAttempts > 3)
             {

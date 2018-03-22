@@ -699,6 +699,7 @@
     <Content Include="Views\SecurityQuestions\Edit.cshtml" />
     <Content Include="Views\SecurityQuestions\Index.cshtml" />
     <Content Include="Views\Network\GetNodeInformation.cshtml" />
+    <Content Include="Views\SecurityQuestions\Cancel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -93,6 +93,22 @@ namespace _744Project.Controllers
             connect.Close();
             return question;
         }
+        public Boolean userExists(string name)
+        {
+            Boolean exists = true;
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select count(*) from AspNetUsers where Email like '"+name+"' ";
+            int count = Convert.ToInt32(cmd.ExecuteScalar());
+            if(count == 0)
+            {
+                exists = false;
+            }
+            connect.Close();
+            return exists;
+        }
+
+
 
         public Boolean checkAnswer(int question, string answer, string id)
         {
@@ -121,6 +137,13 @@ namespace _744Project.Controllers
             {
                 return HttpContext.GetOwinContext().Authentication;
             }
+        }
+        //POST: SecurityQuestions/Cancel
+        [HttpPost]        
+        public ActionResult Cancel()
+        {
+            logoutUser();            
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
@@ -243,6 +266,8 @@ namespace _744Project.Controllers
             return View(securityQuestion);
         }
 
+        
+
         // GET: SecurityQuestions/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -269,6 +294,7 @@ namespace _744Project.Controllers
             return RedirectToAction("Index");
         }
 
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing)
