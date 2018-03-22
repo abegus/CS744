@@ -18,7 +18,7 @@ namespace _744Project.Controllers
 
         static string connectionString = Configuration.getConnectionString();
         SqlConnection connect = new SqlConnection(connectionString);
-
+        //SqlConnection connect = Configuration.getConnectionString();
         // GET: Accounts
         public ActionResult Index()
         {

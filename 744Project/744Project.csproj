@@ -417,6 +417,14 @@
     <Compile Include="Migrations\201803092059279_aaa.Designer.cs">
       <DependentUpon>201803092059279_aaa.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803211838173_add stores to relays relationship.cs" />
+    <Compile Include="Migrations\201803211838173_add stores to relays relationship.Designer.cs">
+      <DependentUpon>201803211838173_add stores to relays relationship.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803212330157_addedManyRelationships.cs" />
+    <Compile Include="Migrations\201803212330157_addedManyRelationships.Designer.cs">
+      <DependentUpon>201803212330157_addedManyRelationships.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -441,6 +449,7 @@
     <Compile Include="Models\RelayTransaction.cs" />
     <Compile Include="Models\SecurityQuestion.cs" />
     <Compile Include="Models\Store.cs" />
+    <Compile Include="Models\StoresToRelays.cs" />
     <Compile Include="Models\StoreTransaction.cs" />
     <Compile Include="Models\sysdiagram.cs" />
     <Compile Include="Models\Transaction.cs" />
@@ -846,6 +855,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803092059279_aaa.resx">
       <DependentUpon>201803092059279_aaa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803211838173_add stores to relays relationship.resx">
+      <DependentUpon>201803211838173_add stores to relays relationship.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803212330157_addedManyRelationships.resx">
+      <DependentUpon>201803212330157_addedManyRelationships.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.addmiddlename.resources" />
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.initialcreate.resources" />

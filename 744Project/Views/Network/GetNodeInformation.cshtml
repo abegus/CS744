@@ -16,6 +16,8 @@
 			<span>Processing Center</span>
 		}
 	</h3>
+@using (Html.BeginForm())
+{
 	<div>
 		<dl class="dl-horizontal">
 			<dt>Ip</dt>
@@ -30,4 +32,83 @@
 			<dd>@Model.region</dd>
 		</dl>
 	</div>
+	<button onclick="Activate(@Model.id,@Model.type)" id="Activate" class="btn btn-default Activate" >Activate</button>
+	<div class="form-group">
+	
+		<div class="col-md-offset-2 col-md-10">
+			@if (Model.isActive)
+			{
+				<input type="submit" id="@Model.id" value="Inactivate" class="btn btn-default" />
+			}
+			@if(!Model.isActive){ 
+				<input type="submit" value="Activate" class="btn btn-default" />
+			}
+		</div>
+	</div>
+}
 </div>
+
+@section Scripts{
+	<script>
+		$(".Activate").click(function (event) {
+			console.log("Here");
+		});
+
+		function Activate(id, type) {
+			console.log("testing 1 2 3");
+			if (id != null) {
+				var DEST = "/Network/GetNodeInformation?id=" + id + "&type=" + type;
+				$.ajax({
+					url: DEST,
+					contentType: 'application/html; charset=utf-8',
+					type: 'POST',
+					dataType: 'html'
+
+				})
+					.success(function (result) {
+						/*$("#NodePopup").html(result);
+						$("#myModal").modal()*/
+						$("#NodePopup").html("");
+
+					})
+					.error(function (xhr, status) {
+						alert(status);
+					})
+			}
+			else {
+				$("#NodePopup").html("");
+			}
+		}
+
+		$("#Activate").onClick(function (event) {
+            //preliminary data gathering for Answers and Questions
+			alert(event.target.id);
+			console.log("HERE");
+			var id = "@Model.id.ToString()";
+			var type = "@Model.type.ToString()";
+
+			if (id != null) {
+				var DEST = "/Network/GetNodeInformation?id=" + id + "&type=" + type;
+				$.ajax({
+					url: DEST,
+					contentType: 'application/html; charset=utf-8',
+					type: 'POST',
+					dataType: 'html'
+
+				})
+					.success(function (result) {
+						/*$("#NodePopup").html(result);
+						$("#myModal").modal()*/
+						$("#NodePopup").html("");
+
+					})
+					.error(function (xhr, status) {
+						alert(status);
+					})
+			}
+			else {
+				$("#NodePopup").html("");
+			}
+		});
+	</script>
+}

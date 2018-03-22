@@ -19,6 +19,8 @@ namespace _744Project.ViewModels
         public bool? isGateway { get; set; }
         public List<string> queue { get; set; } //should be empty, but it can be used by the JS?
 
+        public NetworkEntityViewModel() { }
+
         public NetworkEntityViewModel(Store store)
         {
             type = 0;

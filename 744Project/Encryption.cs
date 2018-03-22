@@ -15,6 +15,7 @@ namespace _744Project
         //This is to get the connection string from the configuration file:
         static string connString = getConnection();
         SqlConnection connect = new SqlConnection(connString);
+        //SqlConnection connect = Configuration.getConnectionString();
         public Encryption()
         {
             connString = getConnection();
@@ -26,8 +27,8 @@ namespace _744Project
         {
             string conn = Configuration.getConnectionString();
             return conn;
-        }       
-        
+        }
+
         public void encryptAndStoreTransaction(string transactionId)
         {
             //Open a new connection to the database:

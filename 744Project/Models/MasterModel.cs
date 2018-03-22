@@ -32,6 +32,7 @@ namespace _744Project.Models
         public virtual DbSet<Questions> Questions { get; set; }
         public virtual DbSet<SecurityQuestion> SecurityQuestions { set; get; }
         public virtual DbSet<Regions> Regions { get; set; }
+        public virtual DbSet<StoresToRelays> StoresToRelays { get; set; }
 
         //not a necessary part of the system, just used for storing locations of nodes
         public virtual DbSet<NodePosition> NodePositions { get; set; }

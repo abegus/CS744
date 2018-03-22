@@ -98,16 +98,17 @@
 
     <script>
 
-	/* ================================================================================================
-										Cytoscape SETUP SECTION
-	===================================================================================================*/
+		/* ================================================================================================
+											Cytoscape SETUP SECTION
+		===================================================================================================*/
 
-	//This converts the Model into JSON data
-	var jsonData = @Html.Raw(Json.Encode(Model));
+		//This converts the Model into JSON data
+		var jsonData = @Html.Raw(Json.Encode(Model));
 	console.log(jsonData);
 
 	var processingCenter = 0;
 
+	//
 	var NetworkElements = {
 		nodes: [],
 		edges: []
@@ -116,7 +117,7 @@
 	//initializes the Cytoscape object. (This is what the graph is)
 	var cy = cytoscape({
         container: document.getElementById('cy'),
-        style: 
+        style:
         [
 			{
 				selector: 'node',
@@ -254,7 +255,7 @@
 	//Starts the animation on the click of a node
 
 
-       
+
 
 	//This function recursively calls itself to do the animation from node to node. the elements from the Store to the Processing
 	// Center are stored in the 'stack' parameter, while the current element is the 'item', and the current index is 'i'.
@@ -352,7 +353,7 @@
 			content: function () {
 				popupInformation( this.data('databaseId'), this.data('category') );// sending popupInformation(Id, node type)
 				return this.id() + ", Queue: ";
-				
+
 			},
 			position: {
 				my: 'top center',
@@ -368,7 +369,7 @@
 		});*/
 		cy.on('click', 'node', function (evt) {
 			popupInformation(this.data('databaseId'), this.data('category'));// sending popupInformation(Id, node type)
-			
+
 		});
 
 		function popupInformation(id,type) {
@@ -387,6 +388,33 @@
 					.success(function (result) {
 						$("#NodePopup").html(result);
 						$("#myModal").modal()
+
+					})
+					.error(function (xhr, status) {
+						alert(status);
+					})
+			}
+			else {
+				$("#NodePopup").html("");
+			}
+		}
+
+
+		function Activate(id, type) {
+			console.log("testing 1 2 3");
+			if (id != null) {
+				var DEST = "/Network/GetNodeInformation?id=" + id + "&type=" + type;
+				$.ajax({
+					url: DEST,
+					contentType: 'application/html; charset=utf-8',
+					type: 'POST',
+					dataType: 'html'
+
+				})
+					.success(function (result) {
+						/*$("#NodePopup").html(result);
+						$("#myModal").modal()*/
+						$("#NodePopup").html("");
 
 					})
 					.error(function (xhr, status) {

@@ -1,111 +1,90 @@
-﻿@*@model IEnumerable<_744Project.Models.SecurityQuestion>*@
-@using _744Project.Models
-@model LoginViewModel
-@{
-    ViewBag.Title = "Index";
-}
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Team Saturn</title>
 
-<div class="container">
-    <h2>Security Question</h2>
-    <div class="panel panel-default">
-        <div class="panel-body">
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
 
-            @*<p>
-            @Html.ActionLink("Create New", "Create")
-        </p>*@
-            <form method="post" action="~/SecurityQuestions/Index">
+</head>
 
-                <div class="form-group">
-                    @Html.LabelFor(m => m.SecuriyQuestion, new { @class = "col-md-2 control-label" })
-                    <div style="display:inline">
-                        <p style="color: #000a0e">@Model.SecuriyQuestion</p>
-                    </div>
-                    <div style="display:none" class="col-md-10">
-                        @Html.PasswordFor(m => m.SecuriyQuestion, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.SecuriyQuestion, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-
-
-
-
-                <div class="form-group">
-                    <div style="color:red">@ViewBag.Security</div>
-                    @Html.LabelFor(m => m.AnswerToSecurityQuestion, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @*@Html.PasswordFor(m => m.AnswerToSecurityQuestion, new { @class = "form-control" })*@
-                        @*@Html.ValidationMessageFor(m => m.AnswerToSecurityQuestion, "", new { @class = "text-danger" })*@
-                        <input id="answer" type="password" name="answer" value="" class="form-control" />
-                        @*@Html.ValidationMessage("answer")*@
-                        @Html.ValidationMessage("answer", "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        @*<input type="submit" value="Log in" class="btn btn-default" />*@
-                        @*<form method="post" action="~/SecurityQuestions/Index">*@
-                        @*<input id="answer" type="password" value="" class="form-control" />*@
-                        <input id="submit" type="submit" value="Submit" class="btn btn-default" />
-                        @*</form>*@
-                    </div>
-                </div>
-            </form>
-
-            @*<table class="table">
-                        <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.AspNetUserID)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.QuestionID)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Answer)
-                            </th>
-                            <th></th>
-                        </tr>
-
-                        @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AspNetUserID)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.QuestionID)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Answer)
-                        </td>
-                        <td>
-                            @Html.ActionLink("Edit", "Edit", new { id = item.SecurityQuestionsID }) |
-                            @Html.ActionLink("Details", "Details", new { id = item.SecurityQuestionsID }) |
-                            @Html.ActionLink("Delete", "Delete", new { id = item.SecurityQuestionsID })
-                        </td>
-                    </tr>
-        }
-
-                    </table>*@
-
-
-            @section Scripts {
-                @*@Scripts.Render("~/bundles/jqueryval")*@
-                @*<script>
-                $(document).ready(function () {
-
-                    $("#submit").click(function () {
-                        $.getJSON('@Url.Action("Answer")', function (data) {
-                            //$("#mytext").val(data);
-                        });
-                    });
-
-                });
-            </script>*@
-            }
-
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @*@Html.ActionLink("Team Saturn", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    @*<li>@Html.ActionLink("Home", "Index", "Home")</li>*@
+                   
+                </ul>
+                @*@Html.Partial("_LoginPartial")*@
+            </div>
         </div>
     </div>
-</div>
+    <div class="container body-content">
+        @*@RenderBody()*@
+        <hr />
+        <footer>
+            <!-- <p>&copy; @DateTime.Now.Year - Team Saturn</p>-->
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @*@RenderSection("scripts", required: false)*@
+
+
+
+    @using _744Project.Models
+    @model LoginViewModel
+    @{
+        ViewBag.Title = "Index";
+    }
+
+    <div class="container">
+        <h2>Security Question</h2>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form method="post" action="~/SecurityQuestions/Index">
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.SecuriyQuestion, new { @class = "col-md-2 control-label" })
+                        <div style="display:inline">
+                            <p style="color: #000a0e">@Model.SecuriyQuestion</p>
+                        </div>
+                        <div style="display:none" class="col-md-10">
+                            @Html.PasswordFor(m => m.SecuriyQuestion, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.SecuriyQuestion, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div style="color:red">@ViewBag.Security</div>
+                        @Html.LabelFor(m => m.AnswerToSecurityQuestion, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            <input id="answer" type="password" name="answer" value="" class="form-control" />
+                            @Html.ValidationMessage("answer", "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input id="submit" type="submit" value="Submit" class="btn btn-default" />
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

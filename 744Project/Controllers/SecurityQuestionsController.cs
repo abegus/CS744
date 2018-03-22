@@ -20,6 +20,7 @@ namespace _744Project.Controllers
 
         static string connectionString = Configuration.getConnectionString();
         SqlConnection connect = new SqlConnection(connectionString);
+        //SqlConnection connect = Configuration.getConnectionString();
         static string g_id = "";
         static int g_q1, g_q2, g_q3, g_final_question;
         static int pageRefreshes = 0, g_numOfTries = 0;
