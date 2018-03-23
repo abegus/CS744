@@ -141,7 +141,7 @@
                 css: {
                     'background-color': 'green',
                     'line-color': 'black',
-                    
+
                 }
             }
         ],
@@ -222,11 +222,24 @@
 	function exportPositions() {//cy
 		var list = [];
 		var nodes = cy.nodes();
+		console.log(nodes);
+		console.log("=============================");
         for (var i = 0; i < nodes.length; i++) {
             var obj = {};
             obj['id'] = nodes[i].id();
-            obj['pos'] = nodes[i].position();
-            obj['type'] = nodes[i].category;
+			obj['pos'] = nodes[i].position();
+			console.log(jsonData.networkEntities);
+			console.log(nodes[i]);
+			if (nodes[i].id() != 1 && nodes[i].id() != 2 && nodes[i].id() != 3 && nodes[i].id() != 4) {
+				console.log(jsonData.networkEntities[obj['id']]);
+				//obj['category'] = jsonData.networkEntities[obj['id']].type;//nodes[i].category;
+				obj['isActive'] = jsonData.networkEntities[obj['id']].isActive;
+			}
+			else {
+				//obj['category'] = -1;
+				obj['isActive'] = true;
+			}
+
             list.push(obj);
         }
 
@@ -236,7 +249,7 @@
 
 		console.log(list);
 
-		var url = 'Network/NodePositions';
+		var url = 'Network/NodePositions';//'Network/NodePositions';
 		$.ajax({
 			type: 'POST',
 			url: url,
@@ -428,31 +441,54 @@
 			}
 		}
 
-
-		function Activate(id, type) {
+		function Activate(id, type, ip) {
 			console.log("testing 1 2 3");
+			console.log(id);
 			if (id != null) {
-				var DEST = "/Network/GetNodeInformation?id=" + id + "&type=" + type;
+				var list = [];
+				var obj = {};
+				obj['id'] = id;
+				//obj['isActive'] = Model.isActive;
+				obj['type'] = type;
+				list.push(obj);
+				list = JSON.stringify({
+					'nodePosition': list
+				});
+				obj = JSON.stringify(obj);
+				console.log(obj);
+
+				//sets the javascript value (of isActive) to true/ false
+				var element = cy.getElementById(ip);
+				console.log(ip);
+				console.log(element);
+				console.log(element._private.data);
+				element._private.data.isActive = !element._private.data.isActive;
+
+				var url = '/Network/SaveNoteInformation';
 				$.ajax({
-					url: DEST,
-					contentType: 'application/html; charset=utf-8',
 					type: 'POST',
-					dataType: 'html'
-
-				})
-					.success(function (result) {
-						/*$("#NodePopup").html(result);
-						$("#myModal").modal()*/
+					url: url,
+					data: obj,
+					dataType: 'json',
+					contentType: 'application/json;charset=utf-8',
+					success: function (data) {
+						alert(data);
 						$("#NodePopup").html("");
-
-					})
-					.error(function (xhr, status) {
-						alert(status);
-					})
+						$("#NodePopup").modal('hide');
+					},
+					failure: function (errMsg) {
+						alert(errMsg);
+						$("#NodePopup").html("");
+					}
+				});
+				//hides the modal after success
+				$("#NodePopup").html("");
+				$('#myModal').modal('hide')
 			}
 			else {
 				$("#NodePopup").html("");
 			}
 		}
+		
     </script>
 }
