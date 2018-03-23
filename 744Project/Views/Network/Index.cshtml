@@ -108,7 +108,8 @@
 
 	var processingCenter = 0;
 
-	//
+	//store edges and nodes
+    var dataDB = {};
 	var NetworkElements = {
 		nodes: [],
 		edges: []
@@ -208,12 +209,13 @@
 
 		//console.log("===========================================================================================");
 		for (var q in jsonData.connections) {
-			//console.log(jsonData.connections[q]);
-			NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight } });
+            //console.log(jsonData.connections[q]);
+            NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: jsonData.connections[q].isActive } });
         }
+        dataDB = NetworkElements;
 		return NetworkElements;
 	}
-
+        console.log("dataDB", dataDB);
 	/* ================================================================================================
 										EXPORT NODE POSITION SECTION
 	===================================================================================================*/
