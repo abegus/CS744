@@ -202,9 +202,10 @@
                     }
                 }
             }
-        }
+		}
+		console.log("===========================================================================================");
         //add processing center which is from processingCenter
-        NetworkElements.nodes.push({ data: { id: jsonData.processingCenter.ip, color: 'red', shape: 'triangle', category: 2, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+        NetworkElements.nodes.push({ data: { id: jsonData.processingCenter.ip, color: 'red', shape: 'triangle', category: 2, databaseId: jsonData.processingCenter.databaseId }, position: { x: jsonData.processingCenter.x, y: jsonData.processingCenter.y } });
 
 		//console.log("===========================================================================================");
 		for (var q in jsonData.connections) {
@@ -249,7 +250,7 @@
 
 		console.log(list);
 
-		var url = 'Network/NodePositions';//'Network/NodePositions';
+		var url = '/Network/NodePositions';//'Network/NodePositions';
 		$.ajax({
 			type: 'POST',
 			url: url,
@@ -269,7 +270,8 @@
 										ANIMATION SECTION
 	===================================================================================================*/
         var animations = [];
-        var queue = [];
+		var queue = [];
+		var processingCenterQueue = [];
 
 	//Calculates the shortest path to the Processing Center
 	var dijkstra = cy.elements().dijkstra(cy.getElementById(processingCenter), function (edge) {
@@ -292,6 +294,14 @@
 		console.log(pathToJ);
 		console.log("=============================================================");*/
 		recursivePath(pathToJ, pathToJ[i - 1], i - 1);
+
+
+		//TEMPORARY TO DEMONSTRATE HOW TO USE THE PROCESS TRANSACTION FUNCTIONALITY
+		//This just sends the transaction straight to the processingCenterQueue, where it can then be processed
+		var transactionId = $(this).parent().attr("id");
+		console.log("Transactdion: " + transactionId);
+		processingCenterQueue.push(transactionId );
+		console.log(processingCenterQueue);
 	});
 
 	//Starts the animation on the click of a node
@@ -418,7 +428,7 @@
 			console.log(id + " clicked!");
 			//return;
 
-			if (id != null) {
+			if (id != null ){//&& type != 2) {
 				var DEST = "/Network/GetNodeInformation?id=" +id+"&type="+type;
 				$.ajax({
 					url: DEST,
@@ -430,15 +440,59 @@
 					.success(function (result) {
 						$("#NodePopup").html(result);
 						$("#myModal").modal()
-
+						if (type == 2) {
+							console.log("PC clicked ... ");
+							processingCenterQueue.forEach(function (element) {
+								console.log(element);
+								$("#PCTransactionList").append('<div class="btn btn-default processTransactionBtn" id="' + element + '"onclick="processTransactionButton('+element+')">' +
+									'Process transaction: '+element +
+									'</div>');
+							});
+						}
 					})
 					.error(function (xhr, status) {
 						alert(status);
 					})
 			}
+			/*else if (itype == 2) {
+				console.log("PC clicked...");
+			}*/
 			else {
 				$("#NodePopup").html("");
 			}
+
+
+		}
+
+		function processTransactionButton(event) {
+			console.log("this transaction was clicked: " + event);
+
+			obj = {};
+			obj['transId'] = event ;
+			obj = JSON.stringify(obj);
+			console.log(obj);
+			//var sendData = "{ 'transId': '"+event+"' }";
+			//console.log(sendData);
+			var url = '/Transactions/ProcessTransaction';
+			$.ajax({
+				type: 'POST',
+				url: url,
+				data: obj,
+				dataType: 'json',
+				contentType: 'application/json;charset=utf-8',
+				success: function (response) {
+					console.log("returned correctly...");
+					if (response.success) {
+						console.log(response.responseText);
+					} else {
+						// DoSomethingElse()
+						console.log(response.responseText);
+					}
+				},
+				failure: function (errMsg) {
+					console.log("bad bug");
+				}
+			});
 		}
 
 		function Activate(id, type, ip) {

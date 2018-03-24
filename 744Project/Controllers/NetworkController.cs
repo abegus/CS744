@@ -41,6 +41,12 @@ namespace _744Project.Controllers
 
             foreach( var node in nodePosition)
             {
+                //find the pc...
+                if (node.id.Equals("192.168.0.1"))
+                {
+                    var x = "here";
+                }
+
                 NodePosition nodeConfiguration = db.NodePositions.Find(node.id);
                 //if it doesn't exist, create a new instance
                 if(nodeConfiguration == null)

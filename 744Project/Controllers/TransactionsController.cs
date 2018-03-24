@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using _744Project.Models;
+using _744Project.ViewModels;
 
 namespace _744Project.Controllers
 {
@@ -47,6 +48,53 @@ namespace _744Project.Controllers
                 return HttpNotFound();
             }
             return View(transaction);
+        }
+
+        [HttpPost]
+        public ActionResult ProcessTransaction(TransactionViewModel trans) 
+        {
+           // var transaction = db.Transactions.Find(trans.transId);
+            Encryption cl = new Encryption();
+            cl.decryptAndStoreTransaction(trans.transId + "");
+
+            //now grab transaction from DB and check that it is valid.
+            var transaction = db.Transactions.Find(trans.transId);
+            var valid = true;
+            //cant check if the card attached to the account matches one in the database, because it must in order
+            //to be a valid transaction....
+
+            //check if the card is expired
+            if(transaction.CreditCard.cardExpirationDate < transaction.transactionTime)
+            {
+                valid = false;
+            }
+            //check if the account has enough balance for the amount mentioned
+            //first check debit, 
+            var account = transaction.CreditCard.Account;
+            if (transaction.transactionType.Equals("Debit"))
+            {
+                if(account.accountBalance - System.Convert.ToDecimal(transaction.transactionAmount) < 0)
+                {
+                    valid = false;
+                }
+            }
+            else if (transaction.transactionType.Equals("Credit"))
+            {
+                if (account.accountBalance + System.Convert.ToDecimal(transaction.transactionAmount) > account.accountMax)
+                {
+                    valid = false;
+                }
+            }
+
+            if (valid)
+            {
+                return Json(new { success = true, responseText = "Succeeded transaction" }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { success = false, responseText = "Failed transaction" }, JsonRequestBehavior.AllowGet);
+            }
+            //eturn RedirectToAction("Index", "Home");
         }
 
         // GET: Transactions/Create

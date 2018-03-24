@@ -462,6 +462,7 @@
     <Compile Include="ViewModels\NetworkEntityViewModel.cs" />
     <Compile Include="ViewModels\NetworkViewModel.cs" />
     <Compile Include="ViewModels\NodeConfiguration.cs" />
+    <Compile Include="ViewModels\TransactionViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\744Project.dll" />

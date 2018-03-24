@@ -36,22 +36,34 @@
 	<div class="form-group">
 	
 		<div class="col-md-offset-2 col-md-10">
-			@if (Model.isActive)
+			@if (Model.isActive && Model.type == 1)
 			{
 				<!--<input type="submit" id="@Model.id" value="Inactivate" class="btn btn-default" />-->
 				<button onclick="Activate(@Model.id,@Model.type,'@Model.ip')" id="Activate" class="btn btn-default Activate">Inactivate</button>
 			}
-			@if(!Model.isActive){ 
+			@if(!Model.isActive && Model.type == 1)
+			{
 				<!--<input type="submit" value="Activate" class="btn btn-default" />-->
 				<button onclick="Activate(@Model.id,@Model.type,'@Model.ip')" id="Activate" class="btn btn-default Activate">Activate</button>
 			}
 		</div>
 	</div>
+	@if(Model.type == 2)
+	{
+		<div id="PCTransactionList" class="table table-bordered">
+			<div>Test</div>
+		</div>
+	}
 
 </div>
 
 @section Scripts{
 	<script>
+
+		processingCenterQueue.forEach(function (element) {
+			console.log(element);
+			$("PCTransactionList").append('<div id="innerDiv">1</div>');
+		});
 		/*function Activate(id, type) {
 			console.log("testing 1 2 3");
 			console.log(id);
@@ -92,15 +104,6 @@
 				$("#NodePopup").html("");
 			}
 		}*/
-
-
-
-
-		$("#Activate").onClick(function (event) {
-			var list = [];
-			var obj = {};
-
-		}
 
 		/*$("#Activate").onClick(function (event) {
             //preliminary data gathering for Answers and Questions
