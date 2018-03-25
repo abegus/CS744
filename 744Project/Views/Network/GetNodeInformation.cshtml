@@ -51,7 +51,7 @@
 	@if(Model.type == 2)
 	{
 		<div id="PCTransactionList" class="table table-bordered">
-			<div>Test</div>
+			
 		</div>
 	}
 
@@ -64,76 +64,5 @@
 			console.log(element);
 			$("PCTransactionList").append('<div id="innerDiv">1</div>');
 		});
-		/*function Activate(id, type) {
-			console.log("testing 1 2 3");
-			console.log(id);
-			if (id != null) {
-				
-				var list = [];
-				var obj = {};
-				obj['id'] = Model.id;
-				obj['isActive'] = !Model.isActive;
-				obj['type'] = Model.type;
-				list.push(obj);
-				list = JSON.stringify({
-					'nodePosition': list
-				});
-				obj = JSON.stringify(obj);
-				console.log(obj);
-
-				//console.log(list);
-
-				var url = '/Network/SaveNoteInformation';
-				$.ajax({
-					type: 'POST',
-					url: url,
-					data: obj,
-					dataType: 'json',
-					contentType: 'application/json;charset=utf-8',
-					success: function (data) {
-						alert(data);
-						$("#NodePopup").html("");
-					},
-					failure: function (errMsg) {
-						alert(errMsg);
-						$("#NodePopup").html("");
-					}
-				});
-			}
-			else {
-				$("#NodePopup").html("");
-			}
-		}*/
-
-		/*$("#Activate").onClick(function (event) {
-            //preliminary data gathering for Answers and Questions
-			alert(event.target.id);
-			console.log("HERE");
-			var id = "Model.id.ToString()";
-			var type = "Model.type.ToString()";
-
-			if (id != null) {
-				var DEST = "/Network/GetNodeInformation?id=" + id + "&type=" + type;
-				$.ajax({
-					url: DEST,
-					contentType: 'application/html; charset=utf-8',
-					type: 'POST',
-					dataType: 'html'
-
-				})
-					.success(function (result) {
-						//$("#NodePopup").html(result);
-						//$("#myModal").modal()
-						$("#NodePopup").html("");
-
-					})
-					.error(function (xhr, status) {
-						alert(status);
-					})
-			}
-			else {
-				$("#NodePopup").html("");
-			}
-		});*/
 	</script>
 }

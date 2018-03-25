@@ -157,27 +157,6 @@
 		//alert("hi");
 		//console.log("Hello..");
 		console.log(jsonData.regions);
-		//for (var p in jsonData.networkEntities) {
-		//	var xLocation = 0;
-		//	var yLocation = 0;
-		//	//if it is a store
-  //          if (jsonData.networkEntities[p].type == 0) {
-  //              //console.log("convert 形状处理");
-  //              NetworkElements.nodes.push({ data: { id: p, color: 'yellow', shape: 'octagon', category: 0, databaseId: jsonData.networkEntities[p].databaseId }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
-		//	}
-		//	//if it is a relay
-  //          else if (jsonData.networkEntities[p].type == 1) {
-  //              if (jsonData.networkEntities[p].isGateway) {//gateway represent other color
-  //                  NetworkElements.nodes.push({ data: { id: p, color: 'green', shape: 'rectangle', category: 1, databaseId: jsonData.networkEntities[p].databaseId }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
-  //              } else {
-  //                  NetworkElements.nodes.push({ data: { id: p, color: 'blue', shape: 'rectangle', category: 1, databaseId: jsonData.networkEntities[p].databaseId }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
-  //              }
-		//	}
-  //          else if (jsonData.networkEntities[p].type == 2){
-		//		processingCenter = p;
-		//		NetworkElements.nodes.push({ data: { id: p, color: 'red', shape: 'triangle', category: 2, databaseId: jsonData.networkEntities[p].databaseId  }, position: { x: jsonData.networkEntities[p].x, y: jsonData.networkEntities[p].y } });
-		//	}
-		//}
 
         //change to use region
         NetworkElements.nodes.push({ data: { id: 1, color: 'grey', shape: 'rectangle' } });
@@ -264,6 +243,40 @@
 		});
 	}
 
+	/* ================================================================================================
+										Send Transaction SECTION
+		-This is called when one of the "send" buttons are clicked next to a transaction on the bottom of the main screen
+		-Currently:
+			-the transaction is sent to the Processing Center's queue (where it can then be seen once the PC is clicked on)
+		-What needs to be done:
+			-compute the path and implement the queues between nodes
+	===================================================================================================*/
+		var processingCenterQueue = []; //once the AJAX call is made (for clicking on a Processing Center), this is used to
+										// show what is on the queue. The call pulls the GetNodeInformation.cshtml into the
+										//javascript modal as a partial view. You can see in the javascript of that page
+										// that it dynamically adds the items in the queue to its HTML with a for each loop
+				//you are going to want to do this for general relays and their queues. it will be the same process, but the 
+				//data will be coming from a different place.
+
+		// When one of the transaction "Send" buttons are clicked, this is called which starts the animation
+		$(".SendTransaction").click(function () {
+			// Holds the product ID of the clicked element,this code is just for the old animation
+			var storeIp = $(this).attr('id');
+			var transitionID = document.getElementById(storeIp).parentNode.id;
+			queue.push(transitionID);
+			var pathToJ = dijkstra.pathTo(cy.getElementById(storeIp));
+			console.log("pathToJ: ", pathToJ);
+			var i = pathToJ.length;
+			recursivePath(pathToJ, pathToJ[i - 1], i - 1);
+
+
+			//TEMPORARY TO DEMONSTRATE HOW TO USE THE PROCESS TRANSACTION FUNCTIONALITY
+			//This just sends the transaction straight to the processingCenterQueue, where it can then be processed
+			var transactionId = $(this).parent().attr("id");
+			console.log("Transactdion: " + transactionId);
+			processingCenterQueue.push(transactionId);
+			console.log(processingCenterQueue);
+		});
 
 
 	/* ================================================================================================
@@ -271,7 +284,7 @@
 	===================================================================================================*/
         var animations = [];
 		var queue = [];
-		var processingCenterQueue = [];
+		
 
 	//Calculates the shortest path to the Processing Center
 	var dijkstra = cy.elements().dijkstra(cy.getElementById(processingCenter), function (edge) {
@@ -280,34 +293,9 @@
 		return edge.data('weight');
 	});
 
-	// When one of the transaction "Send" buttons are clicked, this is called which starts the animation
-	$(".SendTransaction").click(function () {
-		// Holds the product ID of the clicked element
-		var storeIp = $(this).attr('id');
-		//console.log(storeIp);
-        var transitionID = document.getElementById(storeIp).parentNode.id;
-        queue.push(transitionID);
-        var pathToJ = dijkstra.pathTo(cy.getElementById(storeIp));
-        console.log("pathToJ: ", pathToJ);
-		var i = pathToJ.length;
-		/*console.log(i);
-		console.log(pathToJ);
-		console.log("=============================================================");*/
-		recursivePath(pathToJ, pathToJ[i - 1], i - 1);
-
-
-		//TEMPORARY TO DEMONSTRATE HOW TO USE THE PROCESS TRANSACTION FUNCTIONALITY
-		//This just sends the transaction straight to the processingCenterQueue, where it can then be processed
-		var transactionId = $(this).parent().attr("id");
-		console.log("Transactdion: " + transactionId);
-		processingCenterQueue.push(transactionId );
-		console.log(processingCenterQueue);
-	});
+	
 
 	//Starts the animation on the click of a node
-
-
-
 
 	//This function recursively calls itself to do the animation from node to node. the elements from the Store to the Processing
 	// Center are stored in the 'stack' parameter, while the current element is the 'item', and the current index is 'i'.
@@ -400,25 +388,7 @@
 		/* ================================================================================================
 										Modal Popup section (clicking on an element in the graph)
 		===================================================================================================*/
-		// Popup info and queue
-		/*cy.nodes().qtip({
-			content: function () {
-				popupInformation( this.data('databaseId'), this.data('category') );// sending popupInformation(Id, node type)
-				return this.id() + ", Queue: ";
-
-			},
-			position: {
-				my: 'top center',
-				at: 'bottom center'
-			},
-			style: {
-				classes: 'qtip-bootstrap',
-				tip: {
-					width: 16,
-					height: 8
-				}
-			}
-		});*/
+	
 		cy.on('click', 'node', function (evt) {
 			popupInformation(this.data('databaseId'), this.data('category'));// sending popupInformation(Id, node type)
 
@@ -464,40 +434,10 @@
 
 		}
 
-		function processTransactionButton(event) {
-			console.log("this transaction was clicked: " + event);
-
-			obj = {};
-			obj['transId'] = event ;
-			obj = JSON.stringify(obj);
-			console.log(obj);
-			//var sendData = "{ 'transId': '"+event+"' }";
-			//console.log(sendData);
-			var url = '/Transactions/ProcessTransaction';
-			$.ajax({
-				type: 'POST',
-				url: url,
-				data: obj,
-				dataType: 'json',
-				contentType: 'application/json;charset=utf-8',
-				success: function (response) {
-					console.log("returned correctly...");
-					if (response.success) {
-						console.log(response.responseText);
-					} else {
-						// DoSomethingElse()
-						console.log(response.responseText);
-					}
-				},
-				failure: function (errMsg) {
-					console.log("bad bug");
-				}
-			});
-		}
-
-		function Activate(id, type, ip) {
-			console.log("testing 1 2 3");
-			console.log(id);
+		// this is the activate / inactivate
+		function Activate(id, type, ip) { //type 1 is relay
+			//console.log("testing 1 2 3");
+			//console.log(id);
 			if (id != null) {
 				var list = [];
 				var obj = {};
@@ -516,8 +456,13 @@
 				console.log(ip);
 				console.log(element);
 				console.log(element._private.data);
+
+				//this js call updates the active/inactive in the js
 				element._private.data.isActive = !element._private.data.isActive;
 
+				//here is where you change how something looks if it is active or inactive after the call..
+				
+				//this ajax call updates the database
 				var url = '/Network/SaveNoteInformation';
 				$.ajax({
 					type: 'POST',
@@ -543,6 +488,45 @@
 				$("#NodePopup").html("");
 			}
 		}
-		
+
+		/* ================================================================================================
+										Process Transaction Section 
+			-This is called when one of the transactions are clicked on (on the Processing Center popup window)
+			-It retuns a status response that prints out to the console right now. 
+		===================================================================================================*/
+
+		function processTransactionButton(event) {
+			console.log("this transaction was clicked: " + event);
+
+			obj = {};
+			obj['transId'] = event;
+			obj = JSON.stringify(obj);
+			console.log(obj);
+			var url = '/Transactions/ProcessTransaction';
+			$.ajax({
+				type: 'POST',
+				url: url,
+				data: obj,
+				dataType: 'json',
+				contentType: 'application/json;charset=utf-8',
+				success: function (response) {
+					console.log("returned correctly...");
+					//if the transaction succeeded.
+					if (response.success) {
+						console.log(response.responseText);
+					}
+					//if the transaction failed.
+					else {
+						// DoSomethingElse()
+						console.log(response.responseText);
+					}
+				},
+				failure: function (errMsg) {
+					console.log("bad bug");
+				}
+			});
+		}
+
+
     </script>
 }
