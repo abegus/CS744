@@ -20,6 +20,7 @@ namespace _744Project.ViewModels
         public string id { get; set; }
         public Coordinates pos { get; set; }
         public int category { get; set; }
+       public bool isActive { get; set; }
     }
 
     public class Coordinates

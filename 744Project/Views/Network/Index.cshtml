@@ -142,7 +142,7 @@
                 css: {
                     'background-color': 'green',
                     'line-color': 'black',
-                    
+
                 }
             }
         ],
@@ -203,9 +203,10 @@
                     }
                 }
             }
-        }
+		}
+		console.log("===========================================================================================");
         //add processing center which is from processingCenter
-        NetworkElements.nodes.push({ data: { id: jsonData.processingCenter.ip, color: 'red', shape: 'triangle', category: 2, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+        NetworkElements.nodes.push({ data: { id: jsonData.processingCenter.ip, color: 'red', shape: 'triangle', category: 2, databaseId: jsonData.processingCenter.databaseId }, position: { x: jsonData.processingCenter.x, y: jsonData.processingCenter.y } });
 
 		//console.log("===========================================================================================");
 		for (var q in jsonData.connections) {
@@ -224,11 +225,24 @@
 	function exportPositions() {//cy
 		var list = [];
 		var nodes = cy.nodes();
+		console.log(nodes);
+		console.log("=============================");
         for (var i = 0; i < nodes.length; i++) {
             var obj = {};
             obj['id'] = nodes[i].id();
-            obj['pos'] = nodes[i].position();
-            obj['type'] = nodes[i].category;
+			obj['pos'] = nodes[i].position();
+			console.log(jsonData.networkEntities);
+			console.log(nodes[i]);
+			if (nodes[i].id() != 1 && nodes[i].id() != 2 && nodes[i].id() != 3 && nodes[i].id() != 4) {
+				console.log(jsonData.networkEntities[obj['id']]);
+				//obj['category'] = jsonData.networkEntities[obj['id']].type;//nodes[i].category;
+				obj['isActive'] = jsonData.networkEntities[obj['id']].isActive;
+			}
+			else {
+				//obj['category'] = -1;
+				obj['isActive'] = true;
+			}
+
             list.push(obj);
         }
 
@@ -238,7 +252,7 @@
 
 		console.log(list);
 
-		var url = 'Network/NodePositions';
+		var url = '/Network/NodePositions';//'Network/NodePositions';
 		$.ajax({
 			type: 'POST',
 			url: url,
@@ -258,7 +272,8 @@
 										ANIMATION SECTION
 	===================================================================================================*/
         var animations = [];
-        var queue = [];
+		var queue = [];
+		var processingCenterQueue = [];
 
 	//Calculates the shortest path to the Processing Center
 	var dijkstra = cy.elements().dijkstra(cy.getElementById(processingCenter), function (edge) {
@@ -281,6 +296,14 @@
 		console.log(pathToJ);
 		console.log("=============================================================");*/
 		recursivePath(pathToJ, pathToJ[i - 1], i - 1);
+
+
+		//TEMPORARY TO DEMONSTRATE HOW TO USE THE PROCESS TRANSACTION FUNCTIONALITY
+		//This just sends the transaction straight to the processingCenterQueue, where it can then be processed
+		var transactionId = $(this).parent().attr("id");
+		console.log("Transactdion: " + transactionId);
+		processingCenterQueue.push(transactionId );
+		console.log(processingCenterQueue);
 	});
 
 	//Starts the animation on the click of a node
@@ -407,7 +430,7 @@
 			console.log(id + " clicked!");
 			//return;
 
-			if (id != null) {
+			if (id != null ){//&& type != 2) {
 				var DEST = "/Network/GetNodeInformation?id=" +id+"&type="+type;
 				$.ajax({
 					url: DEST,
@@ -419,42 +442,109 @@
 					.success(function (result) {
 						$("#NodePopup").html(result);
 						$("#myModal").modal()
-
+						if (type == 2) {
+							console.log("PC clicked ... ");
+							processingCenterQueue.forEach(function (element) {
+								console.log(element);
+								$("#PCTransactionList").append('<div class="btn btn-default processTransactionBtn" id="' + element + '"onclick="processTransactionButton('+element+')">' +
+									'Process transaction: '+element +
+									'</div>');
+							});
+						}
 					})
 					.error(function (xhr, status) {
 						alert(status);
 					})
 			}
+			/*else if (itype == 2) {
+				console.log("PC clicked...");
+			}*/
 			else {
 				$("#NodePopup").html("");
 			}
+
+
 		}
 
+		function processTransactionButton(event) {
+			console.log("this transaction was clicked: " + event);
 
-		function Activate(id, type) {
+			obj = {};
+			obj['transId'] = event ;
+			obj = JSON.stringify(obj);
+			console.log(obj);
+			//var sendData = "{ 'transId': '"+event+"' }";
+			//console.log(sendData);
+			var url = '/Transactions/ProcessTransaction';
+			$.ajax({
+				type: 'POST',
+				url: url,
+				data: obj,
+				dataType: 'json',
+				contentType: 'application/json;charset=utf-8',
+				success: function (response) {
+					console.log("returned correctly...");
+					if (response.success) {
+						console.log(response.responseText);
+					} else {
+						// DoSomethingElse()
+						console.log(response.responseText);
+					}
+				},
+				failure: function (errMsg) {
+					console.log("bad bug");
+				}
+			});
+		}
+
+		function Activate(id, type, ip) {
 			console.log("testing 1 2 3");
+			console.log(id);
 			if (id != null) {
-				var DEST = "/Network/GetNodeInformation?id=" + id + "&type=" + type;
+				var list = [];
+				var obj = {};
+				obj['id'] = id;
+				//obj['isActive'] = Model.isActive;
+				obj['type'] = type;
+				list.push(obj);
+				list = JSON.stringify({
+					'nodePosition': list
+				});
+				obj = JSON.stringify(obj);
+				console.log(obj);
+
+				//sets the javascript value (of isActive) to true/ false
+				var element = cy.getElementById(ip);
+				console.log(ip);
+				console.log(element);
+				console.log(element._private.data);
+				element._private.data.isActive = !element._private.data.isActive;
+
+				var url = '/Network/SaveNoteInformation';
 				$.ajax({
-					url: DEST,
-					contentType: 'application/html; charset=utf-8',
 					type: 'POST',
-					dataType: 'html'
-
-				})
-					.success(function (result) {
-						/*$("#NodePopup").html(result);
-						$("#myModal").modal()*/
+					url: url,
+					data: obj,
+					dataType: 'json',
+					contentType: 'application/json;charset=utf-8',
+					success: function (data) {
+						alert(data);
 						$("#NodePopup").html("");
-
-					})
-					.error(function (xhr, status) {
-						alert(status);
-					})
+						$("#NodePopup").modal('hide');
+					},
+					failure: function (errMsg) {
+						alert(errMsg);
+						$("#NodePopup").html("");
+					}
+				});
+				//hides the modal after success
+				$("#NodePopup").html("");
+				$('#myModal').modal('hide')
 			}
 			else {
 				$("#NodePopup").html("");
 			}
 		}
+		
     </script>
 }

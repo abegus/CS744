@@ -41,6 +41,12 @@ namespace _744Project.Controllers
 
             foreach( var node in nodePosition)
             {
+                //find the pc...
+                if (node.id.Equals("192.168.0.1"))
+                {
+                    var x = "here";
+                }
+
                 NodePosition nodeConfiguration = db.NodePositions.Find(node.id);
                 //if it doesn't exist, create a new instance
                 if(nodeConfiguration == null)
@@ -51,6 +57,11 @@ namespace _744Project.Controllers
                         x = node.pos.x,
                         y = node.pos.y
                     };
+                    if(node.category == 1)
+                    {
+                        var relay = db.Relays.Find(node.id); // doesn't work, getting IP instead of ID
+                        relay.isActive = node.isActive;
+                    }
                     db.NodePositions.Add(nodeConfiguration);
                 }
                 //otherwise update current positions
@@ -58,6 +69,15 @@ namespace _744Project.Controllers
                 {
                     nodeConfiguration.x = node.pos.x;
                     nodeConfiguration.y = node.pos.y;
+                    if (node.category == 1)
+                    {
+                        var relay = db.Relays.Find(node.id); // doesn't work, getting IP instead of ID
+                        relay.isActive = node.isActive;
+                    }
+                    if(node.category == 2)
+                    {
+                        var x = "is a pc";
+                    }
                 }
             }
 
@@ -90,7 +110,7 @@ namespace _744Project.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetNodeInformation(NetworkEntityViewModel vm)
+        public ActionResult SaveNoteInformation(NetworkEntityViewModel vm)
         {
             if (vm.type == 0)//if its a store
             {
@@ -108,7 +128,8 @@ namespace _744Project.Controllers
                 //pc.isActive = !pc.isActive;
             }
             db.SaveChanges();
-            return RedirectToAction("Index");
+            //return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
             //return ;
         }
 
