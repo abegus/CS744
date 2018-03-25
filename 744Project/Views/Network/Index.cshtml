@@ -103,7 +103,7 @@
 		===================================================================================================*/
 
 		//This converts the Model into JSON data
-		var jsonData = @Html.Raw(Json.Encode(Model));
+	   var jsonData = @Html.Raw(Json.Encode(Model));
 	   console.log(jsonData);
 
 	var processingCenter = 0;
@@ -140,7 +140,7 @@
             {
                 selector: ':selected',
                 css: {
-                    'background-color': 'green',
+                    'background-color': 'grey',
                     'line-color': 'black',
 
                 }
@@ -211,12 +211,12 @@
 		//console.log("===========================================================================================");
 		for (var q in jsonData.connections) {
             //console.log(jsonData.connections[q]);
-            NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: jsonData.connections[q].isActive } });
+            NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: true } });
         }
         dataDB = NetworkElements;
 		return NetworkElements;
 	}
-        console.log("dataDB", dataDB);
+
 	/* ================================================================================================
 										EXPORT NODE POSITION SECTION
 	===================================================================================================*/
@@ -266,21 +266,148 @@
 		});
 	}
 
+    /* ================================================================================================
+										Find the shortest path
+	===================================================================================================*/
+        function Graph() {
+            var neighbors = this.neighbors = {};
+            this.addRREdge = function (u, v) {
+                if (neighbors[u] === undefined) { 
+                    neighbors[u] = [];
+                }
+                neighbors[u].push(v);
+                if (neighbors[v] === undefined) { 
+                    neighbors[v] = [];           
+                }                                  
+                neighbors[v].push(u);              
+            };
+            this.addEdge = function (u, v) {
+                if (neighbors[u] === undefined) {
+                    neighbors[u] = [];
+                }
+                neighbors[u].push(v);
+            };
+            this.addNode = function (u) {
+                if (neighbors[u] === undefined) {
+                    neighbors[u] = [];
+                }
+            }
+            return this;
+        }
 
+        function shortestPath(graph, source, target) {
+            if (source === target) {   
+                console.log(source);  
+                return;               
+            }                         
+            var queue = [source],
+                visited = { source: true },
+                predecessor = {},
+                tail = 0;
+            while (tail < queue.length) {
+                var u = queue[tail++],  
+                    neighbors = graph.neighbors[u];
+                for (var i = 0; i < neighbors.length; ++i) {
+                    var v = neighbors[i];
+                    if (visited[v]) {
+                        continue;
+                    }
+                    visited[v] = true;
+                    if (v === target) {   
+                        var path = [v];   
+                        while (u !== source) {
+                            path.push(u);
+                            u = predecessor[u];
+                        }
+                        path.push(u);
+                        path.reverse();
+                        return path;
+                    }
+                    predecessor[v] = u;
+                    queue.push(v);
+                }
+            }
+            console.log('there is no path from ' + source + ' to ' + target);
+            return;
+        }
+        console.log("element network", NetworkElements);
 
+        function makeAGraph() {
+            var graph = new Graph();
+            NetworkElements.nodes.forEach(function (node) {
+                if (node.data.category) {
+                    console.log("category,", node.data.category)
+                    if (node.data.category == 1) {
+                        if (node.data.isActive) {
+                            graph.addNode(node.data.id);
+                        }
+                    } else {
+                        console.log("is not active");
+                        return true;
+                    }
+                    //console.log("make a graph", node.data)
+                    graph.addNode(node.data.id);
+                }
+            });
+
+            NetworkElements.edges.forEach(function (edge) {
+                if (edge.data.isActive) {
+                    if (isRRConnection(edge.data.source, edge.data.target)) {
+                        graph.addRREdge(edge.data.source, edge.data.target);
+                    } else {
+                        graph.addEdge(edge.data.source, edge.data.target);
+                    }
+                }
+            });
+            return graph;
+        }
+
+        function isRRConnection(sourceIP, targetIP) {
+            var sourceType, targetType;
+            NetworkElements.nodes.forEach(function (node) {
+                if (node.data.id === sourceIP) {
+                    sourceType = node.data.category;
+                }
+            });
+            NetworkElements.nodes.forEach(function (node) {
+                if (node.data.id === targetIP) {
+                    targetType = node.data.category;
+                }
+            });
+            if (sourceType == 1 && targetType == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+       // test();
+         function test() {
+            var graph = makeAGraph();
+             //console.log("graph", graph);
+            var result = shortestPath(graph, "192.168.0.24", "192.168.0.1");
+            console.log("test result", result);
+        }
+
+         function findShorestPath(sourceIP) {
+             var graph = makeAGraph();
+             pathQueue = shortestPath(graph, sourceIP, "192.168.0.1");
+             console.log("making graph", graph)
+         }
 	/* ================================================================================================
 										ANIMATION SECTION
 	===================================================================================================*/
         var animations = [];
-		var queue = [];
+        var pathQueue;
+        var transisionQueue = [];
 		var processingCenterQueue = [];
 
-	//Calculates the shortest path to the Processing Center
-	var dijkstra = cy.elements().dijkstra(cy.getElementById(processingCenter), function (edge) {
-		//console.log(processingCenter);
-		//console.log(cy.elements());
-		return edge.data('weight');
-	});
+        //Calculates the shortest path to the Processing Center
+    var processingcenter = jsonData.processingCenter.ip;
+	//var dijkstra = cy.elements().dijkstra(cy.getelementbyid(processingcenter), function (edge) {
+	//	//console.log("dijkstra function, processing center,",processingcenter);
+	//	//console.log("dijkstra cy.elements",cy.elements());
+	//	return edge.data('weight');
+	//});
 
 	// When one of the transaction "Send" buttons are clicked, this is called which starts the animation
 	$(".SendTransaction").click(function () {
@@ -288,14 +415,19 @@
 		var storeIp = $(this).attr('id');
 		//console.log(storeIp);
         var transitionID = document.getElementById(storeIp).parentNode.id;
-        queue.push(transitionID);
-        var pathToJ = dijkstra.pathTo(cy.getElementById(storeIp));
-        console.log("pathToJ: ", pathToJ);
-		var i = pathToJ.length;
+        transisionQueue.push(transitionID);
+        findShorestPath(storeIp);
+        console.log(pathQueue);
+        /**
+         * ============================================================================================
+         */
+
+      //  var pathToJ = dijkstra.pathTo(cy.getElementById(storeIp));
+		//var i = pathToJ.length;
 		/*console.log(i);
 		console.log(pathToJ);
 		console.log("=============================================================");*/
-		recursivePath(pathToJ, pathToJ[i - 1], i - 1);
+		//recursivePath(pathToJ, pathToJ[i - 1], i - 1);
 
 
 		//TEMPORARY TO DEMONSTRATE HOW TO USE THE PROCESS TRANSACTION FUNCTIONALITY
