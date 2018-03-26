@@ -195,7 +195,10 @@
             NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: true} });
         }
 		return NetworkElements;
-	}
+        }
+
+        NetworkElements
+        console.log("after emptying the networkelement, ", NetworkElements);
 
 	/* ================================================================================================
 										EXPORT NODE POSITION SECTION
@@ -457,7 +460,9 @@
 	===================================================================================================*/
         var animations = [];
 		var transitionQueue = [];
-		
+        function sleep(time) {
+            return new Promise((resolve) => setTimeout(resolve, time));
+        }
 
 	//Calculates the shortest path to the Processing Center
 	//var dijkstra = cy.elements().dijkstra(cy.getElementById(processingCenter), function (edge) {
@@ -500,12 +505,15 @@
                 ann.reverse().rewind().play();
                 //animations.pop();
                 if (length > 0) {
-                    NetworkElements.nodes.forEach(function (node) {
-                        if (node.data.id == source) {
+                    sleep(10000).then(() => {
+                        NetworkElements.nodes.forEach(function (node) {
+                            if (node.data.id == source) {
                                 queue.push(node.data.queue.pop());
-                        }
+                            }
+                        });
+                        return generateAnimation(nodeList[0], nodeList, nodeList.length);
                     });
-                    return generateAnimation(nodeList[0], nodeList, nodeList.length);
+                    
                 } else {
                     ann.stop();
                 }
@@ -517,8 +525,8 @@
 	// Center are stored in the 'stack' parameter, while the current element is the 'item', and the current index is 'i'.
 	//once this is done, it calls the promise function, which reverses the animation by calling backTrackAnimation
         function recursivePath(stack, item, i) {
-            console.log("item", item._private.data.id);
-            console.log("stack", stack);
+            //console.log("item", item._private.data.id);
+            //console.log("stack", stack);
 		var ann = cy.getElementById(item._private.data.id).animation({
 			style: {
 				'background-color': 'white',
@@ -745,12 +753,12 @@
 				console.log("node infomation: ",element._private.data);
 
 				//this js call updates the active/inactive in the js
-				element._private.data.isActive = !element._private.data.isActive;
+				//element._private.data.isActive = !element._private.data.isActive;
 				NetworkElements.nodes.forEach(function (node) {
 					//console.log(node);
 					if (node.data.id == ip) {
 						node.data.isActive = !node.data.isActive;
-						//node.data.color = 'black';
+                        node.data.color = 'black';
 						console.log(" IP : " + ip + " is not active/inactive in js");
 					}
 				});
