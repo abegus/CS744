@@ -367,7 +367,6 @@
            
             //console.log("after changing inactiveated node :", NetworkElements.edges);
 
-
             NetworkElements.edges.forEach(function (edge) {
                 if (edge.data.isActive) {
                     if (isRRConnection(edge.data.source, edge.data.target)) {
@@ -447,9 +446,9 @@
 			//TEMPORARY TO DEMONSTRATE HOW TO USE THE PROCESS TRANSACTION FUNCTIONALITY
 			//This just sends the transaction straight to the processingCenterQueue, where it can then be processed
 			var transactionId = $(this).parent().attr("id");
-			console.log("Transactdion: " + transactionId);
+			//console.log("Transactdion: " + transactionId);
 			processingCenterQueue.push(transactionId);
-			console.log(processingCenterQueue);
+			//console.log(processingCenterQueue);
 		});
 
 
@@ -477,15 +476,16 @@
                 duration: 1000
             });
             animations.push(ann);
+            nodeList.shift()
             //test the pre node whether have the queue in node 
-            nodeList.shift();
-            //if (testRecord) {
-            //    NetworkElements.edges.forEach(function (node) {
-            //        if (node.data.id == testRecord) {
-            //            console.log("when do the animation, queue of prennode : ", node.data.queue);
-            //        }
-            //    });
-            //}
+           //var testRecord = nodeList.shift();
+           // if (testRecord) {
+           //     NetworkElements.nodes.forEach(function (node) {
+           //         if (node.data.id == testRecord) {
+           //             console.log("when do the animation, queue of pre node : ", node.data.queue);
+           //         }
+           //     });
+           // }
             /* ↑ ↑↑↑↑↑↑↑test↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑*/
             NetworkElements.nodes.forEach(function (node) {
                 if (node.data.id == source) {
