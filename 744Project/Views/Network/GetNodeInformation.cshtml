@@ -27,7 +27,7 @@
 			<dt>Gateway</dt>
 			<dd>@Model.isGateway</dd>
 			<dt>Queue</dt>
-			<dd>@Model.queue<dd>
+			<dd id="modalQueue"><dd>
 			<dt>Region</dt>
 			<dd>@Model.region</dd>
 		</dl>
@@ -63,6 +63,16 @@
 		processingCenterQueue.forEach(function (element) {
 			console.log(element);
 			$("PCTransactionList").append('<div id="innerDiv">1</div>');
+		});
+
+		NetworkElements.nodes.forEach(function (node) {
+			if (node.id == @Model.ip){
+				node.data.queue.forEach(function (item) {
+					console.log("Item: " + item);
+					$("#modalQueue").append('<div>' + item + '</div>');
+				});
+				
+			}
 		});
 	</script>
 }

@@ -86,6 +86,63 @@ namespace _744Project.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        // GET: Network/GetConnection
+        // This sends a source and a target IP for a connection. Returns a view with the connection information.
+        public PartialViewResult GetConnection(string source, string target, string type1, string type2)
+        {
+            ConnectionViewModel vm = new ConnectionViewModel();
+
+            //check if source is a relay, store, or PC, then add it  to the vm
+            vm.sourceIp = source;
+            vm.sourceType = Int32.Parse(type1);
+            vm.targetIp = target;
+            vm.targetType = Int32.Parse(type2);
+
+            //relay source, pc target
+            if (type1.Equals("1") && type2.Equals("2"))
+            {
+                var relay = (from re in db.Relays where re.relayIP.Equals(source) select re).First();
+                var pc = (from p in db.ProcessCenters where p.processCenterIP.Equals(target) select p).First();
+                vm.isActive = relay.RelayToProcessCenterConnections.Where(p => p.processCenterID == pc.processCenterID).First().isActive;
+                //var con = db.RelayToProcessCenterConnections.Find(relay.relayID, pc.processCenterID);
+               // vm.isActive = con.isActive;
+            }
+            //relay source, relay target;
+            else if (type1.Equals("1") && type2.Equals("1"))
+            {
+                var rrs = from rr in db.RelayToRelayConnections select rr;
+                foreach (var v in rrs)
+                {
+                    if(v.Relay.relayIP == source && v.Relay2.relayIP == target)
+                    {
+                        vm.isActive = v.isActive;
+                    }
+                }
+                var relay1 = (from re in db.Relays where re.relayIP.Equals(source) select re).First();
+                var relay2 = (from re in db.Relays where re.relayIP.Equals(target) select re).First();
+                //var rrs = (from rr in db.RelayToRelayConnections where rr.relayID.Equals(relay1.relayID) && rr.relayID2.Equals(relay2.relayID) select rr).First();
+               // vm.isActive = rrs.isActive;
+                //vm.isActive = relay1.RelayToRelayConnections.Where(r => r.Relay2.relayID == relay2.relayID).First().isActive;
+                // var con = db.RelayToRelayConnections.Find(relay1.relayID, relay2.relayID);
+                //vm.isActive = con.isActive;
+            }
+            //store source, relay target
+            else if (type1.Equals("0") && type2.Equals("1"))
+            {
+                var store = (from re in db.Stores where re.storeIP.Equals(source) select re).First();
+                var relay2 = (from re in db.Relays where re.relayIP.Equals(target) select re).First();
+                // vm.isActive = store.
+                //var con = db.StoresToRelays.Find(store.storeID, relay2.relayID);
+                //vm.isActive = con.isActive;
+                return null;
+            }
+            else
+            {
+                return null;
+            }
+
+            return PartialView(vm);
+        }
 
         // GET: Network/GetNodeInformation
         // This sends a database ID and a type (0: Store, 1: Relay, 2: PC). Return a view with the results
