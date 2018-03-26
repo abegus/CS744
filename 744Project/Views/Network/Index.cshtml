@@ -128,7 +128,9 @@
 					'background-color': 'data(color)',
 					content: 'data(id)',
                     'curve-style': 'bezier',
-                    'shape': 'data(shape)'
+                    'shape': 'data(shape)',
+                    'width': 'data(width)',
+                    'height': 'data(height)'
                 },
 			},
 			{
@@ -152,7 +154,7 @@
 		//RIGHT HERE IS WHERE I GET THE ELEMENTS FROM THE MODEL
 		elements: convertToCytoscape()
 	});
-
+      
 	// This function converts the JSON representation of the Model into the Cytoscape elements
 	function convertToCytoscape() {
 		//alert("hi");
@@ -160,10 +162,10 @@
 		console.log(jsonData.regions);
 
         //change to use region
-        NetworkElements.nodes.push({ data: { id: 1, color: 'grey', shape: 'rectangle' } });
-        NetworkElements.nodes.push({ data: { id: 2, color: 'grey', shape: 'rectangle' } });
-        NetworkElements.nodes.push({ data: { id: 3, color: 'grey', shape: 'rectangle' } });
-        NetworkElements.nodes.push({ data: { id: 4, color: 'grey', shape: 'rectangle' } });
+        NetworkElements.nodes.push({ data: { id: 1, color: '#d4c4c4', shape: 'rectangle', width: 30, height: 30 } });
+        NetworkElements.nodes.push({ data: { id: 2, color: '#d4c4c4', shape: 'rectangle', width: 30, height: 30 } });
+        NetworkElements.nodes.push({ data: { id: 3, color: '#d4c4c4', shape: 'rectangle', width: 30, height: 30 } });
+        NetworkElements.nodes.push({ data: { id: 4, color: '#d4c4c4', shape: 'rectangle', width: 30, height: 30 } });
 
         for (var p in jsonData.regions) {
             var xLocation = 0;
@@ -171,26 +173,26 @@
             for (var i in jsonData.regions[p].networkEntities) {
                  //if it is a store
                 if (jsonData.regions[p].networkEntities[i].type == 0) {
-                    NetworkElements.nodes.push({ data: { id: i, color: 'yellow', shape: 'octagon', parent: p, category: 0, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+                    NetworkElements.nodes.push({ data: { id: i, color: 'yellow', shape: 'octagon', parent: p, width: 30, height: 30, category: 0, queue:[], limit:5, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                 }
                 //if it is a relay
                 else if (jsonData.regions[p].networkEntities[i].type == 1) {
                     if (jsonData.regions[p].networkEntities[i].isGateway) {//gateway represent other color
-                        NetworkElements.nodes.push({ data: { id: i, color: 'green', shape: 'rectangle', parent: p, category: 1, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+                        NetworkElements.nodes.push({ data: { id: i, color: 'green', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: 100, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                     } else {
-                        NetworkElements.nodes.push({ data: { id: i, color: 'blue', shape: 'rectangle', parent: p, category: 1, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+                        NetworkElements.nodes.push({ data: { id: i, color: 'blue', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: 10, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                     }
                 }
             }
 		}
 		console.log("===========================================================================================");
         //add processing center which is from processingCenter
-        NetworkElements.nodes.push({ data: { id: jsonData.processingCenter.ip, color: 'red', shape: 'triangle', category: 2, databaseId: jsonData.processingCenter.databaseId }, position: { x: jsonData.processingCenter.x, y: jsonData.processingCenter.y } });
+        NetworkElements.nodes.push({ data: { id: jsonData.processingCenter.ip, color: 'red', shape: 'triangle', width: 70, height: 70, category: 2, queue: [], limit:1000, databaseId: jsonData.processingCenter.databaseId }, position: { x: jsonData.processingCenter.x, y: jsonData.processingCenter.y } });
 
 		//console.log("===========================================================================================");
 		for (var q in jsonData.connections) {
             //console.log(jsonData.connections[q]);
-            NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: true } });
+            NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: true} });
         }
 		return NetworkElements;
 	}
@@ -265,11 +267,11 @@
                 }
                 neighbors[u].push(v);
             };
-            this.addNode = function (u) {
-                if (neighbors[u] === undefined) {
-                    neighbors[u] = [];
-                }
-            }
+            //this.addNode = function (u) {
+            //    if (neighbors[u] === undefined) {
+            //        neighbors[u] = [];
+            //    }
+            //}
             return this;
         }
 
@@ -277,16 +279,24 @@
             if (source === target) {   
                 console.log(source);  
                 return;               
-            }                         
+            }
             var queue = [source],
                 visited = { source: true },
                 predecessor = {},
                 tail = 0;
+            //console.log("before loop, queue", queue);
             while (tail < queue.length) {
                 var u = queue[tail++],  
                     neighbors = graph.neighbors[u];
+                //console.log("in while loop, graph.neighbors", graph.neighbors);
+                //console.log("shortest path u", u, "neighbors", neighbors);
+                if (!neighbors) {
+                    return { err: "This way is block" };
+                    break;
+                }
                 for (var i = 0; i < neighbors.length; ++i) {
                     var v = neighbors[i];
+                   // console.log("for loop, v = ", v)
                     if (visited[v]) {
                         continue;
                     }
@@ -309,24 +319,54 @@
             return;
         }
         console.log("element network", NetworkElements);
-
+        var inActivatedNodes = [];
         function makeAGraph() {
             var graph = new Graph();
             NetworkElements.nodes.forEach(function (node) {
                 if (node.data.category) {
                     console.log("category,", node.data.category)
                     if (node.data.category == 1) {
-                        if (node.data.isActive) {
-                            graph.addNode(node.data.id);
+                        if (!node.data.isActive) {
+                            inActivatedNodes.push(node.data.id);
                         }
                     } else {
-                        console.log("is not active");
+                        console.log("is active");
                         return true;
                     }
                     //console.log("make a graph", node.data)
-                    graph.addNode(node.data.id);
                 }
             });
+            console.log("inActiveNodes: ", inActivatedNodes);
+            //console.log("before changing inactiveated node :", NetworkElements.edges);
+
+            //handle if this relay is activated, if it's inactivated, find that relay through ip, then set it as false
+            if (inActivatedNodes) {
+                NetworkElements.edges.forEach(function (edge) {
+                    if (inActivatedNodes.indexOf(edge.data.source) >= 0) {
+                        edge.data.isActive = false;
+                    }
+                });
+                NetworkElements.edges.forEach(function (edge) {
+                    //console.log("=================", inActivatedNodes.indexOf(edge.data.target));
+                    if (inActivatedNodes.indexOf(edge.data.target) >= 0) {
+                        edge.data.isActive = false;
+                    }
+                });
+            } else {
+                NetworkElements.edges.forEach(function (edge) {
+                    if (inActivatedNodes.indexOf(edge.data.source) < 0 || inActivatedNodes.indexOf(edge.data.target) < 0) {
+                        edge.data.isActive = true;
+                    }
+                });
+                NetworkElements.edges.forEach(function (edge) {
+                    if (inActivatedNodes.indexOf(edge.data.target) < 0) {
+                        edge.data.isActive = true;
+                    }
+                });
+            }
+           
+            //console.log("after changing inactiveated node :", NetworkElements.edges);
+
 
             NetworkElements.edges.forEach(function (edge) {
                 if (edge.data.isActive) {
@@ -369,8 +409,9 @@
          function findShorestPath(sourceIP) {
              var graph = makeAGraph();
              pathQueue = shortestPath(graph, sourceIP, "192.168.0.1");
-             console.log("making graph", graph)
+             //console.log("making graph", graph)
          }
+
 	/* ================================================================================================
 										Send Transaction SECTION
 		-This is called when one of the "send" buttons are clicked next to a transaction on the bottom of the main screen
@@ -385,17 +426,22 @@
 										// that it dynamically adds the items in the queue to its HTML with a for each loop
 				//you are going to want to do this for general relays and their queues. it will be the same process, but the 
 				//data will be coming from a different place.
-
+        var queue = [];
 		// When one of the transaction "Send" buttons are clicked, this is called which starts the animation
-		$(".SendTransaction").click(function () {
+        $(".SendTransaction").click(function () {
 			// Holds the product ID of the clicked element,this code is just for the old animation
 			var storeIp = $(this).attr('id');
 			var transitionID = document.getElementById(storeIp).parentNode.id;
-			queue.push(transitionID);
-			var pathToJ = dijkstra.pathTo(cy.getElementById(storeIp));
-			console.log("pathToJ: ", pathToJ);
-			var i = pathToJ.length;
-			recursivePath(pathToJ, pathToJ[i - 1], i - 1);
+            queue.push(transitionID);
+            findShorestPath(storeIp);
+            console.log("node ip queue ", pathQueue);
+            //console.log("pathqueue.length,", pathQueue.length);
+            generateAnimation(storeIp, pathQueue, pathQueue.length);
+
+            //======================================↑ new function to find shortest path=======================================================================
+   //         var pathToJ = dijkstra.pathTo(cy.getElementById(storeIp));
+   //         var i = pathToJ.length;
+			//recursivePath(pathToJ, pathToJ[i - 1], i - 1);
 
 
 			//TEMPORARY TO DEMONSTRATE HOW TO USE THE PROCESS TRANSACTION FUNCTIONALITY
@@ -411,24 +457,68 @@
 										ANIMATION SECTION
 	===================================================================================================*/
         var animations = [];
-		var queue = [];
+		var transitionQueue = [];
 		
 
 	//Calculates the shortest path to the Processing Center
-	var dijkstra = cy.elements().dijkstra(cy.getElementById(processingCenter), function (edge) {
-		//console.log(processingCenter);
-		//console.log(cy.elements());
-		return edge.data('weight');
-	});
+	//var dijkstra = cy.elements().dijkstra(cy.getElementById(processingCenter), function (edge) {
+	//	console.log(processingCenter);
+	//	//console.log(cy.elements());
+	//	return edge.data('weight');
+	//});
+        function generateAnimation(source, nodeList, length) {
+            console.log("Animation source", source);
+            var ann = cy.getElementById(source).animation({
+                style: {
+                    'background-color': 'white',
+                    'width': 50,
+                    'height': 50
+                },
+                duration: 1000
+            });
+            animations.push(ann);
+            //test the pre node whether have the queue in node 
+            nodeList.shift();
+            //if (testRecord) {
+            //    NetworkElements.edges.forEach(function (node) {
+            //        if (node.data.id == testRecord) {
+            //            console.log("when do the animation, queue of prennode : ", node.data.queue);
+            //        }
+            //    });
+            //}
+            /* ↑ ↑↑↑↑↑↑↑test↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑*/
+            NetworkElements.nodes.forEach(function (node) {
+                if (node.data.id == source) {
+                    if (node.data.limit > 0) {
+                        node.data.queue.push(queue.pop());
+                    }
+                    console.log("when do the animation, queue of current node", node.data.queue);
+                }
+            });
 
+            ann.play().promise('completed').then(function () {
+                ann.reverse().rewind().play();
+                //animations.pop();
+                if (length > 0) {
+                    NetworkElements.nodes.forEach(function (node) {
+                        if (node.data.id == source) {
+                                queue.push(node.data.queue.pop());
+                        }
+                    });
+                    return generateAnimation(nodeList[0], nodeList, nodeList.length);
+                } else {
+                    ann.stop();
+                }
+            });
+        }
 	
-
-	//Starts the animation on the click of a node
 
 	//This function recursively calls itself to do the animation from node to node. the elements from the Store to the Processing
 	// Center are stored in the 'stack' parameter, while the current element is the 'item', and the current index is 'i'.
 	//once this is done, it calls the promise function, which reverses the animation by calling backTrackAnimation
-	function recursivePath(stack, item, i) {
+        function recursivePath(stack, item, i) {
+            console.log("item", item._private.data.id);
+            console.log("stack", stack);
 		var ann = cy.getElementById(item._private.data.id).animation({
 			style: {
 				'background-color': 'white',
@@ -537,7 +627,7 @@
 				})
 					.success(function (result) {
 						$("#NodePopup").html(result);
-						$("#myModal").modal()
+                        $("#myModal").modal();
 						if (type == 2) {
 							console.log("PC clicked ... ");
 							processingCenterQueue.forEach(function (element) {
@@ -546,7 +636,8 @@
 									'Process transaction: '+element +
 									'</div>');
 							});
-						}
+                        }
+                        
 					})
 					.error(function (xhr, status) {
 						alert(status);
@@ -583,7 +674,7 @@
 				var element = cy.getElementById(ip);
 				console.log(ip);
 				console.log(element);
-				console.log(element._private.data);
+				console.log("node infomation: ",element._private.data);
 
 				//this js call updates the active/inactive in the js
 				element._private.data.isActive = !element._private.data.isActive;
@@ -598,15 +689,16 @@
 					data: obj,
 					dataType: 'json',
 					contentType: 'application/json;charset=utf-8',
-					success: function (data) {
+                    success: function (data) {
+                        console.log("after successfully call ajax, data: ",data)
 						alert(data);
 						$("#NodePopup").html("");
-						$("#NodePopup").modal('hide');
+                        $("#NodePopup").modal('hide');
 					},
-					failure: function (errMsg) {
-						alert(errMsg);
-						$("#NodePopup").html("");
-					}
+					//error: function (errMsg) {
+					//	alert("not update the data");
+					//	$("#NodePopup").html("");
+					//}
 				});
 				//hides the modal after success
 				$("#NodePopup").html("");
