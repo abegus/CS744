@@ -108,8 +108,6 @@
 
 	var processingCenter = 0;
 
-	//store edges and nodes
-    var dataDB = {};
 	var NetworkElements = {
 		nodes: [],
 		edges: []
@@ -791,7 +789,7 @@
 
 				NetworkElements.nodes.forEach(function (node) {
 					//console.log(node);
-					if (node.data.id == ip) {
+                    if (node.data.id == ip) {
 						node.data.isActive = !node.data.isActive;
                         node.data.color = 'black';
 						console.log(" IP : " + ip + " is not active/inactive in js");
