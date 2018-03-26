@@ -74,7 +74,7 @@ namespace _744Project.ViewModels
             foreach (var store in stores)
             {
                 //add a new connection from store to relay
-                connections.Add(new IpConnection(store.storeIP, store.Relay.relayIP, store.storeWeight, false));//don't have relay to store connections inactivatable in database yet.
+                connections.Add(new IpConnection(store.storeIP, store.Relay.relayIP, store.storeWeight, false, 0, 1));//don't have relay to store connections inactivatable in database yet.
 
                 //get locations
                 var location1 = getEntityLocation(store.storeIP);
@@ -112,7 +112,7 @@ namespace _744Project.ViewModels
             //convert relay-relay to connections...
             foreach(var relayCon in rr)
             {
-                connections.Add(new IpConnection(relayCon.Relay.relayIP, relayCon.Relay2.relayIP, relayCon.relayWeight, relayCon.isActive));
+                connections.Add(new IpConnection(relayCon.Relay.relayIP, relayCon.Relay2.relayIP, relayCon.relayWeight, relayCon.isActive, 1 ,1 ));
 
                 //get locations
                 var location1 = getEntityLocation(relayCon.Relay.relayIP);
@@ -147,7 +147,7 @@ namespace _744Project.ViewModels
             //convert relay-PC to connections...
             foreach(var con in rpc)
             {
-                connections.Add(new IpConnection(con.Relay.relayIP, con.ProcessCenter.processCenterIP, con.relayToProcessCenterConnectionWeight, con.isActive)); // not in database yet
+                connections.Add(new IpConnection(con.Relay.relayIP, con.ProcessCenter.processCenterIP, con.relayToProcessCenterConnectionWeight, con.isActive, 1, 2)); // not in database yet
 
                 //Get locations
                 var location1 = getEntityLocation(con.Relay.relayIP);
@@ -215,13 +215,17 @@ namespace _744Project.ViewModels
         public string ip2 { get; set; }
         public int weight { get; set; }
         public bool isActive { get; set; }
+        public int type1 { get; set; }
+        public int type2 { get; set; }
 
-        public IpConnection (string ip1, string ip2, int? weight, bool isActive)
+        public IpConnection (string ip1, string ip2, int? weight, bool isActive, int type1, int type2)
         {
             this.isActive = isActive;
             this.ip1 = ip1;
             this.ip2 = ip2;
             this.weight = weight??0;
+            this.type1 = type1;
+            this.type2 = type2;
         }
     }
 

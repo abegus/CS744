@@ -425,6 +425,10 @@
     <Compile Include="Migrations\201803212330157_addedManyRelationships.Designer.cs">
       <DependentUpon>201803212330157_addedManyRelationships.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803261757169_added isActive.cs" />
+    <Compile Include="Migrations\201803261757169_added isActive.Designer.cs">
+      <DependentUpon>201803261757169_added isActive.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -459,6 +463,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\AccountsCreditsViewModel.cs" />
+    <Compile Include="ViewModels\ConnectionViewModel.cs" />
     <Compile Include="ViewModels\NetworkEntityViewModel.cs" />
     <Compile Include="ViewModels\NetworkViewModel.cs" />
     <Compile Include="ViewModels\NodeConfiguration.cs" />
@@ -701,6 +706,7 @@
     <Content Include="Views\SecurityQuestions\Index.cshtml" />
     <Content Include="Views\Network\GetNodeInformation.cshtml" />
     <Content Include="Views\SecurityQuestions\Cancel.cshtml" />
+    <Content Include="Views\Network\GetConnection.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -863,6 +869,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803212330157_addedManyRelationships.resx">
       <DependentUpon>201803212330157_addedManyRelationships.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803261757169_added isActive.resx">
+      <DependentUpon>201803261757169_added isActive.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.addmiddlename.resources" />
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.initialcreate.resources" />
