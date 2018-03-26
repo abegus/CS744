@@ -1,0 +1,32 @@
+﻿@model _744Project.ViewModels.ConnectionViewModel
+
+
+<div>
+	<dl class="dl-horizontal">
+		<dt>Source Type</dt>
+		<dd>@Model.sourceType</dd>
+		<dt>Source Ip</dt>
+		<dd>@Model.sourceIp</dd>
+		<dt>Target Type</dt>
+		<dd>@Model.targetType</dd>
+		<dt>Target Ip</dt>
+		<dd>@Model.targetIp</dd>
+		<dt>Is Active?</dt>
+		<dd>@Model.isActive</dd>
+	</dl>
+
+	<div class="form-group">
+
+		<div class="col-md-offset-2 col-md-10">
+			@if (Model.isActive )
+			{
+				<button onclick="ActivateCon('@Model.sourceIp',@Model.sourceType,'@Model.targetIp', @Model.targetType)" id="Activate" class="btn btn-default Activate">Inactivate</button>
+			}
+			@if (!Model.isActive )
+			{
+				<!--<input type="submit" value="Activate" class="btn btn-default" />-->
+				<button onclick="ActivateCon('@Model.sourceIp',@Model.sourceType,'@Model.targetIp', @Model.targetType)" id="Activate" class="btn btn-default Activate">Activate</button>
+			}
+		</div>
+	</div>
+</div>

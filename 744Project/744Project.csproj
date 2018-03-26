@@ -459,6 +459,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\AccountsCreditsViewModel.cs" />
+    <Compile Include="ViewModels\ConnectionViewModel.cs" />
     <Compile Include="ViewModels\NetworkEntityViewModel.cs" />
     <Compile Include="ViewModels\NetworkViewModel.cs" />
     <Compile Include="ViewModels\NodeConfiguration.cs" />
@@ -701,6 +702,7 @@
     <Content Include="Views\SecurityQuestions\Index.cshtml" />
     <Content Include="Views\Network\GetNodeInformation.cshtml" />
     <Content Include="Views\SecurityQuestions\Cancel.cshtml" />
+    <Content Include="Views\Network\GetConnection.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

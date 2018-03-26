@@ -189,7 +189,7 @@
 		//console.log("===========================================================================================");
 		for (var q in jsonData.connections) {
 			//console.log(jsonData.connections[q]);
-			NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight } });
+			NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: jsonData.connections[q].isActive, type1: jsonData.connections[q].type1, type2: jsonData.connections[q].type2} });
         }
 		return NetworkElements;
 	}
@@ -388,7 +388,50 @@
 		/* ================================================================================================
 										Modal Popup section (clicking on an element in the graph)
 		===================================================================================================*/
-	
+
+		//When you click on a connection,
+		cy.on('click', 'edge', function (event) {
+			var source = this.data('source');
+			var target = this.data('target');
+			var type1 = this.data('type1');
+			var type2 = this.data('type2');
+			var isActive = this.data('isActive');
+			console.log("source: " + this.data('source'));
+			console.log("target: " + this.data('target'));
+			console.log(type1 + " " + type2 + " " + isActive);
+
+			if (source != null && target != null) {
+				var DEST = "/Network/GetConnection?source="+source+"&target="+target+"&type1="+type1+"&type2="+type2;
+				$.ajax({
+					url: DEST,
+					contentType: 'application/html; charset=utf-8',
+					type: 'GET',
+					dataType: 'html'
+
+				})
+					.success(function (result) {
+						$("#NodePopup").html(result);
+						$("#myModal").modal()
+						/*if (type == 2) {
+							console.log("PC clicked ... ");
+							processingCenterQueue.forEach(function (element) {
+								console.log(element);
+								$("#PCTransactionList").append('<div class="btn btn-default processTransactionBtn" id="' + element + '"onclick="processTransactionButton(' + element + ')">' +
+									'Process transaction: ' + element +
+									'</div>');
+							});
+						}*/
+					})
+					.error(function (xhr, status) {
+						alert(status);
+					})
+			}
+			else {
+				$("#NodePopup").html("");
+			}
+		});
+
+		//When you click a node, popup for info
 		cy.on('click', 'node', function (evt) {
 			popupInformation(this.data('databaseId'), this.data('category'));// sending popupInformation(Id, node type)
 
@@ -410,13 +453,24 @@
 					.success(function (result) {
 						$("#NodePopup").html(result);
 						$("#myModal").modal()
-						if (type == 2) {
+						if (type == 2){
 							console.log("PC clicked ... ");
 							processingCenterQueue.forEach(function (element) {
 								console.log(element);
 								$("#PCTransactionList").append('<div class="btn btn-default processTransactionBtn" id="' + element + '"onclick="processTransactionButton('+element+')">' +
 									'Process transaction: '+element +
 									'</div>');
+							});
+						}
+						else if (type == 1) {
+							NetworkElements.nodes.forEach(function (node) {
+								if (node.id == id){
+									node.data.queue.forEach(function (item) {
+										console.log("Item: " + item);
+										$("#modalQueue").append('<div>' + item + '</div>');
+									});
+				
+								}
 							});
 						}
 					})
@@ -432,6 +486,21 @@
 			}
 
 
+		}
+
+		//this is the activate/inactivate for aconnection
+		function ActivateCon(sourceIp, sourceType, targetIp, targetType) {
+			var obj = {};
+			obj['sourceIp'] = sourceIp;
+			obj['sourceType'] = sourceType;
+			obj['targetIp'] = targetIp;
+			obj['targetType'] = targetType;
+			obj = JSON.stringify(obj);
+
+			//still need to set the js element back
+			var element = cy.getElementById(sourceIp + "" + targetIp);
+			console.log(sourceIp + "" + targetIp);
+			console.log(element);
 		}
 
 		// this is the activate / inactivate
@@ -459,8 +528,17 @@
 
 				//this js call updates the active/inactive in the js
 				element._private.data.isActive = !element._private.data.isActive;
+				NetworkElements.nodes.forEach(function (node) {
+					//console.log(node);
+					if (node.data.id == ip) {
+						node.data.isActive = !node.data.isActive;
+						//node.data.color = 'black';
+						console.log(" IP : " + ip + " is not active/inactive in js");
+					}
+				});
 
 				//here is where you change how something looks if it is active or inactive after the call..
+
 				
 				//this ajax call updates the database
 				var url = '/Network/SaveNoteInformation';
