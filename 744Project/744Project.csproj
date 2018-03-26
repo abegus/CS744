@@ -429,6 +429,10 @@
     <Compile Include="Migrations\201803261757169_added isActive.Designer.cs">
       <DependentUpon>201803261757169_added isActive.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803261826061_added DB_changes.cs" />
+    <Compile Include="Migrations\201803261826061_added DB_changes.Designer.cs">
+      <DependentUpon>201803261826061_added DB_changes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -872,6 +876,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803261757169_added isActive.resx">
       <DependentUpon>201803261757169_added isActive.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803261826061_added DB_changes.resx">
+      <DependentUpon>201803261826061_added DB_changes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.addmiddlename.resources" />
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.initialcreate.resources" />

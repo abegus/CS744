@@ -15,6 +15,8 @@ namespace _744Project.Models
             RelayToRelayConnections = new HashSet<RelayToRelayConnection>();
             RelayTransactions = new HashSet<RelayTransaction>();
             Stores = new HashSet<Store>();
+
+            StoresToRelays = new HashSet<StoresToRelays>();
         }
 
         [StringLength(50)]
@@ -48,5 +50,10 @@ namespace _744Project.Models
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Store> Stores { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<StoresToRelays> StoresToRelays { get; set; }
+
+
     }
 }

@@ -39,7 +39,7 @@ namespace _744Project.Controllers
         {
             var temp = nodePosition;
 
-            foreach( var node in nodePosition)
+            foreach (var node in nodePosition)
             {
                 //find the pc...
                 if (node.id.Equals("192.168.0.1"))
@@ -49,7 +49,7 @@ namespace _744Project.Controllers
 
                 NodePosition nodeConfiguration = db.NodePositions.Find(node.id);
                 //if it doesn't exist, create a new instance
-                if(nodeConfiguration == null)
+                if (nodeConfiguration == null)
                 {
                     nodeConfiguration = new NodePosition()
                     {
@@ -57,7 +57,7 @@ namespace _744Project.Controllers
                         x = node.pos.x,
                         y = node.pos.y
                     };
-                    if(node.category == 1)
+                    if (node.category == 1)
                     {
                         var relay = db.Relays.Find(node.id); // doesn't work, getting IP instead of ID
                         relay.isActive = node.isActive;
@@ -74,7 +74,7 @@ namespace _744Project.Controllers
                         var relay = db.Relays.Find(node.id); // doesn't work, getting IP instead of ID
                         relay.isActive = node.isActive;
                     }
-                    if(node.category == 2)
+                    if (node.category == 2)
                     {
                         var x = "is a pc";
                     }
@@ -105,7 +105,7 @@ namespace _744Project.Controllers
                 var pc = (from p in db.ProcessCenters where p.processCenterIP.Equals(target) select p).First();
                 vm.isActive = relay.RelayToProcessCenterConnections.Where(p => p.processCenterID == pc.processCenterID).First().isActive;
                 //var con = db.RelayToProcessCenterConnections.Find(relay.relayID, pc.processCenterID);
-               // vm.isActive = con.isActive;
+                // vm.isActive = con.isActive;
             }
             //relay source, relay target;
             else if (type1.Equals("1") && type2.Equals("1"))
@@ -113,7 +113,7 @@ namespace _744Project.Controllers
                 var rrs = from rr in db.RelayToRelayConnections select rr;
                 foreach (var v in rrs)
                 {
-                    if(v.Relay.relayIP == source && v.Relay2.relayIP == target)
+                    if (v.Relay.relayIP == source && v.Relay2.relayIP == target)
                     {
                         vm.isActive = v.isActive;
                     }
@@ -121,7 +121,7 @@ namespace _744Project.Controllers
                 var relay1 = (from re in db.Relays where re.relayIP.Equals(source) select re).First();
                 var relay2 = (from re in db.Relays where re.relayIP.Equals(target) select re).First();
                 //var rrs = (from rr in db.RelayToRelayConnections where rr.relayID.Equals(relay1.relayID) && rr.relayID2.Equals(relay2.relayID) select rr).First();
-               // vm.isActive = rrs.isActive;
+                // vm.isActive = rrs.isActive;
                 //vm.isActive = relay1.RelayToRelayConnections.Where(r => r.Relay2.relayID == relay2.relayID).First().isActive;
                 // var con = db.RelayToRelayConnections.Find(relay1.relayID, relay2.relayID);
                 //vm.isActive = con.isActive;
@@ -131,10 +131,9 @@ namespace _744Project.Controllers
             {
                 var store = (from re in db.Stores where re.storeIP.Equals(source) select re).First();
                 var relay2 = (from re in db.Relays where re.relayIP.Equals(target) select re).First();
-                // vm.isActive = store.
-                //var con = db.StoresToRelays.Find(store.storeID, relay2.relayID);
-                //vm.isActive = con.isActive;
-                return null;
+                vm.isActive = relay2.StoresToRelays.Where(s => s.storeID == store.storeID).First().isActive;
+                //vm.isActive = relay.RelayToProcessCenterConnections.Where(p => p.processCenterID == pc.processCenterID).First().isActive;
+                //return null;
             }
             else
             {
@@ -155,7 +154,7 @@ namespace _744Project.Controllers
             {
                 vm = new NetworkEntityViewModel(db.Stores.Find(id));
             }
-            else if(numType == 1)//if its a relay
+            else if (numType == 1)//if its a relay
             {
                 vm = new NetworkEntityViewModel(db.Relays.Find(id));
             }
@@ -164,6 +163,53 @@ namespace _744Project.Controllers
                 vm = new NetworkEntityViewModel(db.ProcessCenters.Find(id));
             }
             return PartialView(vm);
+        }
+
+        [HttpPost]
+        public ActionResult SaveConInformation(ConnectionViewModel vm)
+        {
+            if (vm.sourceType.Equals("1") && vm.targetType.Equals("2"))
+            {
+                var relay = (from re in db.Relays where re.relayIP.Equals(vm.sourceIp) select re).First();
+                var pc = (from p in db.ProcessCenters where p.processCenterIP.Equals(vm.targetIp) select p).First();
+                vm.isActive = relay.RelayToProcessCenterConnections.Where(p => p.processCenterID == pc.processCenterID).First().isActive;
+                //var con = db.RelayToProcessCenterConnections.Find(relay.relayID, pc.processCenterID);
+                // vm.isActive = con.isActive;
+            }
+            //relay source, relay target;
+            else if (vm.sourceType.Equals("1") && vm.targetType.Equals("1"))
+            {
+                var rrs = from rr in db.RelayToRelayConnections select rr;
+                foreach (var v in rrs)
+                {
+                    if (v.Relay.relayIP == vm.sourceIp && v.Relay2.relayIP == vm.targetIp)
+                    {
+                        vm.isActive = v.isActive;
+                    }
+                }
+                var relay1 = (from re in db.Relays where re.relayIP.Equals(vm.sourceIp) select re).First();
+                var relay2 = (from re in db.Relays where re.relayIP.Equals(vm.targetIp) select re).First();
+                //var rrs = (from rr in db.RelayToRelayConnections where rr.relayID.Equals(relay1.relayID) && rr.relayID2.Equals(relay2.relayID) select rr).First();
+                // vm.isActive = rrs.isActive;
+                //vm.isActive = relay1.RelayToRelayConnections.Where(r => r.Relay2.relayID == relay2.relayID).First().isActive;
+                // var con = db.RelayToRelayConnections.Find(relay1.relayID, relay2.relayID);
+                //vm.isActive = con.isActive;
+            }
+            //store source, relay target
+            else if (type1.Equals("0") && type2.Equals("1"))
+            {
+                var store = (from re in db.Stores where re.storeIP.Equals(source) select re).First();
+                var relay2 = (from re in db.Relays where re.relayIP.Equals(target) select re).First();
+                vm.isActive = relay2.StoresToRelays.Where(s => s.storeID == store.storeID).First().isActive;
+                //vm.isActive = relay.RelayToProcessCenterConnections.Where(p => p.processCenterID == pc.processCenterID).First().isActive;
+                //return null;
+            }
+            else
+            {
+                return null;
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
