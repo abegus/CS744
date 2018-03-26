@@ -60,7 +60,7 @@ namespace _744Project.ViewModels
         private void getTransactions()
         {
             List<Transaction> tranList = (from trans in db.Transactions where trans.encryptedFlag == true select trans).ToList();  //trans.encryptedFlag
-            foreach(var trans in tranList)
+            foreach (var trans in tranList)
             {
                 transactions.Add(new EncryptedTransaction(trans));
             }

@@ -692,8 +692,9 @@
 							console.log("Inside the get queue function for relays:");
 							NetworkElements.nodes.forEach(function (node) {
 								console.log("Node: " + node.data.id + ", id = " + id);
-								console.log("Queue: " + node.data.queue);
-								if (node.data.id == id){
+								//console.log("Queue: " + node.data.queue);
+                                if (node.data.id == id) {
+                                    console.log("Test popup window ,node.data.id: ", node.data.id, "the unknown id", id);
 									node.data.queue.forEach(function (item) {
 										console.log("Item: " + item);
 										$("#modalQueue").append('<div>' + item + '</div>');
