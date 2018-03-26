@@ -16,7 +16,7 @@ namespace _744Project.Models
 
         [Key]
         public int storesToRelaysID { get; set; }
-        
+        public Boolean isActive { get; set; }
 
         [StringLength(50)]
         public string relayID { get; set; }
