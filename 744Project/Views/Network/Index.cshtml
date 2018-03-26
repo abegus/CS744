@@ -719,9 +719,15 @@
 			obj = JSON.stringify(obj);
 
 			//still need to set the js element back
-			var element = cy.getElementById(sourceIp + "" + targetIp);
-			console.log(sourceIp + "" + targetIp);
-			console.log(element);
+			 
+
+			//change in the network elements
+			NetworkElements.edges.forEach(function (el) {
+				if (el.data.id == (sourceIp + "" + targetIp)) {
+					console.log("CHANGING ACTIVE OF CONNECTION");
+					el.data.isActive = !el.data.isActive;
+				}
+			});
 
 			//ajax call
 			//this ajax call updates the database
@@ -773,6 +779,7 @@
 
 				//this js call updates the active/inactive in the js
 				element._private.data.isActive = !element._private.data.isActive;
+
 				NetworkElements.nodes.forEach(function (node) {
 					//console.log(node);
 					if (node.data.id == ip) {
