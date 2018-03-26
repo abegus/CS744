@@ -192,7 +192,7 @@
 		//console.log("===========================================================================================");
 		for (var q in jsonData.connections) {
             //console.log(jsonData.connections[q]);
-            NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: true} });
+			NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: true, type1: jsonData.connections[q].type1, type2: jsonData.connections[q].type2 } });
         }
 		return NetworkElements;
 	}
@@ -681,8 +681,11 @@
 							});
 						}
 						else if (type == 1) {
+							console.log("Inside the get queue function for relays:");
 							NetworkElements.nodes.forEach(function (node) {
-								if (node.id == id){
+								console.log("Node: " + node.data.id + ", id = " + id);
+								console.log("Queue: " + node.data.queue);
+								if (node.data.id == id){
 									node.data.queue.forEach(function (item) {
 										console.log("Item: " + item);
 										$("#modalQueue").append('<div>' + item + '</div>');
@@ -719,6 +722,30 @@
 			var element = cy.getElementById(sourceIp + "" + targetIp);
 			console.log(sourceIp + "" + targetIp);
 			console.log(element);
+
+			//ajax call
+			//this ajax call updates the database
+			var url = '/Network/SaveConInformation';
+			$.ajax({
+				type: 'POST',
+				url: url,
+				data: obj,
+				dataType: 'json',
+				contentType: 'application/json;charset=utf-8',
+				success: function (data) {
+					console.log("after successfully call ajax, data: ", data)
+					alert(data);
+					$("#NodePopup").html("");
+					$("#NodePopup").modal('hide');
+				},
+				//error: function (errMsg) {
+				//	alert("not update the data");
+				//	$("#NodePopup").html("");
+				//}
+			});
+			//hides the modal after success
+			$("#NodePopup").html("");
+			$('#myModal').modal('hide')
 		}
 
 		// this is the activate / inactivate
