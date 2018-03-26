@@ -12,6 +12,7 @@ namespace _744Project.Models
         public Store()
         {
             StoreTransactions = new HashSet<StoreTransaction>();
+            StoresToRelays = new HashSet<StoresToRelays>();
         }
 
         [StringLength(50)]
@@ -35,5 +36,9 @@ namespace _744Project.Models
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StoreTransaction> StoreTransactions { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<StoresToRelays> StoresToRelays { get; set; }
+    
     }
 }
