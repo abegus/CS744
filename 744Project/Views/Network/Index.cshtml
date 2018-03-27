@@ -680,7 +680,7 @@
 						if (type == 2) {
 							console.log("PC clicked ... ");
 							processingCenterQueue.forEach(function (element) {
-								console.log(element);
+								//console.log(element);
 								$("#PCTransactionList").append('<div class="btn btn-default processTransactionBtn" id="' + element + '"onclick="processTransactionButton('+element+')">' +
 									'Process transaction: '+element +
 									'</div>');
@@ -733,6 +733,7 @@
 				if (el.data.id == (sourceIp + "" + targetIp)) {
 					console.log("CHANGING ACTIVE OF CONNECTION");
 					el.data.isActive = !el.data.isActive;
+					console.log("change: " + el.data.isActive);
 				}
 			});
 
@@ -780,19 +781,30 @@
 
 				//sets the javascript value (of isActive) to true/ false
 				var element = cy.getElementById(ip);
+				//var element = cy.$('#' + ip);
 				console.log(ip);
 				console.log(element);
 				console.log("node infomation: ",element._private.data);
 
 				//this js call updates the active/inactive in the js
-				element._private.data.isActive = !element._private.data.isActive;
+				console.log("Before the cy.element._private.isActive is changed: " + element._private.data.isActive);
+				element.data('isActive', !element._private.data.isActive);
+				console.log("After the cy.element._private.isActive is changed: " + element._private.data.isActive);
 
 				NetworkElements.nodes.forEach(function (node) {
 					//console.log(node);
-                    if (node.data.id == ip) {
-						node.data.isActive = !node.data.isActive;
-                        node.data.color = 'black';
-						console.log(" IP : " + ip + " is not active/inactive in js");
+					if (node.data.id == ip) {
+						console.log("After the NetworkElement.isActive is changed: " + node.data.isActive);
+						if (node.data.isActive) {
+							//node.data.isActive = false;
+						}
+						else {
+							//node.data.isActive = true;
+						}
+						//node.data.isActive = !node.data.isActive;
+						//console.log("After the NetworkElement.isActive is changed: " + node.data.isActive);
+						//node.data.color = 'black';
+						//console.log(" IP : " + ip + " is not active/inactive in js");
 					}
 				});
 
