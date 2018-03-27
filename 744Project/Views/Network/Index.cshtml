@@ -223,7 +223,12 @@
 		//console.log("===========================================================================================");
 		for (var q in jsonData.connections) {
             //console.log(jsonData.connections[q]);
-            NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, color:'grey', source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: true, type1: jsonData.connections[q].type1, type2: jsonData.connections[q].type2 } });
+            if (jsonData.connections[q].isActive) {
+                NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, color: 'grey', source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: jsonData.connections[q].isActive, type1: jsonData.connections[q].type1, type2: jsonData.connections[q].type2 } });
+            } else {
+                NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, color: '#990000', source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: jsonData.connections[q].isActive, type1: jsonData.connections[q].type1, type2: jsonData.connections[q].type2 } });
+            }
+            
         }
 		return NetworkElements;
         }
@@ -356,6 +361,7 @@
         console.log("element network", NetworkElements);
         var inActivatedNodes = [];
         var activeNodes = [];
+        var inActiveConnection = [];
         function makeAGraph() {
             inActivatedNodes = [];
             activeNodes = [];
@@ -380,6 +386,12 @@
             console.log("ActiveNodes: ", activeNodes);
             //console.log("before changing inactiveated node :", NetworkElements.edges);
 
+            NetworkElements.edges.forEach(function (edge) {
+                if (edge.data.isActive) {
+                    inActiveConnection.push(edge.data.id);
+                }
+            });
+
             //handle if this relay is activated, if it's inactivated, find that relay through ip, then set it as false
             if (inActivatedNodes) {
                 NetworkElements.edges.forEach(function (edge) {
@@ -397,18 +409,18 @@
                 });
             } 
             NetworkElements.edges.forEach(function (edge) {
-                if (activeNodes.indexOf(edge.data.source) >= 0 && inActivatedNodes.indexOf(edge.data.target)<0) {
+                if (activeNodes.indexOf(edge.data.source) >= 0 && inActivatedNodes.indexOf(edge.data.target) < 0 && inActiveConnection.indexOf(edge.data.id)<0) {
                         edge.data.isActive = true;
                     }
                 });
                 NetworkElements.edges.forEach(function (edge) {
-                    if (activeNodes.indexOf(edge.data.target) >= 0 && inActivatedNodes.indexOf(edge.data.source) < 0) {
+                    if (activeNodes.indexOf(edge.data.target) >= 0 && inActivatedNodes.indexOf(edge.data.source) < 0 && inActiveConnection.indexOf(edge.data.id)<0) {
                         edge.data.isActive = true;
                     }
                 });
             
            
-            //console.log("after changing inactiveated node :", NetworkElements.edges);
+            console.log("after changing inactiveated node :", NetworkElements.edges);
 
             NetworkElements.edges.forEach(function (edge) {
                 if (edge.data.isActive) {
