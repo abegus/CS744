@@ -872,6 +872,7 @@
 		function processTransactionButton(event) {
 			console.log("this transaction was clicked: " + event);
 
+			var returnText = "";
 			obj = {};
 			obj['transId'] = event;
 			obj = JSON.stringify(obj);
@@ -887,18 +888,35 @@
 					console.log("returned correctly...");
 					//if the transaction succeeded.
 					if (response.success) {
+						$("#NodePopup").html("");
+						$("#NodePopup").modal('hide');
 						console.log(response.responseText);
+						printResponse(response.responseText);
 					}
 					//if the transaction failed.
 					else {
 						// DoSomethingElse()
+						$("#NodePopup").html("");
+						$("#NodePopup").modal('hide');
 						console.log(response.responseText);
+						printResponse(response.responseText)
 					}
 				},
 				failure: function (errMsg) {
 					console.log("bad bug");
 				}
 			});
+
+			//hides the modal after success
+			$("#NodePopup").html("");
+			$('#myModal').modal('hide')
+
+			//here is where you sent animation back
+
+		}
+
+		function printResponse(response) {
+			alert(response);
 		}
 
 
