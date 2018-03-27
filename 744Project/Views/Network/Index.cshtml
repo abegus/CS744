@@ -161,9 +161,9 @@
 
         //change to use region
         NetworkElements.nodes.push({ data: { id: 1, color: '#d4c4c4', shape: 'rectangle', width: 30, height: 30 } });
-        NetworkElements.nodes.push({ data: { id: 2, color: '#d4c4c4', shape: 'rectangle', width: 30, height: 30 } });
-        NetworkElements.nodes.push({ data: { id: 3, color: '#d4c4c4', shape: 'rectangle', width: 30, height: 30 } });
-        NetworkElements.nodes.push({ data: { id: 4, color: '#d4c4c4', shape: 'rectangle', width: 30, height: 30 } });
+        NetworkElements.nodes.push({ data: { id: 2, color: '#e6eeff', shape: 'rectangle', width: 30, height: 30 } });
+        NetworkElements.nodes.push({ data: { id: 3, color: '#ddccff', shape: 'rectangle', width: 30, height: 30 } });
+        NetworkElements.nodes.push({ data: { id: 4, color: '#f7ffe6', shape: 'rectangle', width: 30, height: 30 } });
 
         for (var p in jsonData.regions) {
             var xLocation = 0;
@@ -178,7 +178,7 @@
                     if (jsonData.regions[p].networkEntities[i].isGateway) {//gateway represent other color
                         NetworkElements.nodes.push({ data: { id: i, color: 'green', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: 100, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                     } else {
-                        NetworkElements.nodes.push({ data: { id: i, color: 'blue', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: 10, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+                        NetworkElements.nodes.push({ data: { id: i, color: '#4d88ff', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: 10, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                     }
                 }
             }
@@ -190,13 +190,13 @@
 		//console.log("===========================================================================================");
 		for (var q in jsonData.connections) {
             //console.log(jsonData.connections[q]);
-			NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: true, type1: jsonData.connections[q].type1, type2: jsonData.connections[q].type2 } });
+            NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: true, type1: jsonData.connections[q].type1, type2: jsonData.connections[q].type2 } });
         }
 		return NetworkElements;
         }
 
-        NetworkElements
-        console.log("after emptying the networkelement, ", NetworkElements);
+        
+        //console.log("after emptying the networkelement, ", NetworkElements);
 
 	/* ================================================================================================
 										EXPORT NODE POSITION SECTION
@@ -408,6 +408,7 @@
 
          function findShorestPath(sourceIP) {
              var graph = makeAGraph();
+             pathQueue = [];
              pathQueue = shortestPath(graph, sourceIP, "192.168.0.1");
              //console.log("making graph", graph)
          }
@@ -457,7 +458,8 @@
 										ANIMATION SECTION
 	===================================================================================================*/
         var animations = [];
-		var transitionQueue = [];
+        var transitionQueue = [];
+        var nodePath = [];
         function sleep(time) {
             return new Promise((resolve) => setTimeout(resolve, time));
         }
@@ -468,6 +470,12 @@
 	//	//console.log(cy.elements());
 	//	return edge.data('weight');
 	//});
+        
+	
+
+	//This function recursively calls itself to do the animation from node to node. the elements from the Store to the Processing
+	// Center are stored in the 'stack' parameter, while the current element is the 'item', and the current index is 'i'.
+	//once this is done, it calls the promise function, which reverses the animation by calling backTrackAnimation
         function generateAnimation(source, nodeList, length) {
             console.log("Animation source", source);
             var ann = cy.getElementById(source).animation({
@@ -480,15 +488,17 @@
             });
             animations.push(ann);
             nodeList.shift()
+            // nodePath.push(nodeList.shift());
+            //console.log("nodePath", nodePath);
             //test the pre node whether have the queue in node 
-           //var testRecord = nodeList.shift();
-           // if (testRecord) {
-           //     NetworkElements.nodes.forEach(function (node) {
-           //         if (node.data.id == testRecord) {
-           //             console.log("when do the animation, queue of pre node : ", node.data.queue);
-           //         }
-           //     });
-           // }
+            //var testRecord = nodeList.shift();
+            // if (testRecord) {
+            //     NetworkElements.nodes.forEach(function (node) {
+            //         if (node.data.id == testRecord) {
+            //             console.log("when do the animation, queue of pre node : ", node.data.queue);
+            //         }
+            //     });
+            // }
             /* ↑ ↑↑↑↑↑↑↑test↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑*/
             NetworkElements.nodes.forEach(function (node) {
                 if (node.data.id == source) {
@@ -501,9 +511,10 @@
 
             ann.play().promise('completed').then(function () {
                 ann.reverse().rewind().play();
-                //animations.pop();
-                if (length > 0) {
-                    sleep(10000).then(() => {
+                console.log("animation length: ",length);
+                animations.pop();
+                if (length > 1) {
+                    sleep(3000).then(() => {
                         NetworkElements.nodes.forEach(function (node) {
                             if (node.data.id == source) {
                                 queue.push(node.data.queue.pop());
@@ -511,68 +522,62 @@
                         });
                         return generateAnimation(nodeList[0], nodeList, nodeList.length);
                     });
-                    
                 } else {
-                    ann.stop();
+                        console.log("finish transt from to processing center: ", queue);
                 }
             });
         }
-	
-
-	//This function recursively calls itself to do the animation from node to node. the elements from the Store to the Processing
-	// Center are stored in the 'stack' parameter, while the current element is the 'item', and the current index is 'i'.
-	//once this is done, it calls the promise function, which reverses the animation by calling backTrackAnimation
-        function recursivePath(stack, item, i) {
-            //console.log("item", item._private.data.id);
-            //console.log("stack", stack);
-		var ann = cy.getElementById(item._private.data.id).animation({
-			style: {
-				'background-color': 'white',
-				'width': 50,
-				'height': 50
-			},
-			duration: 1000
-			});
-		animations.push(ann);
-
-		ann
-			.play() // start
-			.promise('completed').then(function () { // on next completed
-				i--;
-				ann.reverse().rewind().play();
-				animations.pop();
-				if (i > 0) { // was >=
-					return recursivePath(stack, stack[i], i ); // i
-				}
-				return backTrackAnimation(stack, stack[0], 0);
-		});
-	}
 
 	//This function is exactly the same as the recursivePath function, except it goes from the ProcessingCenter back to the Store.
-	function backTrackAnimation(stack, item, i) {
-		var ann = cy.getElementById(item._private.data.id).animation({
-			style: {
-				'background-color': 'green',
-				'width': 50,
-				'height':50
-			},
-			duration: 1000
-		});
-		animations.push(ann);
+        function backToStore(processingCenter, nodeList, length) {
+                var ann = cy.getElementById(item._private.data.id).animation({
+                    style: {
+                        'background-color': 'green',
+                        'width': 50,
+                        'height': 50
+                    },
+                    duration: 1000
+                });
+                animations.push(ann);
 
-		ann
-			.play() // start
-			.promise('completed').then(function () { // on next completed
-				ann.reverse().rewind().play();
-				animations.pop();
-				i++;
-				if (i < stack.length) {
-					return backTrackAnimation(stack, stack[i], i);
-				}
-				resetElements(stack);
-				return;
-			});
-	}
+                ann
+                    .play() // start
+                    .promise('completed').then(function () { // on next completed
+                        ann.reverse().rewind().play();
+                        animations.pop();
+                        i++;
+                        if (i < stack.length) {
+                            return backTrackAnimation(stack, stack[i], i);
+                        }
+                        resetElements(stack);
+                        return;
+                    });
+        }
+       
+	//function backTrackAnimation(stack, item, i) {
+	//	var ann = cy.getElementById(item._private.data.id).animation({
+	//		style: {
+	//			'background-color': 'green',
+	//			'width': 50,
+	//			'height':50
+	//		},
+	//		duration: 1000
+	//	});
+	//	animations.push(ann);
+
+	//	ann
+	//		.play() // start
+	//		.promise('completed').then(function () { // on next completed
+	//			ann.reverse().rewind().play();
+	//			animations.pop();
+	//			i++;
+	//			if (i < stack.length) {
+	//				return backTrackAnimation(stack, stack[i], i);
+	//			}
+	//			resetElements(stack);
+	//			return;
+	//		});
+	//}
 
 	//Not used yet, but this method is called once the animation is complete.
 	function resetElements(stack) {
@@ -633,7 +638,8 @@
 					dataType: 'html'
 
 				})
-					.success(function (result) {
+                    .success(function (result) {
+                        console.log("has go through here");
 						$("#NodePopup").html(result);
 						$("#myModal").modal()
 						/*if (type == 2) {
@@ -645,6 +651,7 @@
 									'</div>');
 							});
 						}*/
+                        //console.log("edge info: ", result);
 					})
 					.error(function (xhr, status) {
 						alert(status);
@@ -674,33 +681,49 @@
 					dataType: 'html'
 
 				})
-					.success(function (result) {
+                    .success(function (result) {
+                        //console.log("what is the result", result);
 						$("#NodePopup").html(result);
                         $("#myModal").modal();
-						if (type == 2) {
-							console.log("PC clicked ... ");
-							processingCenterQueue.forEach(function (element) {
-								//console.log(element);
-								$("#PCTransactionList").append('<div class="btn btn-default processTransactionBtn" id="' + element + '"onclick="processTransactionButton('+element+')">' +
-									'Process transaction: '+element +
-									'</div>');
-							});
-						}
-						else if (type == 1) {
-							console.log("Inside the get queue function for relays:");
-							NetworkElements.nodes.forEach(function (node) {
-								console.log("Node: " + node.data.id + ", id = " + id);
-								//console.log("Queue: " + node.data.queue);
-                                if (node.data.id == id) {
-                                    console.log("Test popup window ,node.data.id: ", node.data.id, "the unknown id", id);
-									node.data.queue.forEach(function (item) {
-										console.log("Item: " + item);
-										$("#modalQueue").append('<div>' + item + '</div>');
-									});
-				
-								}
-							});
-						}
+                        if (type == 2) {
+                            NetworkElements.nodes.forEach(function (node) {
+                                if (node.data.databaseId == id) {
+                                    node.data.queue.forEach(function (item) {
+                                        $('<div>' + item + '</div>').appendTo($('#modalQueue'));
+                                        $("#PCTransactionList").append('<div class="btn btn-default processTransactionBtn" id="' + item + '"onclick="processTransactionButton(' + item + ')">' +
+                                            'Process transaction: ' + item +
+                                            '</div>');
+                                    });
+                                }
+                            });
+                            console.log("PC clicked ... ");
+                            //processingCenterQueue.forEach(function (element) {
+                            //    $("#PCTransactionList").append('<div class="btn btn-default processTransactionBtn" id="' + element + '"onclick="processTransactionButton(' + element + ')">' +
+                            //        'Process transaction: ' + element +
+                            //        '</div>');
+                            //});
+                        }
+                        else if (type == 1) {
+                            NetworkElements.nodes.forEach(function (node) {
+                                if (node.data.databaseId == id) {
+                                    node.data.queue.forEach(function (item) {
+                                        $('<div>' + item + '</div>').appendTo($('#modalQueue'));
+                                    });
+
+                                }
+                            });
+                        }
+                        else if (type == 0) {
+                            NetworkElements.nodes.forEach(function (node) {
+                                console.log("node id: ", node.data.id, "id :", id);
+                                if (node.data.databaseId == id) {
+                                    node.data.queue.forEach(function (item) {
+                                        $('<div>' + item + '</div>').appendTo($('#modalQueue'));
+                                    });
+
+                                }
+                            });
+                        }
 					})
 					.error(function (xhr, status) {
 						alert(status);
@@ -726,14 +749,15 @@
 			obj = JSON.stringify(obj);
 
 			//still need to set the js element back
-			 
-
+			
 			//change in the network elements
 			NetworkElements.edges.forEach(function (el) {
-				if (el.data.id == (sourceIp + "" + targetIp)) {
-					console.log("CHANGING ACTIVE OF CONNECTION");
+                if (el.data.id == (sourceIp + "" + targetIp)) {
+                    console.log("el.data.id: ",el.data.id)
+                    console.log("CHANGING ACTIVE OF CONNECTION");
+                    console.log("before chaing the status: ", el.data.isActive);
 					el.data.isActive = !el.data.isActive;
-					console.log("change: " + el.data.isActive);
+					console.log("after changing the status: " + el.data.isActive);
 				}
 			});
 
