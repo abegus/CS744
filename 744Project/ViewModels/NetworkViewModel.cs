@@ -66,6 +66,8 @@ namespace _744Project.ViewModels
             }
         }
 
+
+        /* this  funCTION IS BROKEN. NEED TO REMODEL TO HANDLE MANY TO MANY RELATIONSHIP */
         private List<IpConnection> convertStoresToIpConnections(IEnumerable<Store> stores)
         {
             List<IpConnection> newConnections = new List<IpConnection>();
@@ -73,8 +75,10 @@ namespace _744Project.ViewModels
             //convert stores to connections...
             foreach (var store in stores)
             {
+                //grab the true/false from isActive
+                var isActive = (from con in db.StoresToRelays where con.storeID == store.storeID where store.relayID == con.relayID select con).First().isActive;
                 //add a new connection from store to relay
-                connections.Add(new IpConnection(store.storeIP, store.Relay.relayIP, store.storeWeight, false, 0, 1));//don't have relay to store connections inactivatable in database yet.
+                connections.Add(new IpConnection(store.storeIP, store.Relay.relayIP, store.storeWeight, isActive, 0, 1));//don't have relay to store connections inactivatable in database yet.
 
                 //get locations
                 var location1 = getEntityLocation(store.storeIP);

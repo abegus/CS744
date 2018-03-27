@@ -1051,6 +1051,8 @@
 			$("#NodePopup").html("");
 			$('#myModal').modal('hide')
 
+			remove(processingCenterQueue, event);
+
             //here is where you sent animation back
             var backPath = backQueue.reverse();
             console.log("backTo store, look at the path : ", backPath,"back");
@@ -1060,7 +1062,18 @@
 		function printResponse(response) {
 			alert(response);
 		}
+		function remove(array, element) {
+			const index = array.indexOf(element);
+			console.log(array);
 
+			if (array.length <= 2) {
+				array.splice(0, array.length);
+			}
+			else if (index !== -1) {
+				array.splice(index, 1);
+			}
+			
+		}
 
     </script>
 }
