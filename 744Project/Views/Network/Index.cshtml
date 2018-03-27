@@ -362,10 +362,16 @@
         var inActivatedNodes = [];
         var activeNodes = [];
         var inActiveConnection = [];
+        var activeConnection = [];
+
         function makeAGraph() {
             inActivatedNodes = [];
             activeNodes = [];
+            inActiveConnection = [];
+            activeConnection = [];
+
             var graph = new Graph();
+            //find all the inactive nodes
             NetworkElements.nodes.forEach(function (node) {
                 if (node.data.category) {
                     console.log("category,", node.data.category)
@@ -376,21 +382,25 @@
                             activeNodes.push(node.data.id);
                         }
                     } else {
-                        console.log("is active");
+                        //console.log("is active");
                         return true;
                     }
                     //console.log("make a graph", node.data)
                 }
             });
+            console.log("WHEN MAKEAGRAPH SEE THE INACTIVATED INFO");
             console.log("inActiveNodes: ", inActivatedNodes);
             console.log("ActiveNodes: ", activeNodes);
             //console.log("before changing inactiveated node :", NetworkElements.edges);
-
+            //find all the inactive connection
             NetworkElements.edges.forEach(function (edge) {
-                if (edge.data.isActive) {
+                if (!edge.data.isActive) {
                     inActiveConnection.push(edge.data.id);
+                } else {
+                    activeConnection.push(edge.data.id);
                 }
             });
+            
 
             //handle if this relay is activated, if it's inactivated, find that relay through ip, then set it as false
             if (inActivatedNodes) {
@@ -408,20 +418,27 @@
                     }
                 });
             } 
-            NetworkElements.edges.forEach(function (edge) {
-                if (activeNodes.indexOf(edge.data.source) >= 0 && inActivatedNodes.indexOf(edge.data.target) < 0 && inActiveConnection.indexOf(edge.data.id)<0) {
+            //To activate the node
+                NetworkElements.edges.forEach(function (edge) {
+                    if (activeNodes.indexOf(edge.data.source) >= 0
+                        && inActivatedNodes.indexOf(edge.data.target) < 0
+                        && inActiveConnection.indexOf(edge.data.id) < 0) {
                         edge.data.isActive = true;
                     }
                 });
                 NetworkElements.edges.forEach(function (edge) {
-                    if (activeNodes.indexOf(edge.data.target) >= 0 && inActivatedNodes.indexOf(edge.data.source) < 0 && inActiveConnection.indexOf(edge.data.id)<0) {
+                    if (activeNodes.indexOf(edge.data.target) >= 0
+                        && inActivatedNodes.indexOf(edge.data.source) < 0
+                        && inActiveConnection.indexOf(edge.data.id) < 0) {
                         edge.data.isActive = true;
                     }
                 });
             
-           
-            console.log("after changing inactiveated node :", NetworkElements.edges);
+                console.log("inActiveConnections: ", inActiveConnection);
+                console.log("ActiveConnections: ", activeConnection);
 
+           // console.log("after changing inactiveated node :", NetworkElements.edges);
+            //here is to do make the graph at the data structure
             NetworkElements.edges.forEach(function (edge) {
                 if (edge.data.isActive) {
                     if (isRRConnection(edge.data.source, edge.data.target)) {
@@ -564,7 +581,7 @@
                     if (node.data.limit > 0) {
                         node.data.queue.push(queue.pop());
                     }
-                    console.log("when do the animation, queue of current node", node.data.queue);
+                   // console.log("when do the animation, queue of current node", node.data.queue);
                 }
             });
 
@@ -580,7 +597,7 @@
                         });
                         return generateAnimation(nodeList[0], nodeList, nodeList.length);
                 } else {
-                     console.log("finish transt from to processing center: ", queue);
+                    // console.log("finish transt from to processing center: ", queue);
                 }
             });
         }
@@ -627,13 +644,13 @@
                         if (node.data.limit > 0 && queue.pop() !== undefined) {
                             node.data.queue.push(queue.pop());
                         }
-                        console.log("when do the animation, queue of current node", node.data.queue);
+                       // console.log("when do the animation, queue of current node", node.data.queue);
                     }
                 });
 
                 ann.play().promise('completed').then(function () {
                     ann.reverse().rewind().play();
-                    console.log("animation length: ", length);
+                   // console.log("animation length: ", length);
                     animations.pop();
                     if (length > 1) {
                             NetworkElements.nodes.forEach(function (node) {
@@ -643,7 +660,7 @@
                             });
                          return generateAnimation(nodeList[0], nodeList, nodeList.length);
                     } else {
-                        console.log("finish transt from to processing center: ", queue);
+                       // console.log("finish transt from to processing center: ", queue);
                     }
                 });
             
