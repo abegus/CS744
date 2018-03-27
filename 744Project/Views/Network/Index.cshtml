@@ -385,22 +385,24 @@
                 NetworkElements.edges.forEach(function (edge) {
                     if (inActivatedNodes.indexOf(edge.data.source) >= 0) {
                         edge.data.isActive = false;
+                        console.log("find shortest path, that edges source: ", edge.data);
                     }
                 });
                 NetworkElements.edges.forEach(function (edge) {
                     //console.log("=================", inActivatedNodes.indexOf(edge.data.target));
                     if (inActivatedNodes.indexOf(edge.data.target) >= 0) {
                         edge.data.isActive = false;
+                        console.log("find shortest path, that edges target: ", edge.data);
                     }
                 });
             } 
-                NetworkElements.edges.forEach(function (edge) {
-                    if (activeNodes.indexOf(edge.data.source) >= 0) {
+            NetworkElements.edges.forEach(function (edge) {
+                if (activeNodes.indexOf(edge.data.source) >= 0 && inActivatedNodes.indexOf(edge.data.target)<0) {
                         edge.data.isActive = true;
                     }
                 });
                 NetworkElements.edges.forEach(function (edge) {
-                    if (activeNodes.indexOf(edge.data.target) >+ 0) {
+                    if (activeNodes.indexOf(edge.data.target) >= 0 && inActivatedNodes.indexOf(edge.data.source) < 0) {
                         edge.data.isActive = true;
                     }
                 });
