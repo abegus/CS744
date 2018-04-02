@@ -35,9 +35,11 @@ namespace _744Project.ViewModels
             getTransactions();
             getRegions();
 
-            var storeToRelays = from store in db.Stores select store;
+            //var storeToRelays = from store in db.Stores select store;
+            var storesToRelays = db.StoresToRelays.ToList();
+            convertStoresToConnections(storesToRelays);
             //connections = 
-            convertStoresToIpConnections(storeToRelays);
+            //convertStoresToIpConnections(storeToRelays);
 
             var relayToRelays = from rr in db.RelayToRelayConnections select rr;
             //connections.AddRange(
@@ -66,6 +68,42 @@ namespace _744Project.ViewModels
             }
         }
 
+        private void convertStoresToConnections(IEnumerable<StoresToRelays> stores)
+        {
+            foreach(var sr in stores)
+            {
+                var isActive = sr.isActive;
+                connections.Add(new IpConnection(sr.Store.storeIP, sr.Relay.relayIP, sr.weight, isActive, 0, 1));
+
+                var location1 = getEntityLocation(sr.Store.storeIP);
+
+                //only add the relay it if it doesnt already exist
+                if (!regions[sr.Relay.regionID + ""].networkEntities.ContainsKey(sr.Relay.relayIP))// !networkEntities.ContainsKey(store.Relay.relayIP)
+                {
+                    var location2 = getEntityLocation(sr.Relay.relayIP);
+
+                    NetworkEntity relay = new NetworkEntity(sr.Relay.relayIP, 1, sr.Relay.relayID, location2.Item1, location2.Item2, sr.Relay.isActive, sr.Relay.isGateway, sr.Relay.regionID + "");
+
+                    //OLD ADD, REMOVE
+                    networkEntities.Add(sr.Relay.relayIP, relay);
+                    //NEW ADD
+                    regions[sr.Relay.regionID + ""].networkEntities.Add(sr.Relay.relayIP, relay);
+                }
+
+                //only add the Store it if it doesnt already exist
+                if (!regions[sr.Relay.regionID + ""].networkEntities.ContainsKey(sr.Store.storeIP))// !networkEntities.ContainsKey(store.Relay.relayIP)
+                {
+                    var location2 = getEntityLocation(sr.Store.storeIP);
+
+                    NetworkEntity store = new NetworkEntity(sr.Store.storeIP, 0, sr.Store.storeID, location2.Item1, location2.Item2, true, false, sr.Relay.regionID + "");
+
+                    //OLD ADD, REMOVE
+                    networkEntities.Add(sr.Store.storeIP, store);
+                    //NEW ADD
+                    regions[sr.Relay.regionID + ""].networkEntities.Add(sr.Store.storeIP, store);
+                }
+            }
+        }
 
         /* this  funCTION IS BROKEN. NEED TO REMODEL TO HANDLE MANY TO MANY RELATIONSHIP */
         private List<IpConnection> convertStoresToIpConnections(IEnumerable<Store> stores)
