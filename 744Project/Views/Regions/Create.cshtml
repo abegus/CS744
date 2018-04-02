@@ -1,0 +1,108 @@
+﻿@*@model _744Project.Models.Regions*@
+@model _744Project.ViewModels.RegionsRelaysStoresViewModel
+@{
+    ViewBag.Title = "Create";
+}
+
+<div class="container">
+    <h2>Create</h2>
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <h4>Regions</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.regions.regionName, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.regions.regionName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.regions.regionName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.regions.gatewayIP, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.regions.gatewayIP, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.regions.gatewayIP, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                @*Relay Name*@
+                <div class="form-group">
+                    @*@Html.LabelFor(model => model.relay.relayName, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                    @Html.Label("Gateway Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.relay.relayName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.relay.relayName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                @*Relay Queue Limit*@
+                <div class="form-group">
+                    @*@Html.LabelFor(model => model.relay.relayQueue, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                    @Html.Label("Gateway Queue Limit", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.relay.relayQueue, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.relay.relayQueue, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                @*Store IP*@
+                <div class="form-group">
+                    @Html.LabelFor(model => model.store.storeIP, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.store.storeIP, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.store.storeIP, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                @*Store Name*@
+                <div class="form-group">
+                    @Html.LabelFor(model => model.store.storeName, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.store.storeName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.store.storeName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                @*Store Weight*@
+                <div class="form-group">
+                    @Html.LabelFor(model => model.store.storeWeight, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.store.storeWeight, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.store.storeWeight, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                @*Gateway to PC Weight*@
+                <div class="form-group">
+                    @Html.LabelFor(model => model.relayToProcessCenterConnection.relayToProcessCenterConnectionWeight, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.relayToProcessCenterConnection.relayToProcessCenterConnectionWeight, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.relayToProcessCenterConnection.relayToProcessCenterConnectionWeight, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                @*<div class="form-group">
+            @Html.Label("Gateway to Process Center Weight", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.Editor("gatewayToPC", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessage("gatewayToPC", "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+            }
+
+            <div>
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+
+</div>
+</div>
+</div>

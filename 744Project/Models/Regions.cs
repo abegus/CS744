@@ -22,8 +22,11 @@ namespace _744Project.Models
         }
 
         [Key]
+        [Display(Name = "Region ID")]
         public int regionID { get; set; }
+        [Display(Name = "Region Name")]
         public string regionName { get; set; }
+        [Display(Name = "Gateway IP")]
         public string gatewayIP { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

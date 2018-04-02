@@ -18,20 +18,22 @@ namespace _744Project.Models
 
             StoresToRelays = new HashSet<StoresToRelays>();
         }
-
+        [Key]
+        [Display(Name = "Relay ID")]
         [StringLength(50)]
         public string relayID { get; set; }
-
+        [Display(Name = "Relay Name")]
         [StringLength(50)]
         public string relayName { get; set; }
 
         [StringLength(50)]
+        [Display(Name = "Relay IP")]
         public string relayIP { get; set; }
-
+        [Display(Name = "Region ID")]
         public int regionID { get; set; }
-
+        [Display(Name = "Is Gateway?")]
         public Boolean isGateway { get; set; }
-
+        [Display(Name = "Relay Queue")]
         public int relayQueue { get; set; }
 
         public Boolean isActive { get; set; }

@@ -1,0 +1,47 @@
+﻿@model IEnumerable<_744Project.Models.Regions>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="container">
+    <h2>Index</h2>
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+            <p>
+                @Html.ActionLink("Create New", "Create")
+            </p>
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.regionName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.gatewayIP)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.regionName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.gatewayIP)
+                        </td>
+                        <td>
+                            @*@Html.ActionLink("Edit", "Edit", new { id = item.regionID }) |*@
+                            @*@Html.ActionLink("Details", "Details", new { id = item.regionID }) |*@
+                            @*@Html.ActionLink("Delete", "Delete", new { id = item.regionID })*@
+                        </td>
+                    </tr>
+                }
+
+            </table>
+
+</div>
+</div>
+</div>

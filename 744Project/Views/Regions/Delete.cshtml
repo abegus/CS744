@@ -1,0 +1,48 @@
+﻿@model _744Project.Models.Regions
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<div class="container">
+    <h2>Delete</h2>
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+            <h3>Are you sure you want to delete this?</h3>
+            <div>
+                <h4>Regions</h4>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.regionName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.regionName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.gatewayIP)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.gatewayIP)
+                    </dd>
+
+                </dl>
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-actions no-color">
+                        <input type="submit" value="Delete" class="btn btn-default" /> |
+                        @Html.ActionLink("Back to List", "Index")
+                    </div>
+                }
+            </div>
+
+</div>
+</div>
+</div>

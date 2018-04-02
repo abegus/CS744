@@ -14,19 +14,22 @@ namespace _744Project.Models
             StoreTransactions = new HashSet<StoreTransaction>();
             StoresToRelays = new HashSet<StoresToRelays>();
         }
-
+        [Key]
+        [Display(Name = "Store ID")]
         [StringLength(50)]
         public string storeID { get; set; }
 
         [StringLength(50)]
+        [Display(Name = "Store IP")]
         public string storeIP { get; set; }
 
         [StringLength(50)]
+        [Display(Name = "Store Name")]
         public string storeName { get; set; }
-
+        [Display(Name = "Store Weight")]
         public int? storeWeight { get; set; }
 
-        [StringLength(50)]
+        [StringLength(50)]        
         public string relayID { get; set; }
 
         public virtual Relay Relay { get; set; }

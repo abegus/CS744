@@ -87,7 +87,7 @@ namespace _744Project.Controllers
             int lastCardId = getLastCardId();
             //Get a random card number from the table NewCardNumbers and store it in cardNumber of table CreditCards:
             getRandomCardNumber(lastCardId);
-                return RedirectToAction("Index");
+            return RedirectToAction("Index");
             //}            
             //return View(vModel.account);
             //return View(account);
