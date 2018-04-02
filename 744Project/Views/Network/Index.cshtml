@@ -1,9 +1,11 @@
 ﻿@model _744Project.ViewModels.NetworkViewModel
 
 @{
-    ViewBag.Title = "Network";
+	ViewBag.Title = "Network";
 }
 <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.css">
+<script src="~/Scripts/CytoscapeAnimation.js"></script>
+<script src="~/Scripts/Objects.js"></script>
 
 
 <!--Here is where the popup MODAL javascript is going. This is for when the nodes are clicked on-->
@@ -31,63 +33,63 @@
 
 
 <div class="row">
-    <div class="panel panel-default" style="margin-top:10px">
-        <div class="panel-body">
-            <div class="col-sm-4">
-                <button class="PauseButton btn btn-danger">pause</button>
-                <button class="PlayButton btn btn-success">play</button>
-            </div>
-            <div class="col-sm-4">
-                <h3 style="text-align: center;vertical-align: middle;">Network Layout</h3>
-            </div>
-            <div class="col-sm-4" style=" display: flex; align-items: center; justify-content: center;">
-                <input id="clickMe" style="display: block; margin-top: 10px;" class="btn btn-default" type="button" value="Save Configuration" onclick="exportPositions();" />
-            </div>
-        </div>
-    </div>
+	<div class="panel panel-default" style="margin-top:10px">
+		<div class="panel-body">
+			<div class="col-sm-4">
+				<button class="PauseButton btn btn-danger">pause</button>
+				<button class="PlayButton btn btn-success">play</button>
+			</div>
+			<div class="col-sm-4">
+				<h3 style="text-align: center;vertical-align: middle;">Network Layout</h3>
+			</div>
+			<div class="col-sm-4" style=" display: flex; align-items: center; justify-content: center;">
+				<input id="clickMe" style="display: block; margin-top: 10px;" class="btn btn-default" type="button" value="Save Configuration" onclick="exportPositions();" />
+			</div>
+		</div>
+	</div>
 </div>
 
 <div class="panel panel-default" style=" height: 500px; width:100%;">
-    <div id="cy" class="panel-body" style="height: 500px; width:100%;">
-    </div>
+	<div id="cy" class="panel-body" style="height: 500px; width:100%;">
+	</div>
 </div>
 
 
 <div class="panel panel-default">
-    <div class="panel-body">
-        <div class="row">
-            <table class="table table-bordered">
-                <tr><th>Transaction Id</th><th>Store Ip</th><th>Encrypted Amount</th><th>Action</th></tr>
-                @foreach (var trans in Model.transactions)
-                {
-                    <tr>
-                        <td>@trans.Id</td>
-                        <td>@trans.storeIp</td>
-                        <td>@trans.transactionAmount</td>
-                        <td id="@trans.Id"><button class="SendTransaction btn btn-default" id="@trans.storeIp">Send</button></td>
-                    </tr>
-                }
-            </table>
+	<div class="panel-body">
+		<div class="row">
+			<table class="table table-bordered">
+				<tr><th>Transaction Id</th><th>Store Ip</th><th>Encrypted Amount</th><th>Action</th></tr>
+				@foreach (var trans in Model.transactions)
+				{
+					<tr>
+						<td>@trans.Id</td>
+						<td>@trans.storeIp</td>
+						<td>@trans.transactionAmount</td>
+						<td id="@trans.Id"><button class="SendTransaction btn btn-default" id="@trans.storeIp">Send</button></td>
+					</tr>
+				}
+			</table>
 
-        </div>
-        <div class="col-sm-4" style="color:Red;text-align: center;vertical-align: middle; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
-            Processing Center
-        </div>
-        <div class="col-sm-4" style="color:Blue;text-align: center;vertical-align: middle; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
-            Relay
-        </div>
-        <div class="col-sm-4" style="color:Yellow;text-align: center;vertical-align: middle; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
-            Store
-        </div>
+		</div>
+		<div class="col-sm-4" style="color:Red;text-align: center;vertical-align: middle; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
+			Processing Center
+		</div>
+		<div class="col-sm-4" style="color:Blue;text-align: center;vertical-align: middle; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
+			Relay
+		</div>
+		<div class="col-sm-4" style="color:Yellow;text-align: center;vertical-align: middle; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
+			Store
+		</div>
 
-    </div>
+	</div>
 </div>
 
 
 <style type="text/css">
-    body {
-        background-image: url(../../stock-internet.jpg);
-    }
+	body {
+		background-image: url(../../stock-internet.jpg);
+	}
 </style>
 
 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
@@ -96,7 +98,7 @@
 <script src="@Url.Content("~/Scripts/cytoscape-qtip.js")" type="text/javascript"></script>
 @section Scripts{
 
-    <script>
+	<script>
 
 		/* ================================================================================================
 											Cytoscape SETUP SECTION
@@ -177,7 +179,7 @@
 		//RIGHT HERE IS WHERE I GET THE ELEMENTS FROM THE MODEL
 		elements: convertToCytoscape()
 	});
-      
+
 	// This function converts the JSON representation of the Model into the Cytoscape elements
 	function convertToCytoscape() {
 		//alert("hi");
@@ -228,12 +230,12 @@
             } else {
                 NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, color: '#990000', source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: jsonData.connections[q].isActive, type1: jsonData.connections[q].type1, type2: jsonData.connections[q].type2 } });
             }
-            
+
         }
 		return NetworkElements;
         }
 
-        
+
         //console.log("after emptying the networkelement, ", NetworkElements);
 
 	/* ================================================================================================
@@ -292,14 +294,14 @@
         function Graph() {
             var neighbors = this.neighbors = {};
             this.addRREdge = function (u, v) {
-                if (neighbors[u] === undefined) { 
+                if (neighbors[u] === undefined) {
                     neighbors[u] = [];
                 }
                 neighbors[u].push(v);
-                if (neighbors[v] === undefined) { 
-                    neighbors[v] = [];           
-                }                                  
-                neighbors[v].push(u);              
+                if (neighbors[v] === undefined) {
+                    neighbors[v] = [];
+                }
+                neighbors[v].push(u);
             };
             this.addEdge = function (u, v) {
                 if (neighbors[u] === undefined) {
@@ -316,9 +318,9 @@
         }
 
         function shortestPath(graph, source, target) {
-            if (source === target) {   
-                console.log(source);  
-                return;               
+            if (source === target) {
+                console.log(source);
+                return;
             }
             var queue = [source],
                 visited = { source: true },
@@ -326,7 +328,7 @@
                 tail = 0;
             //console.log("before loop, queue", queue);
             while (tail < queue.length) {
-                var u = queue[tail++],  
+                var u = queue[tail++],
                     neighbors = graph.neighbors[u];
                 //console.log("in while loop, graph.neighbors", graph.neighbors);
                 //console.log("shortest path u", u, "neighbors", neighbors);
@@ -341,8 +343,8 @@
                         continue;
                     }
                     visited[v] = true;
-                    if (v === target) {   
-                        var path = [v];   
+                    if (v === target) {
+                        var path = [v];
                         while (u !== source) {
                             path.push(u);
                             u = predecessor[u];
@@ -400,7 +402,7 @@
                     activeConnection.push(edge.data.id);
                 }
             });
-            
+
 
             //handle if this relay is activated, if it's inactivated, find that relay through ip, then set it as false
             if (inActivatedNodes) {
@@ -417,7 +419,7 @@
                         console.log("find shortest path, that edges target: ", edge.data);
                     }
                 });
-            } 
+            }
             //To activate the node
                 NetworkElements.edges.forEach(function (edge) {
                     if (activeNodes.indexOf(edge.data.source) >= 0
@@ -433,7 +435,7 @@
                         edge.data.isActive = true;
                     }
                 });
-            
+
                 console.log("inActiveConnections: ", inActiveConnection);
                 console.log("ActiveConnections: ", activeConnection);
 
@@ -499,7 +501,7 @@
 										// show what is on the queue. The call pulls the GetNodeInformation.cshtml into the
 										//javascript modal as a partial view. You can see in the javascript of that page
 										// that it dynamically adds the items in the queue to its HTML with a for each loop
-				//you are going to want to do this for general relays and their queues. it will be the same process, but the 
+				//you are going to want to do this for general relays and their queues. it will be the same process, but the
 				//data will be coming from a different place.
         var queue = [];
 		// When one of the transaction "Send" buttons are clicked, this is called which starts the animation
@@ -507,17 +509,22 @@
 			// Holds the product ID of the clicked element,this code is just for the old animation
 			var storeIp = $(this).attr('id');
 			var transitionID = document.getElementById(storeIp).parentNode.id;
-            queue.push(transitionID);
-            findShorestPath(storeIp);
-            console.log("node ip queue ", pathQueue);
-            backQueue = pathQueue.slice(0);
-            //console.log("pathqueue.length,", pathQueue.length);
-            generateAnimation(storeIp, pathQueue, pathQueue.length);
+			queue.push(transitionID);
+			findShorestPath(storeIp);
+			console.log("node ip queue ", pathQueue);
+			backQueue = pathQueue.slice(0);
+			//console.log("pathqueue.length,", pathQueue.length);
+			generateAnimation(storeIp, pathQueue, pathQueue.length);
 
-            //======================================↑ new function to find shortest path=======================================================================
-   //         var pathToJ = dijkstra.pathTo(cy.getElementById(storeIp));
-   //         var i = pathToJ.length;
-			//recursivePath(pathToJ, pathToJ[i - 1], i - 1);
+			var transactionId = $(this).parent().attr("id");
+			//var pc = cy.getElementById(processingCenter);
+			//Using Nan's code to get the shortest path...
+			var graph = makeAGraph();
+			var result = shortestPath(graph, storeIp, processingCenter);
+			console.log("Nans path");
+			console.log(result);
+
+			//submitNewTransaction(cy.getElementById(storeIp), transactionId, processingCenter);
 
 
 			//TEMPORARY TO DEMONSTRATE HOW TO USE THE PROCESS TRANSACTION FUNCTIONALITY
@@ -545,8 +552,8 @@
 	//	//console.log(cy.elements());
 	//	return edge.data('weight');
 	//});
-        
-	
+
+
 
 	//This function recursively calls itself to do the animation from node to node. the elements from the Store to the Processing
 	// Center are stored in the 'stack' parameter, while the current element is the 'item', and the current index is 'i'.
@@ -566,7 +573,7 @@
             nodeList.shift()
             // nodePath.push(nodeList.shift());
             //console.log("nodePath", nodePath);
-            //test the pre node whether have the queue in node 
+            //test the pre node whether have the queue in node
             //var testRecord = nodeList.shift();
             // if (testRecord) {
             //     NetworkElements.nodes.forEach(function (node) {
@@ -663,9 +670,9 @@
                        // console.log("finish transt from to processing center: ", queue);
                     }
                 });
-            
+
         }
-       
+
 	//function backTrackAnimation(stack, item, i) {
 	//	var ann = cy.getElementById(item._private.data.id).animation({
 	//		style: {
@@ -1002,7 +1009,7 @@
 
                 //here is where you change how something looks if it is active or inactive after the call..
                 changeColor(changeID, changeType, changeIsActive);
-				
+
 				//this ajax call updates the database
 				var url = '/Network/SaveNoteInformation';
 				$.ajax({
@@ -1030,12 +1037,12 @@
 				$("#NodePopup").html("");
 			}
         }
-      
+
 
 		/* ================================================================================================
-										Process Transaction Section 
+										Process Transaction Section
 			-This is called when one of the transactions are clicked on (on the Processing Center popup window)
-			-It retuns a status response that prints out to the console right now. 
+			-It retuns a status response that prints out to the console right now.
 		===================================================================================================*/
 
 		function processTransactionButton(event) {
@@ -1101,8 +1108,8 @@
 			else if (index !== -1) {
 				array.splice(index, 1);
 			}
-			
+
 		}
 
-    </script>
+	</script>
 }

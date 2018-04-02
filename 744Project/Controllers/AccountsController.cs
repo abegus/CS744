@@ -220,8 +220,11 @@ namespace _744Project.Controllers
         // GET: Accounts/Delete/5
         public ActionResult Delete(int? id)
         {
-            if (id == null)
+            //var account = db.Accounts.Find(id);
+
+            if (id == null )
             {
+                
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Account account = db.Accounts.Find(id);
@@ -334,12 +337,20 @@ namespace _744Project.Controllers
             Account account = db.Accounts.Find(id);
             //Check if there is at least one credit card associated with that account:
             Boolean thereIs = checkIfThereIsAtLeastOneCard(id);
+
+            //if the card balance isn't zero, it cant be delted.
+            if (account.accountBalance != 0)
+            {
+                ModelState.AddModelError("theLastCard", "The account does not have a balance of 0, so it cannot be deleted.");
+                return View(account);
+            }
             //If there is no credit card for that account, delete it:
-            if (!thereIs)
+            else  if (!thereIs)
             {
                 db.Accounts.Remove(account);
                 db.SaveChanges();
             }
+
             //If there is one or more credit cards associated with the selected account, delete them first then delete the account:
             else if (thereIs)
             {

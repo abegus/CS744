@@ -10,103 +10,107 @@
         <div class="panel-body">
 
             <h3>Are you sure you want to delete this?</h3>
-            <div>
-                <h4>Account</h4>
-                <hr />
-                <dl class="dl-horizontal">
-                    @*<dt>
-            @Html.DisplayNameFor(model => model.Customer.customerFirstname)
-        </dt>
+			<div>
+				<h4>Account</h4>
+				<hr />
+				<dl class="dl-horizontal">
+					@*<dt>
+				@Html.DisplayNameFor(model => model.Customer.customerFirstname)
+			</dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Customer.customerFirstname)
-        </dd>*@
+			<dd>
+				@Html.DisplayFor(model => model.Customer.customerFirstname)
+			</dd>*@
 
-                    <dt>
-                        @Html.DisplayNameFor(model => model.accountNumber)
-                    </dt>
+					<dt>
+						@Html.DisplayNameFor(model => model.accountNumber)
+					</dt>
 
-                    <dd>
-                        @Html.DisplayFor(model => model.accountNumber)
-                    </dd>
+					<dd>
+						@Html.DisplayFor(model => model.accountNumber)
+					</dd>
 
-                    <dt>
-                        @Html.DisplayNameFor(model => model.accountBalance)
-                    </dt>
+					<dt>
+						@Html.DisplayNameFor(model => model.accountBalance)
+					</dt>
 
-                    <dd>
-                        @Html.DisplayFor(model => model.accountBalance)
-                    </dd>
+					<dd>
+						@Html.DisplayFor(model => model.accountBalance)
+					</dd>
 
-                    <dt>
-                        @Html.DisplayNameFor(model => model.accountName)
-                    </dt>
+					<dt>
+						@Html.DisplayNameFor(model => model.accountName)
+					</dt>
 
-                    <dd>
-                        @Html.DisplayFor(model => model.accountName)
-                    </dd>
+					<dd>
+						@Html.DisplayFor(model => model.accountName)
+					</dd>
 
-                    <dt>
-                        @Html.DisplayNameFor(model => model.accountFirstName)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.accountFirstName)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.accountLastName)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.accountLastName)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.accountAddress)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.accountAddress)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.accountCity)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.accountCity)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.accountState)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.accountState)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.accountZip)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.accountZip)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.accountPhone)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.accountPhone)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.accountMax)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.accountMax)
-                    </dd>
+					<dt>
+						@Html.DisplayNameFor(model => model.accountFirstName)
+					</dt>
+					<dd>
+						@Html.DisplayFor(model => model.accountFirstName)
+					</dd>
+					<dt>
+						@Html.DisplayNameFor(model => model.accountLastName)
+					</dt>
+					<dd>
+						@Html.DisplayFor(model => model.accountLastName)
+					</dd>
+					<dt>
+						@Html.DisplayNameFor(model => model.accountAddress)
+					</dt>
+					<dd>
+						@Html.DisplayFor(model => model.accountAddress)
+					</dd>
+					<dt>
+						@Html.DisplayNameFor(model => model.accountCity)
+					</dt>
+					<dd>
+						@Html.DisplayFor(model => model.accountCity)
+					</dd>
+					<dt>
+						@Html.DisplayNameFor(model => model.accountState)
+					</dt>
+					<dd>
+						@Html.DisplayFor(model => model.accountState)
+					</dd>
+					<dt>
+						@Html.DisplayNameFor(model => model.accountZip)
+					</dt>
+					<dd>
+						@Html.DisplayFor(model => model.accountZip)
+					</dd>
+					<dt>
+						@Html.DisplayNameFor(model => model.accountPhone)
+					</dt>
+					<dd>
+						@Html.DisplayFor(model => model.accountPhone)
+					</dd>
+					<dt>
+						@Html.DisplayNameFor(model => model.accountMax)
+					</dt>
+					<dd>
+						@Html.DisplayFor(model => model.accountMax)
+					</dd>
 
-                </dl>
+				</dl>
+				<dl>
+					<dt>
+						@Html.ValidationMessage("theLastCard", "", new { @class = "text-danger" })
+					</dt>
+				</dl>
+				@using (Html.BeginForm())
+	{
+			@Html.AntiForgeryToken()
 
-                @using (Html.BeginForm())
-                {
-                    @Html.AntiForgeryToken()
-
-                    <div class="form-actions no-color">
-                        <input type="submit" value="Delete" class="btn btn-default" /> |
-                        @Html.ActionLink("Back to List", "Index")
-                    </div>
-                }
-            </div>
+			<div class="form-actions no-color">
+				<input type="submit" value="Delete" class="btn btn-default" /> |
+				@Html.ActionLink("Back to List", "Index")
+			</div>
+}
+			</div>
 
 </div>
 </div>
