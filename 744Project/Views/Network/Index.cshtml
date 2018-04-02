@@ -224,9 +224,9 @@
 		for (var q in jsonData.connections) {
             //console.log(jsonData.connections[q]);
             if (jsonData.connections[q].isActive) {
-                NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, color: 'grey', source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: jsonData.connections[q].isActive, type1: jsonData.connections[q].type1, type2: jsonData.connections[q].type2 } });
+                NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, color: 'grey', queue: [], source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: jsonData.connections[q].isActive, type1: jsonData.connections[q].type1, type2: jsonData.connections[q].type2 } });
             } else {
-                NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, color: '#990000', source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: jsonData.connections[q].isActive, type1: jsonData.connections[q].type1, type2: jsonData.connections[q].type2 } });
+                NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, color: '#990000', queue: [], source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: jsonData.connections[q].isActive, type1: jsonData.connections[q].type1, type2: jsonData.connections[q].type2 } });
             }
             
         }
@@ -289,6 +289,7 @@
 										Find the shortest path
 	===================================================================================================*/
         var backQueue;
+        const ProcessingCenterIp = "192.168.0.1";
         function Graph() {
             var neighbors = this.neighbors = {};
             this.addRREdge = function (u, v) {
@@ -307,11 +308,6 @@
                 }
                 neighbors[u].push(v);
             };
-            //this.addNode = function (u) {
-            //    if (neighbors[u] === undefined) {
-            //        neighbors[u] = [];
-            //    }
-            //}
             return this;
         }
 
@@ -388,9 +384,9 @@
                     //console.log("make a graph", node.data)
                 }
             });
-            console.log("WHEN MAKEAGRAPH SEE THE INACTIVATED INFO");
-            console.log("inActiveNodes: ", inActivatedNodes);
-            console.log("ActiveNodes: ", activeNodes);
+            //console.log("WHEN MAKEAGRAPH SEE THE INACTIVATED INFO");
+            //console.log("inActiveNodes: ", inActivatedNodes);
+            //AZS console.log("ActiveNodes: ", activeNodes);
             //console.log("before changing inactiveated node :", NetworkElements.edges);
             //find all the inactive connection
             NetworkElements.edges.forEach(function (edge) {
@@ -400,33 +396,47 @@
                     activeConnection.push(edge.data.id);
                 }
             });
-            
+
 
             //handle if this relay is activated, if it's inactivated, find that relay through ip, then set it as false
             if (inActivatedNodes) {
                 NetworkElements.edges.forEach(function (edge) {
                     if (inActivatedNodes.indexOf(edge.data.source) >= 0) {
                         edge.data.isActive = false;
-                        console.log("find shortest path, that edges source: ", edge.data);
+                        // console.log("find shortest path, that edges source: ", edge.data);
                     }
                 });
                 NetworkElements.edges.forEach(function (edge) {
                     //console.log("=================", inActivatedNodes.indexOf(edge.data.target));
                     if (inActivatedNodes.indexOf(edge.data.target) >= 0) {
                         edge.data.isActive = false;
-                        console.log("find shortest path, that edges target: ", edge.data);
+                        // console.log("find shortest path, that edges target: ", edge.data);
                     }
                 });
-            } 
+            }
+        
             //To activate the node
-                NetworkElements.edges.forEach(function (edge) {
+            //console.log("============== Activate node ===================");
+            //console.log("inActiveNodes: ", inActivatedNodes);
+            NetworkElements.edges.forEach(function (edge) {
+                //console.log("**********************");
+                //console.log("source current edge: ", edge.data.id);
+                //console.log("source activeNodes.indexOf: ", activeNodes.indexOf(edge.data.source));
+                //console.log("source inActivatedNodes.indexOf: ", inActivatedNodes.indexOf(edge.data.target));
+                //console.log("source inActiveConnection: ", inActiveConnection.indexOf(edge.data.id))
                     if (activeNodes.indexOf(edge.data.source) >= 0
                         && inActivatedNodes.indexOf(edge.data.target) < 0
                         && inActiveConnection.indexOf(edge.data.id) < 0) {
+                       // console.log("execute");
                         edge.data.isActive = true;
                     }
                 });
-                NetworkElements.edges.forEach(function (edge) {
+            NetworkElements.edges.forEach(function (edge) {
+                //console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+                //console.log("target current edge: ", edge.data.id);
+                //console.log("target activeNodes.indexOf: ", activeNodes.indexOf(edge.data.target));
+                //console.log("target inActivatedNodes.indexOf: ", inActivatedNodes.indexOf(edge.data.source));
+                //console.log("target inActiveConnection: ", inActiveConnection.indexOf(edge.data.id))
                     if (activeNodes.indexOf(edge.data.target) >= 0
                         && inActivatedNodes.indexOf(edge.data.source) < 0
                         && inActiveConnection.indexOf(edge.data.id) < 0) {
@@ -434,9 +444,8 @@
                     }
                 });
             
-                console.log("inActiveConnections: ", inActiveConnection);
-                console.log("ActiveConnections: ", activeConnection);
-
+                //console.log("inActiveConnections: ", inActiveConnection);
+                //console.log("ActiveConnections: ", activeConnection);
            // console.log("after changing inactiveated node :", NetworkElements.edges);
             //here is to do make the graph at the data structure
             NetworkElements.edges.forEach(function (edge) {
@@ -475,16 +484,38 @@
              //console.log("graph", graph);
             var result = shortestPath(graph, "192.168.0.24", "192.168.0.1");
             console.log("test result", result);
-        }
+         }
 
-         function findShorestPath(sourceIP) {
+         function getCompletedPath(path) {
+             var connectionPath = [], newPath = [];
+             for (var i = 0; i < path.length; i++) {
+                 if (i + 1 < path.length) {
+                     connectionPath.push(path[i] + path[i + 1]);
+                 }
+             }
+             //console.log("connection path: ", connectionPath);
+             for (var j = 0; j < path.length; j++) {
+                 if (j == path.length - 1) {
+                     newPath.push(path[j]);
+                 } else {
+                     newPath.push(path[j]);
+                     newPath.push(connectionPath[j]);
+                 }
+             }
+             //console.log("completedPath: ", newPath);
+             pathQueue = newPath.slice(0);
+         }
+
+         //find the path from source node to destination node using their ip as key
+         function findShorestPath(sourceIP, destinationIP) {
              var graph = makeAGraph();
              pathQueue = [];
-             pathQueue = shortestPath(graph, sourceIP, "192.168.0.1");
+             pathQueue = shortestPath(graph, sourceIP, destinationIP);
              if (pathQueue == undefined) {
                  return alert("Way is block, no way to Processing center");
              }
-             //console.log("making graph", graph)
+             getCompletedPath(pathQueue);
+             //console.log("making graph", graph);
          }
 
 	/* ================================================================================================
@@ -508,7 +539,7 @@
 			var storeIp = $(this).attr('id');
 			var transitionID = document.getElementById(storeIp).parentNode.id;
             queue.push(transitionID);
-            findShorestPath(storeIp);
+            findShorestPath(storeIp, ProcessingCenterIp);
             console.log("node ip queue ", pathQueue);
             backQueue = pathQueue.slice(0);
             //console.log("pathqueue.length,", pathQueue.length);
@@ -523,9 +554,7 @@
 			//TEMPORARY TO DEMONSTRATE HOW TO USE THE PROCESS TRANSACTION FUNCTIONALITY
 			//This just sends the transaction straight to the processingCenterQueue, where it can then be processed
 			var transactionId = $(this).parent().attr("id");
-			//console.log("Transactdion: " + transactionId);
 			processingCenterQueue.push(transactionId);
-			//console.log(processingCenterQueue);
 		});
 
 
@@ -552,7 +581,7 @@
 	// Center are stored in the 'stack' parameter, while the current element is the 'item', and the current index is 'i'.
 	//once this is done, it calls the promise function, which reverses the animation by calling backTrackAnimation
         function generateAnimation(source, nodeList, length) {
-            console.log("Animation source", source);
+            //console.log("Animation source", source);
             var ann = cy.getElementById(source).animation({
                 style: {
                     'background-color': 'white',
@@ -587,7 +616,7 @@
 
             ann.play().promise('completed').then(function () {
                 ann.reverse().rewind().play();
-                console.log("animation length: ",length);
+                //console.log("animation length: ",length);
                 animations.pop();
                 if (length > 1) {
                         NetworkElements.nodes.forEach(function (node) {
@@ -866,11 +895,11 @@
 			NetworkElements.edges.forEach(function (el) {
                 if (el.data.id == (sourceIp + "" + targetIp)) {
                     changeID = el.data.id;
-                    console.log("el.data.id: ",el.data.id)
-                    console.log("CHANGING ACTIVE OF CONNECTION");
-                    console.log("before chaing the status: ", el.data.isActive);
+                    //console.log("el.data.id: ",el.data.id)
+                    //console.log("CHANGING ACTIVE OF CONNECTION");
+                    //console.log("before chaing the status: ", el.data.isActive);
 					el.data.isActive = !el.data.isActive;
-                    console.log("after changing the status: " + el.data.isActive);
+                    //console.log("after changing the status: " + el.data.isActive);
                     changeIsActive = el.data.isActive;
 				}
 			});
