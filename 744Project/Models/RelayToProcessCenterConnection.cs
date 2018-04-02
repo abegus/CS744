@@ -15,7 +15,7 @@ namespace _744Project.Models
 
         [StringLength(50)]
         public string processCenterID { get; set; }
-
+        [Display(Name = "Relay to PC Weight")]
         public int? relayToProcessCenterConnectionWeight { get; set; }
 
         public Boolean isActive { get; set; }

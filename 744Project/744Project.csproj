@@ -225,6 +225,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\NetworkController.cs" />
+    <Compile Include="Controllers\RegionsController.cs" />
     <Compile Include="Controllers\RelayToRelayConnectionsController.cs" />
     <Compile Include="Controllers\SecurityQuestionsController.cs" />
     <Compile Include="Controllers\StoresController.cs" />
@@ -471,6 +472,7 @@
     <Compile Include="ViewModels\NetworkEntityViewModel.cs" />
     <Compile Include="ViewModels\NetworkViewModel.cs" />
     <Compile Include="ViewModels\NodeConfiguration.cs" />
+    <Compile Include="ViewModels\RegionsRelaysStoresViewModel.cs" />
     <Compile Include="ViewModels\TransactionViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -713,6 +715,11 @@
     <Content Include="Views\Network\GetNodeInformation.cshtml" />
     <Content Include="Views\SecurityQuestions\Cancel.cshtml" />
     <Content Include="Views\Network\GetConnection.cshtml" />
+    <Content Include="Views\Regions\Create.cshtml" />
+    <Content Include="Views\Regions\Delete.cshtml" />
+    <Content Include="Views\Regions\Details.cshtml" />
+    <Content Include="Views\Regions\Edit.cshtml" />
+    <Content Include="Views\Regions\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

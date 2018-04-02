@@ -1,0 +1,41 @@
+﻿@model _744Project.Models.Regions
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="container">
+    <h2>Details</h2>
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+            <div>
+                <h4>Regions</h4>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.regionName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.regionName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.gatewayIP)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.gatewayIP)
+                    </dd>
+
+                </dl>
+            </div>
+            <p>
+                @Html.ActionLink("Edit", "Edit", new { id = Model.regionID }) |
+                @Html.ActionLink("Back to List", "Index")
+            </p>
+      
+        </div>
+</div>
+</div>
