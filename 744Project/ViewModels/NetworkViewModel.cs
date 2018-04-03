@@ -22,6 +22,13 @@ namespace _744Project.ViewModels
 
         //public List<Transaction> transactions; // grabs all encrypted transactions
         //public JsonData jsonData;
+        
+            
+        //By SALEH: This is to grab the queue limits:
+        public Dictionary<String, RelayQueues> relay;        
+        //END SALEH's code
+
+
 
         public NetworkViewModel()
         {
@@ -48,7 +55,22 @@ namespace _744Project.ViewModels
             var relayToPC = from rpc in db.RelayToProcessCenterConnections select rpc;
             //connections.AddRange(
             convertRelayProcessingConnections(relayToPC);
+
+            //By SALEH: This is to grab the queue limits from relays:
+            relay = new Dictionary<string, RelayQueues>();
+            getQueues();
+            //END SALEH's code
+    }
+        //By SALEH: This is to grab the queue limits from relays:
+        private void getQueues()
+        {            
+            var rels = db.Relays.ToList();            
+            foreach (var rel in rels)
+            {
+                   relay.Add(rel.relayID + " ", new RelayQueues(rel));               
+            }
         }
+        //END SALEH's code
 
         private void getRegions()
         {
@@ -228,7 +250,33 @@ namespace _744Project.ViewModels
 
 
     }
+    //By SALEH: 
+    public class RelayQueues
+    {
+        public string relayID { get; set; }
+        public int relayQueue { get; set; }
+        //The below are not needed, but left in case someone requests them to be added:
+        //public string relayName { get; set; }
+        //public string relayIP { get; set; }
+        //public int regionId { get; set; }
+        //public Boolean isActive { get; set; }
+        //public Boolean isGateway { get; set; }
+        public Dictionary<String, NetworkEntity> networkEntities { get; set; }
 
+        public RelayQueues(Relay relay)
+        {
+            this.relayID = relay.relayID;
+            this.relayQueue = relay.relayQueue;
+            //The below are not needed, but left in case someone requests them to be added:
+            //this.relayName = relay.relayName;
+            //this.relayIP = relay.relayIP;
+            //this.regionId = relay.regionID;
+            //this.isActive = relay.isActive;
+            //this.isGateway = relay.isGateway;
+            this.networkEntities = new Dictionary<string, NetworkEntity>();
+        }
+    }
+    //END SALEH's code
     public class EncryptedTransaction
     {
         public int Id { get; set; }
@@ -278,14 +326,14 @@ namespace _744Project.ViewModels
         public string databaseId { get; set; }
         public bool isActive { get; set; }
         public bool isGateway { get; set; }
-        public string regionId { get; set; }
-
+        public string regionId { get; set; }        
 
         //for view locations
         public decimal x { get; set; }
         public decimal y { get; set; }
 
-        public NetworkEntity(string ip, int type, string databaseId, decimal x, decimal y, bool isActive, bool isGateway, string regionId)
+        public NetworkEntity(string ip, int type, string databaseId, decimal x, decimal y, 
+            bool isActive, bool isGateway, string regionId)
         {
             this.ip = ip;
             this.type = type;
@@ -294,7 +342,7 @@ namespace _744Project.ViewModels
             this.y = y;
             this.isActive = isActive;
             this.isGateway = isGateway;
-            this.regionId = regionId;
+            this.regionId = regionId;           
         }
         //maybe a list<Transactions>..... numTransactions....
     }
