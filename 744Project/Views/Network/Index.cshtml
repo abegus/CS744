@@ -231,9 +231,13 @@
                 NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, color: '#990000', queue: [], source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: jsonData.connections[q].isActive, type1: jsonData.connections[q].type1, type2: jsonData.connections[q].type2 } });
             }
 
-        }
+		}
+
+		console.log(jsonData);
+		//for(var q in jsonData.)
+
 		return NetworkElements;
-        }
+    }
 
 
         //console.log("after emptying the networkelement, ", NetworkElements);
@@ -548,6 +552,8 @@
             generateAnimation(storeIp, pathQueue, pathQueue.length);
 
 			var transactionId = $(this).parent().attr("id");
+
+			submitNewTransaction(storeIp, transactionId, processingCenter);
 			//var pc = cy.getElementById(processingCenter);
 			//Using Nan's code to get the shortest path...
             /***************************************************************************************************
