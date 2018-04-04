@@ -187,8 +187,6 @@
 		//alert("hi");
 		//console.log("Hello..");
         console.log(jsonData.regions);
-        console.log("jsonData.relay: ", jsonData.relay);
-        console.log("jsonData.relay: ", jsonData.relay["192.168.0.3"].relayQueueLimit);
         //change to use region
         NetworkElements.nodes.push({ data: { id: 1, color: '#d4c4c4', shape: 'rectangle', width: 30, height: 30 } });
         NetworkElements.nodes.push({ data: { id: 2, color: '#d4c4c4', shape: 'rectangle', width: 30, height: 30 } });
@@ -526,22 +524,28 @@
                         }
                     });
             }
-            console.log("get completepath connectionPath: ", connectionPath);
-            pathQueue = newPath.slice(0);
+            //console.log("get completepath connectionPath: ", connectionPath);
+            for (let j = 0; j < path.length; j++) {
+                if (j == path.length - 1) {
+                    newPath.push(path[j]);
+                } else {
+                    newPath.push(path[j]);
+                    newPath.push(connectionPath[j]);
+                }
+            }
+            return newPath;
         }
 
          //find the path from source node to destination node using their ip as key
-         function findShorestPath(sourceIP, destinationIP) {
-             var graph = makeAGraph();
-             pathQueue = [];
+         function findShortestPath(sourceIP, destinationIP) {
+             let graph = makeAGraph();
+             let pathQueue = [];
              pathQueue = shortestPath(graph, sourceIP, destinationIP);
-             //console.log("findshortestPath pathQueue: ", pathQueue);
-             //console.log("findshortestPath pathQueue: ", pathQueue==null);
              if (pathQueue == null) {
                  return alert("Way is block, no way to Processing center");
+             } else {
+                 return getCompletedPath(pathQueue);
              }
-             //getCompletedPath(pathQueue);
-             //console.log("making graph", graph);
          }
 
 	/* ================================================================================================
@@ -565,7 +569,7 @@
 			var storeIp = $(this).attr('id');
 			var transitionID = document.getElementById(storeIp).parentNode.id;
             queue.push(transitionID);
-            findShorestPath(storeIp, ProcessingCenterIp);
+            pathQueue = findShortestPath(storeIp, ProcessingCenterIp);
             console.log("node ip queue ", pathQueue);
             backQueue = pathQueue.slice(0);
             //console.log("pathqueue.length,", pathQueue.length);
