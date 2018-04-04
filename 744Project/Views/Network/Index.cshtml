@@ -186,8 +186,9 @@
 	function convertToCytoscape() {
 		//alert("hi");
 		//console.log("Hello..");
-		console.log(jsonData.regions);
-
+        console.log(jsonData.regions);
+        console.log("jsonData.relay: ", jsonData.relay);
+        console.log("jsonData.relay: ", jsonData.relay["192.168.0.3"].relayQueueLimit);
         //change to use region
         NetworkElements.nodes.push({ data: { id: 1, color: '#d4c4c4', shape: 'rectangle', width: 30, height: 30 } });
         NetworkElements.nodes.push({ data: { id: 2, color: '#d4c4c4', shape: 'rectangle', width: 30, height: 30 } });
@@ -206,18 +207,18 @@
                 else if (jsonData.regions[p].networkEntities[i].type == 1) {
                     if (jsonData.regions[p].networkEntities[i].isGateway) {//gateway represent other color
                         if (jsonData.regions[p].networkEntities[i].isActive) {
-                            NetworkElements.nodes.push({ data: { id: i, color: 'green', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: 100, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+                            NetworkElements.nodes.push({ data: { id: i, color: 'green', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                         } else {
-                            NetworkElements.nodes.push({ data: { id: i, color: 'black', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: 100, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+                            NetworkElements.nodes.push({ data: { id: i, color: 'black', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                         }
                     } else {
-                        if (jsonData.regions[p].networkEntities[i].isActive) {//JsonData.relay[i]
-                            NetworkElements.nodes.push({ data: { id: i, color: '#4d88ff', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: 10, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+                        if (jsonData.regions[p].networkEntities[i].isActive) {//jsonData.relay[i].relayQueueLimit
+                            NetworkElements.nodes.push({ data: { id: i, color: '#4d88ff', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                         } else {
-                            NetworkElements.nodes.push({ data: { id: i, color: 'black', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: 10, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+                            NetworkElements.nodes.push({ data: { id: i, color: 'black', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                         }
                     }
-                }
+                } 
             }
 		}
 		console.log("===========================================================================================");
@@ -381,7 +382,7 @@
             activeNodes = [];
             inActiveConnection = [];
             activeConnection = [];
-            console.log("刚进makeAgraph, connectionTemp: ", ConnectionTemp);
+            //console.log("刚进makeAgraph, connectionTemp: ", ConnectionTemp);
             var graph = new Graph();
             //find all the inactive nodes
             NetworkElements.nodes.forEach(function (node) {
@@ -408,8 +409,8 @@
                     activeConnection.push(edge.data.id);
                 }
             });
-            console.log("find ALL Inactive node: ", inActivatedNodes);
-            console.log("Find ALL Inactive connection: ", inActiveConnection);
+            //console.log("find ALL Inactive node: ", inActivatedNodes);
+           // console.log("Find ALL Inactive connection: ", inActiveConnection);
 
             //handle if this relay is activated, if it's inactivated, find that relay through ip, then set it as false
             if (inActivatedNodes) {
@@ -424,7 +425,7 @@
                     }
                 });
             }
-            console.log("2222222222222222222222222222222222222222222222222222222222222222222222222222222");
+            //console.log("2222222222222222222222222222222222222222222222222222222222222222222222222222222");
             //find all the inactive connection
             inActiveConnection = [];
             activeConnection = [];
@@ -435,10 +436,10 @@
                     activeConnection.push(edge.data.id);
                 }
             });
-            console.log("After inactivate node, inactive node: ", inActivatedNodes);
-            console.log("After inactivate node, inactive connection: ", inActiveConnection);
-            console.log("=====================================================================");
-            console.log("before active the node connectionTemp: ", ConnectionTemp);
+            //console.log("After inactivate node, inactive node: ", inActivatedNodes);
+            //console.log("After inactivate node, inactive connection: ", inActiveConnection);
+            //console.log("=====================================================================");
+            //console.log("before active the node connectionTemp: ", ConnectionTemp);
             //To activate node of 
             NetworkElements.edges.forEach(function (edge) {
                 //两个点都是激活的，connection不是
@@ -448,11 +449,11 @@
                         edge.data.isActive = true;
                 }
             });
-            console.log("After activate the node the connectiontem: ", ConnectionTemp);
+            //console.log("After activate the node the connectiontem: ", ConnectionTemp);
 
             InActivateTheConnection();
 
-            console.log("333333333333333333333333333333333333333333333333333333333333333333333333333");
+            //console.log("333333333333333333333333333333333333333333333333333333333333333333333333333");
             //find all the inactive connection
             inActiveConnection = [];
             activeConnection = [];
@@ -463,8 +464,8 @@
                     inActiveConnection.push(edge.data.id);
                 }
             });
-            console.log("After activate node, inactive node: ", inActivatedNodes);
-            console.log("After activate node, inactive connection: ", inActiveConnection);
+            //console.log("After activate node, inactive node: ", inActivatedNodes);
+            //console.log("After activate node, inactive connection: ", inActiveConnection);
 
             //here is to do make the graph at the data structure
             NetworkElements.edges.forEach(function (edge) {
@@ -505,7 +506,7 @@
                     temp.push(tempEdge.data.id);
                 }
             });
-            console.log("here is at create a graph, temp: ",temp);
+            //console.log("here is at create a graph, temp: ",temp);
             NetworkElements.edges.forEach(function (edge) {
                 if (temp.indexOf(edge.data.id) >= 0) {
                     edge.data.isActive = !edge.data.isActive;
@@ -514,20 +515,18 @@
         }
 
         function getCompletedPath(path) {
-            var connectionPath = [], newPath = [];
-            for (var i = 0; i < path.length; i++) {
-                if (i + 1 < path.length) {
-                    connectionPath.push(path[i] + path[i + 1]);
-                }
+            //console.log("get CompletedPath, beggining path: ", path);
+            let connectionPath = [], newPath = [];
+            for (let i = 0; i < path.length; i++) {
+                if (i + 1 < path.length)
+                    NetworkElements.edges.forEach(function (edge) {
+                        if ((edge.data.source == path[i] && edge.data.target == path[i + 1])
+                            || edge.data.source == path[i + 1] && edge.data.target == path[i]) {
+                            connectionPath.push(edge.data.id);
+                        }
+                    });
             }
-            for (var j = 0; j < path.length; j++) {
-                if (j == path.length - 1) {
-                    newPath.push(path[j]);
-                } else {
-                    newPath.push(path[j]);
-                    newPath.push(connectionPath[j]);
-                }
-            }
+            console.log("get completepath connectionPath: ", connectionPath);
             pathQueue = newPath.slice(0);
         }
 
@@ -536,8 +535,8 @@
              var graph = makeAGraph();
              pathQueue = [];
              pathQueue = shortestPath(graph, sourceIP, destinationIP);
-             console.log("findshortestPath pathQueue: ", pathQueue);
-             console.log("findshortestPath pathQueue: ", pathQueue==null);
+             //console.log("findshortestPath pathQueue: ", pathQueue);
+             //console.log("findshortestPath pathQueue: ", pathQueue==null);
              if (pathQueue == null) {
                  return alert("Way is block, no way to Processing center");
              }
@@ -1043,11 +1042,11 @@
                         node.data.isActive = !node.data.isActive;
                         console.log("After the NetworkElement.isActive is changed: " + node.data.isActive);
                         changeIsActive = node.data.isActive;
-                        if (node.data.limit > 50) {
-                            changeType = "gateway";
-                        } else {
-                            changeType = "relay";
-                        }
+                        //if (node.data.limit > 50) {
+                        //    changeType = "gateway";
+                        //} else {
+                        //    changeType = "relay";
+                        //}
 
                         //if (changeType == "gateway") {
                         //    if (changeIsActive) {
