@@ -1,4 +1,4 @@
-﻿@model IEnumerable<_744Project.Models.Store>
+﻿@model IEnumerable<_744Project.Models.Relay>
 
 @{
     ViewBag.Title = "Index";
@@ -18,16 +18,19 @@
                         @Html.DisplayNameFor(model => model.Region.regionName)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Relay.relayName)
+                        @Html.DisplayNameFor(model => model.relayName)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.storeIP)
+                        @Html.DisplayNameFor(model => model.relayIP)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.storeName)
+                        @Html.DisplayNameFor(model => model.isGateway)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.storeWeight)
+                        @Html.DisplayNameFor(model => model.relayQueue)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.isActive)
                     </th>
                     <th></th>
                 </tr>
@@ -39,21 +42,24 @@
                             @Html.DisplayFor(modelItem => item.Region.regionName)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Relay.relayName)
+                            @Html.DisplayFor(modelItem => item.relayName)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.storeIP)
+                            @Html.DisplayFor(modelItem => item.relayIP)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.storeName)
+                            @Html.DisplayFor(modelItem => item.isGateway)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.storeWeight)
+                            @Html.DisplayFor(modelItem => item.relayQueue)
                         </td>
                         <td>
-                            @Html.ActionLink("Edit", "Edit", new { id = item.storeID }) |
-                            @Html.ActionLink("Details", "Details", new { id = item.storeID }) |
-                            @Html.ActionLink("Delete", "Delete", new { id = item.storeID })
+                            @Html.DisplayFor(modelItem => item.isActive)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.relayID }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.relayID }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.relayID })
                         </td>
                     </tr>
                 }

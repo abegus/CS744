@@ -11,41 +11,41 @@ using _744Project.Models;
 
 namespace _744Project.Controllers
 {
-    public class StoresController : Controller
+    public class RelaysController : Controller
     {
         private MasterModel db = new MasterModel();
         static string connectionString = Configuration.getConnectionString();
         SqlConnection connect = new SqlConnection(connectionString);
 
-        // GET: Stores
+        // GET: Relays
         public ActionResult Index()
         {
-            var stores = db.Stores.Include(s => s.Region).Include(s => s.Relay);
-            return View(stores.ToList());
+            var relays = db.Relays.Include(r => r.Region);
+            return View(relays.ToList());
         }
 
-        // GET: Stores/Details/5
+        // GET: Relays/Details/5
         public ActionResult Details(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Store store = db.Stores.Find(id);
-            if (store == null)
+            Relay relay = db.Relays.Find(id);
+            if (relay == null)
             {
                 return HttpNotFound();
             }
-            return View(store);
+            return View(relay);
         }
 
-        // GET: Stores/Create
+        // GET: Relays/Create
         public ActionResult Create()
         {
             ViewBag.regionID = new SelectList(db.Regions, "regionID", "regionName");
-            ViewBag.relayID = new SelectList(db.Relays, "relayID", "relayName");
             return View();
         }
+
 
         public Boolean checkDuplicateIP(string ip, out string errorMessage)
         {
@@ -114,185 +114,145 @@ namespace _744Project.Controllers
             }
             return correct;
         }
-        public string getLastStoreId()
+        public string getLastRelayId()
         {
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
             cmd.CommandType = CommandType.Text;
             //get the number of rows in the Relays table:
-            cmd.CommandText = "select count(*) from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY storeID ASC) ,* FROM Stores) as t";
-            string storeId = cmd.ExecuteScalar().ToString();
+            cmd.CommandText = "select count(*) from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY relayID ASC) ,* FROM Relays) as t";
+            string relayId = cmd.ExecuteScalar().ToString();
             connect.Close();
-            return storeId;
+            return relayId;
         }
-
-
-
-        // POST: Stores/Create
+        // POST: Relays/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "storeID,storeIP,storeName,storeWeight,relayID,regionID")] Store store)
+        public ActionResult Create([Bind(Include = "relayID,relayName,relayIP,regionID,isGateway,relayQueue,isActive")] Relay relay)
         {
-            //if (ModelState.IsValid)
-            //{
-            Boolean thereIsAnError = false;
-            string storeId = (Convert.ToInt32(getLastStoreId()) + 1).ToString();
-            store.storeID = storeId;
             
+            Boolean thereIsAnError = false;
+            string relayId = (Convert.ToInt32(getLastRelayId()) + 1).ToString();
+            relay.relayID = relayId;
+            relay.isActive = true;
+            relay.isGateway = false;
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //check for store.storeIP input
-            string store_duplicate_error = "";
-            string store_input_error = "";
-            Boolean store_correctIP = true;
-            //check if store IP field is empty:
-            if (string.IsNullOrEmpty(store.storeIP))//check for empty input
+            //check for relay.relayIP input
+            string relay_duplicate_error = "";
+            string relay_input_error = "";
+            Boolean relay_correctIP = true;
+            //check if relay IP field is empty:
+            if (string.IsNullOrEmpty(relay.relayIP))//check for empty input
             {
-                ModelState.AddModelError("storeIP", "The Store IP field is required");
+                ModelState.AddModelError("relayIP", "The relay IP field is required");
                 thereIsAnError = true;
-            }
+            }                
             else
             {
-                //check store IP if it the correct format: 192.168.0.XXX; XXX: 0 -> 255                
-                store_correctIP = checkForCorrectIP(store.storeIP, out store_input_error);
-                if (!store_correctIP)
+                //check relay IP if it the correct format: 192.168.0.XXX; XXX: 0 -> 255                
+                relay_correctIP = checkForCorrectIP(relay.relayIP, out relay_input_error);
+                if (!relay_correctIP)
                 {
-                    ModelState.AddModelError("storeIP", store_input_error);
+                    ModelState.AddModelError("relayIP", relay_input_error);
                     thereIsAnError = true;
                 }
             }
-            if (store_correctIP && !thereIsAnError)//this is to avoid input error with special characters that would crash the application
+            if (relay_correctIP && !thereIsAnError)//this is to avoid input error with special characters that would crash the application
             {
-                //check store IP if it matches another IP
-                Boolean store_duplicate = checkDuplicateIP(store.storeIP, out store_duplicate_error);
-                if (store_duplicate)
+                //check relay IP if it matches another IP
+                Boolean relay_duplicate = checkDuplicateIP(relay.relayIP, out relay_duplicate_error);
+                if (relay_duplicate)
                 {
-                    ModelState.AddModelError("storeIP", store_duplicate_error);
+                    ModelState.AddModelError("relayIP", relay_duplicate_error);
                     thereIsAnError = true;
                 }
             }
-            //check if store.storeName == NULL
-            if (string.IsNullOrEmpty(store.storeName))//check for empty input
+            //check if relay.relayName == NULL
+            if (string.IsNullOrEmpty(relay.relayName))//check for empty input
             {
-                ModelState.AddModelError("storeName", "The Store Name field is required");
+                ModelState.AddModelError("relayName", "The Relay Name field is required");
                 thereIsAnError = true;
             }
-            //check if store.storeWeight == NULL
-            if (string.IsNullOrWhiteSpace(store.storeWeight.ToString()))
+            //check if relay.relayQueue == NULL
+            if (string.IsNullOrWhiteSpace(relay.relayQueue.ToString()))
             {
-                ModelState.AddModelError("storeWeight", "The Store Weight field is required");
+                ModelState.AddModelError("relayQueue", "The Relay Queue Limit field is required");
                 thereIsAnError = true;
             }
-            //check if store.storeWeight <1 || > 500
-            else if (store.storeWeight < 1 || store.storeWeight > 500)
+            //check if relay.relayQueue <1 || > 500
+            else if (relay.relayQueue < 1 || relay.relayQueue > 500)
             {
-                ModelState.AddModelError("storeWeight", "The Store Weight must be from 1 to 500");
-                thereIsAnError = true;
-            }
-
-            store.regionID = getRelaysRegion(store.relayID);
-            if(store.regionID == 0)
-            {
-                ModelState.AddModelError("relayID", "The selected Relay does not belong to a Region");
+                ModelState.AddModelError("relayQueue", "The Relay Queue Limit must be from 1 to 500");
                 thereIsAnError = true;
             }
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             if (thereIsAnError)
             {
-                ViewBag.regionID = new SelectList(db.Regions, "regionID", "regionName", store.regionID);
-                ViewBag.relayID = new SelectList(db.Relays, "relayID", "relayName", store.relayID);
-                return View(store);
+                ViewBag.regionID = new SelectList(db.Regions, "regionID", "regionName", relay.regionID);
+                return View(relay);
             }
-
-
-            db.Stores.Add(store);
+            db.Relays.Add(relay);
             db.SaveChanges();
-            return RedirectToAction("Index");
-            //}
-
-            //ViewBag.regionID = new SelectList(db.Regions, "regionID", "regionName", store.regionID);
-            //ViewBag.relayID = new SelectList(db.Relays, "relayID", "relayName", store.relayID);
-            //return View(store);
+            return RedirectToAction("Index");            
         }
 
-
-
-        public int getRelaysRegion(string relayId)
-        {
-            int regionId = 0;
-            connect.Open();
-            SqlCommand cmd = connect.CreateCommand();
-            cmd.CommandType = CommandType.Text;
-            //make sure that the relayID exists in the Relays table:
-            cmd.CommandText = "select count(*) from Relays where relayId like '"+relayId+"' ";
-            int count = Convert.ToInt32(cmd.ExecuteScalar());
-            if(count > 0)
-            {
-                cmd.CommandText = "select regionID from Relays where relayID like '"+relayId+"' ";
-                regionId = Convert.ToInt32(cmd.ExecuteScalar());
-            }
-            connect.Close();
-            return regionId;
-        }
-
-        // GET: Stores/Edit/5
+        // GET: Relays/Edit/5
         public ActionResult Edit(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Store store = db.Stores.Find(id);
-            if (store == null)
+            Relay relay = db.Relays.Find(id);
+            if (relay == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.regionID = new SelectList(db.Regions, "regionID", "regionName", store.regionID);
-            ViewBag.relayID = new SelectList(db.Relays, "relayID", "relayName", store.relayID);
-            return View(store);
+            ViewBag.regionID = new SelectList(db.Regions, "regionID", "regionName", relay.regionID);
+            return View(relay);
         }
 
-        // POST: Stores/Edit/5
+        // POST: Relays/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "storeID,storeIP,storeName,storeWeight,relayID,regionID")] Store store)
+        public ActionResult Edit([Bind(Include = "relayID,relayName,relayIP,regionID,isGateway,relayQueue,isActive")] Relay relay)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(store).State = EntityState.Modified;
+                db.Entry(relay).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.regionID = new SelectList(db.Regions, "regionID", "regionName", store.regionID);
-            ViewBag.relayID = new SelectList(db.Relays, "relayID", "relayName", store.relayID);
-            return View(store);
+            ViewBag.regionID = new SelectList(db.Regions, "regionID", "regionName", relay.regionID);
+            return View(relay);
         }
 
-        // GET: Stores/Delete/5
+        // GET: Relays/Delete/5
         public ActionResult Delete(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Store store = db.Stores.Find(id);
-            if (store == null)
+            Relay relay = db.Relays.Find(id);
+            if (relay == null)
             {
                 return HttpNotFound();
             }
-            return View(store);
+            return View(relay);
         }
 
-        // POST: Stores/Delete/5
+        // POST: Relays/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
-            Store store = db.Stores.Find(id);
-            db.Stores.Remove(store);
+            Relay relay = db.Relays.Find(id);
+            db.Relays.Remove(relay);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
