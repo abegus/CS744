@@ -67,7 +67,7 @@ namespace _744Project.ViewModels
             var rels = db.Relays.ToList();            
             foreach (var rel in rels)
             {
-                   relay.Add(rel.relayIP + " ", new RelayQueues(rel));
+                   relay.Add(rel.relayIP + "", new RelayQueues(rel));
                 //string tempIp = rel.relayIP;
                 //int tempQueue = rel.relayQueue;
             }

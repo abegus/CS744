@@ -178,16 +178,16 @@ namespace _744Project.Controllers
             //check if relay.relayQueue == NULL
             if (string.IsNullOrWhiteSpace(relay.relayQueue.ToString()))
             {
-                ModelState.AddModelError("relayQueue", "The Gateway Queue Limit field is required");
+                ModelState.AddModelError("relayQueue", "The Relay Queue Limit field is required");
                 thereIsAnError = true;
             }
             //check if relay.relayQueue <1 || > 500
             else if (relay.relayQueue < 1 || relay.relayQueue > 500)
             {
-                ModelState.AddModelError("relayQueue", "The Gateway Queue Limit must be from 1 to 500");
+                ModelState.AddModelError("relayQueue", "The Relay Queue Limit must be from 1 to 500");
                 thereIsAnError = true;
             }
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////                    
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             if (thereIsAnError)
             {
                 ViewBag.regionID = new SelectList(db.Regions, "regionID", "regionName", relay.regionID);
