@@ -1,7 +1,7 @@
 ﻿@model _744Project.ViewModels.NetworkViewModel
 
 @{
-	ViewBag.Title = "Network";
+    ViewBag.Title = "Network";
 }
 <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.css">
 <script src="~/Scripts/CytoscapeAnimation.js"></script>
@@ -9,86 +9,86 @@
 
 <!--Here is where the popup MODAL javascript is going. This is for when the nodes are clicked on-->
 <div class="modal fade" id="myModal" role="dialog">
-	<div class="modal-dialog">
+    <div class="modal-dialog">
 
-		<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Network Element Overview</h4>
-			</div>
-			<div id="NodePopup" class="modal-body">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Network Element Overview</h4>
+            </div>
+            <div id="NodePopup" class="modal-body">
 
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-		</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
 
-	</div>
+    </div>
 </div>
 <!-- End of Modal section -->
 
 
 
 <div class="row">
-	<div class="panel panel-default" style="margin-top:10px">
-		<div class="panel-body">
-			<div class="col-sm-4">
-				<button class="PauseButton btn btn-danger">pause</button>
-				<button class="PlayButton btn btn-success">play</button>
-			</div>
-			<div class="col-sm-4">
-				<h3 style="text-align: center;vertical-align: middle;">Network Layout</h3>
-			</div>
-			<div class="col-sm-4" style=" display: flex; align-items: center; justify-content: center;">
-				<input id="clickMe" style="display: block; margin-top: 10px;" class="btn btn-default" type="button" value="Save Configuration" onclick="exportPositions();" />
-			</div>
-		</div>
-	</div>
+    <div class="panel panel-default" style="margin-top:10px">
+        <div class="panel-body">
+            <div class="col-sm-4">
+                <button class="PauseButton btn btn-danger">pause</button>
+                <button class="PlayButton btn btn-success">play</button>
+            </div>
+            <div class="col-sm-4">
+                <h3 style="text-align: center;vertical-align: middle;">Network Layout</h3>
+            </div>
+            <div class="col-sm-4" style=" display: flex; align-items: center; justify-content: center;">
+                <input id="clickMe" style="display: block; margin-top: 10px;" class="btn btn-default" type="button" value="Save Configuration" onclick="exportPositions();" />
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="panel panel-default" style=" height: 500px; width:100%;">
-	<div id="cy" class="panel-body" style="height: 500px; width:100%;">
-	</div>
+    <div id="cy" class="panel-body" style="height: 500px; width:100%;">
+    </div>
 </div>
 
 
 <div class="panel panel-default">
-	<div class="panel-body">
-		<div class="row">
-			<table class="table table-bordered">
-				<tr><th>Transaction Id</th><th>Store Ip</th><th>Encrypted Amount</th><th>Action</th></tr>
-				@foreach (var trans in Model.transactions)
-				{
-					<tr>
-						<td>@trans.Id</td>
-						<td>@trans.storeIp</td>
-						<td>@trans.transactionAmount</td>
-						<td id="@trans.Id"><button class="SendTransaction btn btn-default" id="@trans.storeIp">Send</button></td>
-					</tr>
-				}
-			</table>
+    <div class="panel-body">
+        <div class="row">
+            <table class="table table-bordered">
+                <tr><th>Transaction Id</th><th>Store Ip</th><th>Encrypted Amount</th><th>Action</th></tr>
+                @foreach (var trans in Model.transactions)
+                {
+                    <tr>
+                        <td>@trans.Id</td>
+                        <td>@trans.storeIp</td>
+                        <td>@trans.transactionAmount</td>
+                        <td id="@trans.Id"><button class="SendTransaction btn btn-default" id="@trans.storeIp">Send</button></td>
+                    </tr>
+                }
+            </table>
 
-		</div>
-		<div class="col-sm-4" style="color:Red;text-align: center;vertical-align: middle; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
-			Processing Center
-		</div>
-		<div class="col-sm-4" style="color:Blue;text-align: center;vertical-align: middle; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
-			Relay
-		</div>
-		<div class="col-sm-4" style="color:Yellow;text-align: center;vertical-align: middle; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
-			Store
-		</div>
+        </div>
+        <div class="col-sm-4" style="color:Red;text-align: center;vertical-align: middle; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
+            Processing Center
+        </div>
+        <div class="col-sm-4" style="color:Blue;text-align: center;vertical-align: middle; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
+            Relay
+        </div>
+        <div class="col-sm-4" style="color:Yellow;text-align: center;vertical-align: middle; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
+            Store
+        </div>
 
-	</div>
+    </div>
 </div>
 
 
 <style type="text/css">
-	body {
-		background-image: url(../../stock-internet.jpg);
-	}
+    body {
+        background-image: url(../../stock-internet.jpg);
+    }
 </style>
 
 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
@@ -97,7 +97,7 @@
 <script src="@Url.Content("~/Scripts/cytoscape-qtip.js")" type="text/javascript"></script>
 @section Scripts{
 
-	<script>
+<script>
 
 		/* ================================================================================================
 											Cytoscape SETUP SECTION
@@ -107,6 +107,10 @@
 	   var jsonData = @Html.Raw(Json.Encode(Model));
 	   console.log(jsonData);
 
+
+       var ConnectionTemp = {
+           edges: []
+       };
 		var processingCenter = 0;
 		var TransactionList = [];
 
@@ -184,8 +188,7 @@
 	function convertToCytoscape() {
 		//alert("hi");
 		//console.log("Hello..");
-		console.log(jsonData.regions);
-
+        console.log(jsonData.regions);
         //change to use region
         NetworkElements.nodes.push({ data: { id: 1, color: '#d4c4c4', shape: 'rectangle', width: 30, height: 30 } });
         NetworkElements.nodes.push({ data: { id: 2, color: '#d4c4c4', shape: 'rectangle', width: 30, height: 30 } });
@@ -204,18 +207,18 @@
                 else if (jsonData.regions[p].networkEntities[i].type == 1) {
                     if (jsonData.regions[p].networkEntities[i].isGateway) {//gateway represent other color
                         if (jsonData.regions[p].networkEntities[i].isActive) {
-                            NetworkElements.nodes.push({ data: { id: i, color: 'green', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: 100, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+                            NetworkElements.nodes.push({ data: { id: i, color: 'green', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                         } else {
-                            NetworkElements.nodes.push({ data: { id: i, color: 'black', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: 100, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+                            NetworkElements.nodes.push({ data: { id: i, color: 'black', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                         }
                     } else {
-                        if (jsonData.regions[p].networkEntities[i].isActive) {
-                            NetworkElements.nodes.push({ data: { id: i, color: '#4d88ff', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: 10, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+                        if (jsonData.regions[p].networkEntities[i].isActive) {//jsonData.relay[i].relayQueueLimit
+                            NetworkElements.nodes.push({ data: { id: i, color: '#4d88ff', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                         } else {
-                            NetworkElements.nodes.push({ data: { id: i, color: 'black', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: 10, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+                            NetworkElements.nodes.push({ data: { id: i, color: 'black', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                         }
                     }
-                }
+                } 
             }
 		}
 		console.log("===========================================================================================");
@@ -231,8 +234,16 @@
                 NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, color: '#990000', queue: [], limit:20, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: jsonData.connections[q].isActive, type1: jsonData.connections[q].type1, type2: jsonData.connections[q].type2 } });
             }
 
-		}
+        }
 
+        //add to the connectionTemp
+        for (var q in jsonData.connections) {
+            //console.log(jsonData.connections[q]);
+            if (jsonData.connections[q].isActive) {
+                ConnectionTemp.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, color: 'grey', queue: [], source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: jsonData.connections[q].isActive, type1: jsonData.connections[q].type1, type2: jsonData.connections[q].type2 } });
+            } else {
+                ConnectionTemp.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, color: '#990000', queue: [], source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: jsonData.connections[q].isActive, type1: jsonData.connections[q].type1, type2: jsonData.connections[q].type2 } });
+            }
 		console.log(jsonData);
 		//for(var q in jsonData.)
 		for (var trans in jsonData.transactions) {
@@ -247,10 +258,12 @@
 		}
 		console.log(TransactionList);
 
+        }
+        
 		return NetworkElements;
     }
-
-
+    
+    console.log("ConnectionTemp: ", ConnectionTemp);
         //console.log("after emptying the networkelement, ", NetworkElements);
 
 	/* ================================================================================================
@@ -344,7 +357,7 @@
                 //console.log("in while loop, graph.neighbors", graph.neighbors);
                 //console.log("shortest path u", u, "neighbors", neighbors);
                 if (!neighbors) {
-                    return { err: "This way is block" };
+                    return;
                     break;
                 }
                 for (var i = 0; i < neighbors.length; ++i) {
@@ -382,7 +395,7 @@
             activeNodes = [];
             inActiveConnection = [];
             activeConnection = [];
-
+            //console.log("刚进makeAgraph, connectionTemp: ", ConnectionTemp);
             var graph = new Graph();
             //find all the inactive nodes
             NetworkElements.nodes.forEach(function (node) {
@@ -401,11 +414,7 @@
                     //console.log("make a graph", node.data)
                 }
             });
-            //console.log("WHEN MAKEAGRAPH SEE THE INACTIVATED INFO");
-            //console.log("inActiveNodes: ", inActivatedNodes);
-            //AZS console.log("ActiveNodes: ", activeNodes);
-            //console.log("before changing inactiveated node :", NetworkElements.edges);
-            //find all the inactive connection
+
             NetworkElements.edges.forEach(function (edge) {
                 if (!edge.data.isActive) {
                     inActiveConnection.push(edge.data.id);
@@ -413,57 +422,64 @@
                     activeConnection.push(edge.data.id);
                 }
             });
-
+            //console.log("find ALL Inactive node: ", inActivatedNodes);
+           // console.log("Find ALL Inactive connection: ", inActiveConnection);
 
             //handle if this relay is activated, if it's inactivated, find that relay through ip, then set it as false
             if (inActivatedNodes) {
                 NetworkElements.edges.forEach(function (edge) {
                     if (inActivatedNodes.indexOf(edge.data.source) >= 0) {
                         edge.data.isActive = false;
-                        // console.log("find shortest path, that edges source: ", edge.data);
                     }
                 });
                 NetworkElements.edges.forEach(function (edge) {
-                    //console.log("=================", inActivatedNodes.indexOf(edge.data.target));
                     if (inActivatedNodes.indexOf(edge.data.target) >= 0) {
                         edge.data.isActive = false;
-                        // console.log("find shortest path, that edges target: ", edge.data);
                     }
                 });
             }
-        
-            //To activate the node
-            //console.log("============== Activate node ===================");
-            //console.log("inActiveNodes: ", inActivatedNodes);
+            //console.log("2222222222222222222222222222222222222222222222222222222222222222222222222222222");
+            //find all the inactive connection
+            inActiveConnection = [];
+            activeConnection = [];
             NetworkElements.edges.forEach(function (edge) {
-                //console.log("**********************");
-                //console.log("source current edge: ", edge.data.id);
-                //console.log("source activeNodes.indexOf: ", activeNodes.indexOf(edge.data.source));
-                //console.log("source inActivatedNodes.indexOf: ", inActivatedNodes.indexOf(edge.data.target));
-                //console.log("source inActiveConnection: ", inActiveConnection.indexOf(edge.data.id))
-                    if (activeNodes.indexOf(edge.data.source) >= 0
-                        && inActivatedNodes.indexOf(edge.data.target) < 0
-                        && inActiveConnection.indexOf(edge.data.id) < 0) {
-                       // console.log("execute");
-                        edge.data.isActive = true;
-                    }
-                });
+                if (!edge.data.isActive) {
+                    inActiveConnection.push(edge.data.id);
+                } else {
+                    activeConnection.push(edge.data.id);
+                }
+            });
+            //console.log("After inactivate node, inactive node: ", inActivatedNodes);
+            //console.log("After inactivate node, inactive connection: ", inActiveConnection);
+            //console.log("=====================================================================");
+            //console.log("before active the node connectionTemp: ", ConnectionTemp);
+            //To activate node of 
             NetworkElements.edges.forEach(function (edge) {
-                //console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-                //console.log("target current edge: ", edge.data.id);
-                //console.log("target activeNodes.indexOf: ", activeNodes.indexOf(edge.data.target));
-                //console.log("target inActivatedNodes.indexOf: ", inActivatedNodes.indexOf(edge.data.source));
-                //console.log("target inActiveConnection: ", inActiveConnection.indexOf(edge.data.id))
-                    if (activeNodes.indexOf(edge.data.target) >= 0
-                        && inActivatedNodes.indexOf(edge.data.source) < 0
-                        && inActiveConnection.indexOf(edge.data.id) < 0) {
+                //两个点都是激活的，connection不是
+                if (inActivatedNodes.indexOf(edge.data.source) < 0
+                    && inActivatedNodes.indexOf(edge.data.target) < 0) {
+                        console.log("execute activate due to connection");
                         edge.data.isActive = true;
-                    }
-                });
-            
-                //console.log("inActiveConnections: ", inActiveConnection);
-                //console.log("ActiveConnections: ", activeConnection);
-           // console.log("after changing inactiveated node :", NetworkElements.edges);
+                }
+            });
+            //console.log("After activate the node the connectiontem: ", ConnectionTemp);
+
+            InActivateTheConnection();
+
+            //console.log("333333333333333333333333333333333333333333333333333333333333333333333333333");
+            //find all the inactive connection
+            inActiveConnection = [];
+            activeConnection = [];
+            NetworkElements.edges.forEach(function (edge) {
+                if (edge.data.isActive) {
+                    activeConnection.push(edge.data.id);
+                } else {
+                    inActiveConnection.push(edge.data.id);
+                }
+            });
+            //console.log("After activate node, inactive node: ", inActivatedNodes);
+            //console.log("After activate node, inactive connection: ", inActiveConnection);
+
             //here is to do make the graph at the data structure
             NetworkElements.edges.forEach(function (edge) {
                 if (edge.data.isActive) {
@@ -495,44 +511,56 @@
                 return false;
             }
         }
-       // test();
-         function test() {
-            var graph = makeAGraph();
-             //console.log("graph", graph);
-            var result = shortestPath(graph, "192.168.0.24", "192.168.0.1");
-            console.log("test result", result);
-         }
 
-         function getCompletedPath(path) {
-             var connectionPath = [], newPath = [];
-             for (var i = 0; i < path.length; i++) {
-                 if (i + 1 < path.length) {
-                     connectionPath.push(path[i] + path[i + 1]);
-                 }
-             }
-             //console.log("connection path: ", connectionPath);
-             for (var j = 0; j < path.length; j++) {
-                 if (j == path.length - 1) {
-                     newPath.push(path[j]);
-                 } else {
-                     newPath.push(path[j]);
-                     newPath.push(connectionPath[j]);
-                 }
-             }
-             //console.log("completedPath: ", newPath);
-             pathQueue = newPath.slice(0);
-         }
+        function InActivateTheConnection() {
+            let temp = [];
+            ConnectionTemp.edges.forEach(function (tempEdge) {
+                if (!tempEdge.data.isActive) {
+                    temp.push(tempEdge.data.id);
+                }
+            });
+            //console.log("here is at create a graph, temp: ",temp);
+            NetworkElements.edges.forEach(function (edge) {
+                if (temp.indexOf(edge.data.id) >= 0) {
+                    edge.data.isActive = !edge.data.isActive;
+                }
+            });
+        }
+
+        function getCompletedPath(path) {
+            //console.log("get CompletedPath, beggining path: ", path);
+            let connectionPath = [], newPath = [];
+            for (let i = 0; i < path.length; i++) {
+                if (i + 1 < path.length)
+                    NetworkElements.edges.forEach(function (edge) {
+                        if ((edge.data.source == path[i] && edge.data.target == path[i + 1])
+                            || edge.data.source == path[i + 1] && edge.data.target == path[i]) {
+                            connectionPath.push(edge.data.id);
+                        }
+                    });
+            }
+            //console.log("get completepath connectionPath: ", connectionPath);
+            for (let j = 0; j < path.length; j++) {
+                if (j == path.length - 1) {
+                    newPath.push(path[j]);
+                } else {
+                    newPath.push(path[j]);
+                    newPath.push(connectionPath[j]);
+                }
+            }
+            return newPath;
+        }
 
          //find the path from source node to destination node using their ip as key
-         function findShorestPath(sourceIP, destinationIP) {
-             var graph = makeAGraph();
-             pathQueue = [];
+         function findShortestPath(sourceIP, destinationIP) {
+             let graph = makeAGraph();
+             let pathQueue = [];
              pathQueue = shortestPath(graph, sourceIP, destinationIP);
-             if (pathQueue == undefined) {
+             if (pathQueue == null) {
                  return alert("Way is block, no way to Processing center");
+             } else {
+                 return getCompletedPath(pathQueue);
              }
-             getCompletedPath(pathQueue);
-             //console.log("making graph", graph);
          }
 
 	/* ================================================================================================
@@ -556,9 +584,8 @@
 			var storeIp = $(this).attr('id');
 			var transitionID = document.getElementById(storeIp).parentNode.id;
             queue.push(transitionID);
-            findShorestPath(storeIp, ProcessingCenterIp);
-			console.log("node ip queue ", pathQueue);
-			var path = $.extend(true, {},pathQueue);
+            pathQueue = findShortestPath(storeIp, ProcessingCenterIp);
+            console.log("node ip queue ", pathQueue);
             backQueue = pathQueue.slice(0);
             //console.log("pathqueue.length,", pathQueue.length);
 			//OLD ANIMATION?
@@ -575,13 +602,13 @@
 			//Using Nan's code to get the shortest path...
             /***************************************************************************************************
             Abe'test code.
-           
+
              var graph = makeAGraph();
 			var result = shortestPath(graph, storeIp, processingCenter);
 			console.log("Nans path");
 			console.log(result);
              ****************************************************************************************************/
-			
+
 
 			//submitNewTransaction(cy.getElementById(storeIp), transactionId, processingCenter);
 
@@ -935,15 +962,23 @@
 
 			//still need to set the js element back
             let changeID, changeIsActive;
-			//change in the network elements
+            //change in the network elements
+            ConnectionTemp.edges.forEach(function (edge) {
+                if (edge.data.id == (sourceIp + "" + targetIp)) {
+                    edge.data.isActive = !edge.data.isActive;
+                    console.log("IN MODAL to inactivate connection ID: ", edge.data.id);
+                    console.log("IN MODAL to inactivate connection: ", edge.data.isActive);
+                }
+            })
+
 			NetworkElements.edges.forEach(function (el) {
                 if (el.data.id == (sourceIp + "" + targetIp)) {
                     changeID = el.data.id;
                     //console.log("el.data.id: ",el.data.id)
                     //console.log("CHANGING ACTIVE OF CONNECTION");
-                    //console.log("before chaing the status: ", el.data.isActive);
+                    console.log("before chaing the status: ", el.data.isActive);
 					el.data.isActive = !el.data.isActive;
-                    //console.log("after changing the status: " + el.data.isActive);
+                    console.log("after changing the status: " + el.data.isActive);
                     changeIsActive = el.data.isActive;
 				}
 			});
@@ -1040,11 +1075,11 @@
                         node.data.isActive = !node.data.isActive;
                         console.log("After the NetworkElement.isActive is changed: " + node.data.isActive);
                         changeIsActive = node.data.isActive;
-                        if (node.data.limit > 50) {
-                            changeType = "gateway";
-                        } else {
-                            changeType = "relay";
-                        }
+                        //if (node.data.limit > 50) {
+                        //    changeType = "gateway";
+                        //} else {
+                        //    changeType = "relay";
+                        //}
 
                         //if (changeType == "gateway") {
                         //    if (changeIsActive) {
@@ -1177,5 +1212,5 @@
 
 		}
 
-	</script>
+</script>
 }
