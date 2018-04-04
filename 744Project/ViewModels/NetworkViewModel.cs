@@ -68,8 +68,8 @@ namespace _744Project.ViewModels
             foreach (var rel in rels)
             {
                    relay.Add(rel.relayIP + " ", new RelayQueues(rel));
-                string tempIp = rel.relayIP;
-                int tempQueue = rel.relayQueue;
+                //string tempIp = rel.relayIP;
+                //int tempQueue = rel.relayQueue;
             }
         }
         //END SALEH's code
@@ -256,7 +256,7 @@ namespace _744Project.ViewModels
     public class RelayQueues
     {
         //public string relayID { get; set; }
-        public int relayQueue { get; set; }
+        public int relayQueueLimit { get; set; }
         //The below are not needed, but left in case someone requests them to be added:
         //public string relayName { get; set; }
         public string relayIP { get; set; }
@@ -268,14 +268,14 @@ namespace _744Project.ViewModels
         public RelayQueues(Relay relay)
         {
             //this.relayID = relay.relayID;
-            this.relayQueue = relay.relayQueue;
+            this.relayQueueLimit = relay.relayQueue;
             //The below are not needed, but left in case someone requests them to be added:
             //this.relayName = relay.relayName;
             this.relayIP = relay.relayIP;
             //this.regionId = relay.regionID;
             //this.isActive = relay.isActive;
             //this.isGateway = relay.isGateway;
-            this.networkEntities = new Dictionary<string, NetworkEntity>();
+            //this.networkEntities = new Dictionary<string, NetworkEntity>();
         }
     }
     //END SALEH's code
