@@ -1,4 +1,4 @@
-﻿@model _744Project.Models.Store
+﻿@model _744Project.Models.Relay
 
 @{
     ViewBag.Title = "Delete";
@@ -11,7 +11,7 @@
 
             <h3>Are you sure you want to delete this?</h3>
             <div>
-                <h4>Store</h4>
+                <h4>Relay</h4>
                 <hr />
                 <dl class="dl-horizontal">
                     <dt>
@@ -23,35 +23,43 @@
                     </dd>
 
                     <dt>
-                        @Html.DisplayNameFor(model => model.Relay.relayName)
+                        @Html.DisplayNameFor(model => model.relayName)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.Relay.relayName)
+                        @Html.DisplayFor(model => model.relayName)
                     </dd>
 
                     <dt>
-                        @Html.DisplayNameFor(model => model.storeIP)
+                        @Html.DisplayNameFor(model => model.relayIP)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.storeIP)
+                        @Html.DisplayFor(model => model.relayIP)
                     </dd>
 
                     <dt>
-                        @Html.DisplayNameFor(model => model.storeName)
+                        @Html.DisplayNameFor(model => model.isGateway)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.storeName)
+                        @Html.DisplayFor(model => model.isGateway)
                     </dd>
 
                     <dt>
-                        @Html.DisplayNameFor(model => model.storeWeight)
+                        @Html.DisplayNameFor(model => model.relayQueue)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.storeWeight)
+                        @Html.DisplayFor(model => model.relayQueue)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.isActive)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.isActive)
                     </dd>
 
                 </dl>
