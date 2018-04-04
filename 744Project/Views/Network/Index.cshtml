@@ -573,6 +573,8 @@
             generateAnimation(storeIp, pathQueue, pathQueue.length);
 
 			var transactionId = $(this).parent().attr("id");
+
+			submitNewTransaction(storeIp, transactionId, processingCenter);
 			//var pc = cy.getElementById(processingCenter);
 			//Using Nan's code to get the shortest path...
             /***************************************************************************************************

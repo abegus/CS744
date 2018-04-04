@@ -106,6 +106,16 @@ async function sendToNode(edge, msg) {
 
 
 
+*/
+function submitNewTransaction(nodeId, transactionId, pc){
+	console.log("IN javascript file");
+	console.log("Node: " + nodeId + ", transaction: " + transactionId + ", pc: " + pc);
+
+	var graph = makeAGraph();
+	var result = shortestPath(graph, nodeId, pc);
+	console.log("Nans path");
+	console.log(result);
+}
 
 
 
@@ -114,12 +124,12 @@ async function sendToNode(edge, msg) {
 
 
 
-
-
-/*//CALL TO START FROM NODE
+/*CALL TO START FROM NODE
 function submitNewTransaction(node, transactionId, pc) {
 	console.log("IN OTHER JAVASCRIPT FILE");
 	console.log(node);
+
+	//finding the path
 	//closeTransactionModal();
 	//var transactionInfo = getTransactionInfo(node);
 	//var pcId = getProcessingCenterId();

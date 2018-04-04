@@ -17,16 +17,7 @@ namespace _744Project.Controllers
         // GET: Stores
         public ActionResult Index()
         {
-
-            /*Store store = db.Stores.Find("123");
-            store.storeID = "123";
-
-            db.Stores.Add(store);
-            db.SaveChanges();*/
-
-
-            var stores = db.Stores.Include(s => s.Relay);
-            var sqlstores = from st in db.Stores select st;
+            var stores = db.Stores.Include(s => s.Region).Include(s => s.Relay);
             return View(stores.ToList());
         }
 
@@ -48,6 +39,7 @@ namespace _744Project.Controllers
         // GET: Stores/Create
         public ActionResult Create()
         {
+            ViewBag.regionID = new SelectList(db.Regions, "regionID", "regionName");
             ViewBag.relayID = new SelectList(db.Relays, "relayID", "relayName");
             return View();
         }
@@ -57,7 +49,7 @@ namespace _744Project.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "storeID,storeName,storeWeight,relayID")] Store store)
+        public ActionResult Create([Bind(Include = "storeID,storeIP,storeName,storeWeight,relayID,regionID")] Store store)
         {
             if (ModelState.IsValid)
             {
@@ -66,6 +58,7 @@ namespace _744Project.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.regionID = new SelectList(db.Regions, "regionID", "regionName", store.regionID);
             ViewBag.relayID = new SelectList(db.Relays, "relayID", "relayName", store.relayID);
             return View(store);
         }
@@ -82,6 +75,7 @@ namespace _744Project.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.regionID = new SelectList(db.Regions, "regionID", "regionName", store.regionID);
             ViewBag.relayID = new SelectList(db.Relays, "relayID", "relayName", store.relayID);
             return View(store);
         }
@@ -91,7 +85,7 @@ namespace _744Project.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "storeID,storeName,storeWeight,relayID")] Store store)
+        public ActionResult Edit([Bind(Include = "storeID,storeIP,storeName,storeWeight,relayID,regionID")] Store store)
         {
             if (ModelState.IsValid)
             {
@@ -99,6 +93,7 @@ namespace _744Project.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewBag.regionID = new SelectList(db.Regions, "regionID", "regionName", store.regionID);
             ViewBag.relayID = new SelectList(db.Relays, "relayID", "relayName", store.relayID);
             return View(store);
         }
