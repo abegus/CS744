@@ -770,22 +770,26 @@
 		===================================================================================================*/
 
 
+		var isAnimated = true;
 		//Working on pause and play, however it only works with one element on the "animation list" at a time.
 		//This is because there are multiple "threads"/"listeners" which begin each animation cycle, so the animations
 		//aren't running concurrently. To do more than one, there will have to be a way to either tie them together,
 		//or use some sort of javascript Mutex / Lock that must be used .
 		$(".PauseButton").click(function () {
 			console.log("Stopped!");
-			animations.forEach(function (element) {
+			isAnimated = false;
+			currentAnimations.forEach(function (element) {
 				console.log(element);
-				element.pause();
+				//element.pause();
 			});
 		});
 
 		$(".PlayButton").click(function () {
-			animations.forEach(function (element) {
+			isAnimated = true;
+			ResumeFromAnimationList();
+			currentAnimations.forEach(function (element) {
 				console.log(element);
-				element.play();
+				//element.play();
 			});
 		});
 
@@ -863,7 +867,8 @@
                         $("#myModal").modal();
                         if (type == 2) {
                             NetworkElements.nodes.forEach(function (node) {
-                                if (node.data.databaseId == id) {
+								if (node.data.databaseId == id) {
+									
                                     node.data.queue.forEach(function (item) {
                                         $('<div>' + item + '</div>').appendTo($('#modalQueue'));
                                         $("#PCTransactionList").append('<div class="btn btn-default processTransactionBtn" id="' + item + '"onclick="processTransactionButton(' + item + ')">' +
@@ -881,7 +886,11 @@
                         }
                         else if (type == 1) {
                             NetworkElements.nodes.forEach(function (node) {
-                                if (node.data.databaseId == id && node.data.category == type) {
+								if (node.data.databaseId == id && node.data.category == type) {
+									console.log("AFTER SUCCESS");
+									console.log(node.data.queue);
+									var real = GetQueueList(node.data.id);
+									console.log(real);
                                     node.data.queue.forEach(function (item) {
                                         $('<div>' + item + '</div>').appendTo($('#modalQueue'));
                                     });

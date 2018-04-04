@@ -1,5 +1,6 @@
 ﻿
 var currentAnimations = [];
+var resumeAnimationList = [];
 
 //should be this but nans code is bugged...
 //function submitNewTransaction(nodeId, transactionId, pc){
@@ -48,11 +49,11 @@ function SendToNode(currentIp, pathIndex, transactionId, transObj, lastIp) {
 	//Change state, add to queue...
 	AddTransactionToQueue(transactionId, currentIp);
 
-	//Continue Case, this element is the only thing on the queue and if the current element is not being animated
+	//Continue Case, this element is the only thing on the queue and if the current element is not being animated, and animation is runnign.
 	var isHead = GetHeadOfQueue(currentIp) == transactionId;
 	var isAnimated = IsElementAnimated(currentIp);
 	console.log("result: " + isHead + ", animated?: " + isAnimated);
-	if (isHead  && !isAnimated) { //still check the next To-Queue if it's open??? can it take it?
+	if (isHead  && !isAnimated ) { //still check the next To-Queue if it's open??? can it take it?
 		console.log("animate the item");
 		AnimateItem(transactionId, currentIp, transObj, pathIndex);
 	}
@@ -79,6 +80,11 @@ function WakeUpNodeHead(nodeIp) {
 }
 
 function AnimateItem(transId, currentIp, transObj, pathIndex) {
+	if (!isAnimated) {
+		AddToResumeAnimationList(transId, currentIp, transObj, pathIndex);
+		return;
+	}
+
 	var ann = cy.getElementById(currentIp).animation({
 		style: {
 			'background-color': 'white',
@@ -89,8 +95,11 @@ function AnimateItem(transId, currentIp, transObj, pathIndex) {
 		duration: 1000
 	});
 
+	currentAnimations.push(ann);
+
 	ann.play().promise('completed').then(function () {
 		ann.reverse().rewind().play().promise('completed').then(function () {
+			currentAnimations.pop();
 			TransactionList[transId + ""]["curIndex"]++;//transObj["curIndex"]++;
 			pathIndex++;
 			var nextIp = transObj.path[pathIndex];
@@ -99,6 +108,23 @@ function AnimateItem(transId, currentIp, transObj, pathIndex) {
 			WakeUpNodeHead(currentIp);
 		});
 	});
+}
+
+
+//adds an object to the list of animations to wake up upon pressing the play button.
+function AddToResumeAnimationList(transId, currentIp, transObj, pathIndex) {
+	var obj = [transId, currentIp, transObj, pathIndex];
+	resumeAnimationList.push(obj);
+}
+
+function ResumeFromAnimationList() {
+	console.log("==========================RESUMING =====================");
+	console.log(resumeAnimationList);
+	for (var i in resumeAnimationList) {
+		console.log(resumeAnimationList[i][0] );
+		AnimateItem(resumeAnimationList[i][0], resumeAnimationList[i][1], resumeAnimationList[i][2], resumeAnimationList[i][3],)
+	}
+	resumeAnimationList = [];
 }
 
 //removes the leement from the queue
@@ -177,6 +203,13 @@ function GetHeadOfQueue(nodeIp) {
 		console.log(node._private.data.queue[0]);
 		return node._private.data.queue[0];
 	}
+}
+
+function GetQueueList(nodeIp) {
+	var node = cy.getElementById(nodeIp);
+	console.log("contents of queue");
+	console.log(node._private.data.queue);
+	return node._private.data.queue;
 }
 
 
