@@ -5,7 +5,6 @@
 }
 <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.css">
 <script src="~/Scripts/CytoscapeAnimation.js"></script>
-<script src="~/Scripts/Objects.js"></script>
 
 
 <!--Here is where the popup MODAL javascript is going. This is for when the nodes are clicked on-->
@@ -108,7 +107,8 @@
 	   var jsonData = @Html.Raw(Json.Encode(Model));
 	   console.log(jsonData);
 
-	var processingCenter = 0;
+		var processingCenter = 0;
+		var TransactionList = [];
 
 	var NetworkElements = {
 		nodes: [],
@@ -226,15 +226,26 @@
 		for (var q in jsonData.connections) {
             //console.log(jsonData.connections[q]);
             if (jsonData.connections[q].isActive) {
-                NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, color: 'grey', queue: [], source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: jsonData.connections[q].isActive, type1: jsonData.connections[q].type1, type2: jsonData.connections[q].type2 } });
+                NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, color: 'grey', queue: [], limit:20, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: jsonData.connections[q].isActive, type1: jsonData.connections[q].type1, type2: jsonData.connections[q].type2 } });
             } else {
-                NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, color: '#990000', queue: [], source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: jsonData.connections[q].isActive, type1: jsonData.connections[q].type1, type2: jsonData.connections[q].type2 } });
+                NetworkElements.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, color: '#990000', queue: [], limit:20, source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: jsonData.connections[q].isActive, type1: jsonData.connections[q].type1, type2: jsonData.connections[q].type2 } });
             }
 
 		}
 
 		console.log(jsonData);
 		//for(var q in jsonData.)
+		for (var trans in jsonData.transactions) {
+			console.log(jsonData.transactions[trans]);
+			var t = {
+				id: jsonData.transactions[trans].Id,
+				path: [],
+				curIndex: 0,
+				storeIp: jsonData.transactions[trans].storeIp
+			}
+			TransactionList[jsonData.transactions[trans].Id + ""] = t;
+		}
+		console.log(TransactionList);
 
 		return NetworkElements;
     }
@@ -376,7 +387,7 @@
             //find all the inactive nodes
             NetworkElements.nodes.forEach(function (node) {
                 if (node.data.category) {
-                    console.log("category,", node.data.category)
+                    //console.log("category,", node.data.category)
                     if (node.data.category == 1) {
                         if (!node.data.isActive) {
                             inActivatedNodes.push(node.data.id);
@@ -546,14 +557,20 @@
 			var transitionID = document.getElementById(storeIp).parentNode.id;
             queue.push(transitionID);
             findShorestPath(storeIp, ProcessingCenterIp);
-            console.log("node ip queue ", pathQueue);
+			console.log("node ip queue ", pathQueue);
+			var path = $.extend(true, {},pathQueue);
             backQueue = pathQueue.slice(0);
             //console.log("pathqueue.length,", pathQueue.length);
-            generateAnimation(storeIp, pathQueue, pathQueue.length);
+			//OLD ANIMATION?
+            //generateAnimation(storeIp, pathQueue, pathQueue.length);
 
 			var transactionId = $(this).parent().attr("id");
 
-			submitNewTransaction(storeIp, transactionId, processingCenter);
+			//this is what it should be bun NANS CODE IS BUGGED.
+			//submitNewTransaction(storeIp, transactionId, processingCenter);
+			//THIS IS WHAT I WILL TEST WITH IN THE MEANTIME.
+			submitNewTransaction(storeIp, transactionId, processingCenter, path);
+
 			//var pc = cy.getElementById(processingCenter);
 			//Using Nan's code to get the shortest path...
             /***************************************************************************************************
@@ -582,9 +599,9 @@
         var animations = [];
         var transitionQueue = [];
         var nodePath = [];
-        function sleep(time) {
+        /*function sleep(time) {
             return new Promise((resolve) => setTimeout(resolve, time));
-        }
+        }*/
 
 	//Calculates the shortest path to the Processing Center
 	//var dijkstra = cy.elements().dijkstra(cy.getElementById(processingCenter), function (edge) {
@@ -784,9 +801,9 @@
 			var type1 = this.data('type1');
 			var type2 = this.data('type2');
 			var isActive = this.data('isActive');
-			console.log("source: " + this.data('source'));
-			console.log("target: " + this.data('target'));
-			console.log(type1 + " " + type2 + " " + isActive);
+			//console.log("source: " + this.data('source'));
+			//console.log("target: " + this.data('target'));
+			//console.log(type1 + " " + type2 + " " + isActive);
 
 			if (source != null && target != null) {
 				var DEST = "/Network/GetConnection?source="+source+"&target="+target+"&type1="+type1+"&type2="+type2;
@@ -798,7 +815,7 @@
 
 				})
                     .success(function (result) {
-                        console.log("has go through here");
+                        //console.log("has go through here");
 						$("#NodePopup").html(result);
 						$("#myModal").modal()
 						/*if (type == 2) {
