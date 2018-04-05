@@ -201,21 +201,21 @@
             for (var i in jsonData.regions[p].networkEntities) {
                  //if it is a store
                 if (jsonData.regions[p].networkEntities[i].type == 0) {
-                    NetworkElements.nodes.push({ data: { id: i, color: 'yellow', shape: 'octagon', parent: p, width: 30, height: 30, category: 0, queue:[], limit:5, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+					NetworkElements.nodes.push({ data: { id: i, color: 'yellow', shape: 'octagon', parent: p, width: 30, height: 30, category: 0, queue: [], lastQueue: [], limit:5, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                 }
                 //if it is a relay
                 else if (jsonData.regions[p].networkEntities[i].type == 1) {
                     if (jsonData.regions[p].networkEntities[i].isGateway) {//gateway represent other color
                         if (jsonData.regions[p].networkEntities[i].isActive) {
-                            NetworkElements.nodes.push({ data: { id: i, color: 'green', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+							NetworkElements.nodes.push({ data: { id: i, color: 'green', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], lastQueue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                         } else {
-                            NetworkElements.nodes.push({ data: { id: i, color: 'black', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+							NetworkElements.nodes.push({ data: { id: i, color: 'black', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], lastQueue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                         }
                     } else {
                         if (jsonData.regions[p].networkEntities[i].isActive) {//jsonData.relay[i].relayQueueLimit
-                            NetworkElements.nodes.push({ data: { id: i, color: '#4d88ff', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+							NetworkElements.nodes.push({ data: { id: i, color: '#4d88ff', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], lastQueue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                         } else {
-                            NetworkElements.nodes.push({ data: { id: i, color: 'black', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+							NetworkElements.nodes.push({ data: { id: i, color: 'black', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], lastQueue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                         }
                     }
                 } 
@@ -223,7 +223,7 @@
 		}
 		console.log("===========================================================================================");
         //add processing center which is from processingCenter
-        NetworkElements.nodes.push({ data: { id: jsonData.processingCenter.ip, color: 'red', shape: 'triangle', width: 70, height: 70, category: 2, queue: [], limit:1000, databaseId: jsonData.processingCenter.databaseId }, position: { x: jsonData.processingCenter.x, y: jsonData.processingCenter.y } });
+		NetworkElements.nodes.push({ data: { id: jsonData.processingCenter.ip, color: 'red', shape: 'triangle', width: 70, height: 70, category: 2, queue: [], lastQueue: [], limit:1000, databaseId: jsonData.processingCenter.databaseId }, position: { x: jsonData.processingCenter.x, y: jsonData.processingCenter.y } });
 
 		//console.log("===========================================================================================");
 		for (var q in jsonData.connections) {
@@ -244,19 +244,20 @@
             } else {
                 ConnectionTemp.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, color: '#990000', queue: [], source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: jsonData.connections[q].isActive, type1: jsonData.connections[q].type1, type2: jsonData.connections[q].type2 } });
             }
-		console.log(jsonData);
+		//console.log(jsonData);
 		//for(var q in jsonData.)
 		for (var trans in jsonData.transactions) {
-			console.log(jsonData.transactions[trans]);
+			//console.log(jsonData.transactions[trans]);
 			var t = {
 				id: jsonData.transactions[trans].Id,
 				path: [],
 				curIndex: 0,
+				lastRelay: null,
 				storeIp: jsonData.transactions[trans].storeIp
 			}
 			TransactionList[jsonData.transactions[trans].Id + ""] = t;
 		}
-		console.log(TransactionList);
+		//console.log(TransactionList);
 
         }
         
@@ -895,8 +896,8 @@
                         if (type == 2) {
                             NetworkElements.nodes.forEach(function (node) {
 								if (node.data.databaseId == id) {
-									
-                                    node.data.queue.forEach(function (item) {
+									//was queue
+                                    node.data.lastQueue.forEach(function (item) {
                                         $('<div>' + item + '</div>').appendTo($('#modalQueue'));
                                         $("#PCTransactionList").append('<div class="btn btn-default processTransactionBtn" id="' + item + '"onclick="processTransactionButton(' + item + ')">' +
                                             'Process transaction: ' + item +
@@ -918,7 +919,8 @@
 									console.log(node.data.queue);
 									var real = GetQueueList(node.data.id);
 									console.log(real);
-                                    node.data.queue.forEach(function (item) {
+									//was queue
+									node.data.lastQueue.forEach(function (item) {
                                         $('<div>' + item + '</div>').appendTo($('#modalQueue'));
                                     });
 
@@ -928,8 +930,9 @@
                         else if (type == 0) {
                             NetworkElements.nodes.forEach(function (node) {
                                 //console.log("node id: ", node.data.id, "id :", id);
-                                if (node.data.databaseId == id && node.data.category == type) {
-                                    node.data.queue.forEach(function (item) {
+								if (node.data.databaseId == id && node.data.category == type) {
+									//was queue
+									node.data.lastQueue.forEach(function (item) {
                                         $('<div>' + item + '</div>').appendTo($('#modalQueue'));
                                     });
 

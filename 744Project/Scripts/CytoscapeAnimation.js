@@ -133,6 +133,8 @@ function RemoveTransactionFromQueue(transId, currentIp) {
 	var removed = false;
 	var node = cy.getElementById(currentIp);
 	var queue = node._private.data.queue;
+
+	//remove from actual happens every time
 	var tempQueue = [];
 	for (var i in queue) {
 		if (!removed) {
@@ -154,24 +156,80 @@ function RemoveTransactionFromQueue(transId, currentIp) {
 	//console.log(node);
 }
 
-//adds the element to the queue
-function AddTransactionToQueue(transId, nodeIp) {
-	var node = cy.getElementById(nodeIp);
-	var queue = node._private.data.queue;
-	console.log("-------------ADDING TO QUEUE------------" + nodeIp);
+function RemoveFakeTransactionFromQueue(transId, currentIp) {
+	var transObj = TransactionList[transId + ""];
+
+	var removed = false;
+	var node = cy.getElementById(currentIp);
+	//getting fake queue (which is only used to show what elements are at what queue)
+	var queue = node._private.data.lastQueue;
+
+	//remove from actual happens every time
 	var tempQueue = [];
 	for (var i in queue) {
-		console.log("EXISTING QUEUE");
-		console.log(queue);
+		if (!removed) {
+			if (queue[i] != transId) {
+				tempQueue.push(queue[i]);
+			}
+			else {
+				removed = true;
+			}
+		}
+		else {
+			tempQueue.push(queue[i]);
+		}
+	}
+	//console.log(tempQueue);
+	//console.log("node change queue");
+	node.data('lastQueue', tempQueue);
+	console.log("-------------REMOVED------------");
+	//console.log(node);
+}
+
+//adds the element to the queue
+function AddTransactionToQueue(transId, nodeIp) {
+
+	//basic add, happens every time.
+	var node = cy.getElementById(nodeIp);
+	var queue = node._private.data.queue;
+	var tempQueue = [];
+	for (var i in queue) {
+	//	console.log("EXISTING QUEUE");
 		tempQueue.push(queue[i]); //was tempQueue.push(i);
 	}
 	tempQueue.push(transId);
-	//console.log(tempQueue);
-	//console.log("node change queue");
 	node.data('queue', tempQueue);
-	console.log("-------------DONE------------");
-	//console.log(node);
+
+	// fake add which updates the lastQueue. Also has to update the transObj
+	var ipAsString = nodeIp + "";
+	if (ipAsString.length < 16) {
+		var transObj = TransactionList[transId + ""];
+		var resetIp = transObj.lastRelay; // the ip that needs to remove this transaction from its lastQueue
+		if (resetIp != null) {// it could be null in the initial base case
+			RemoveFakeTransactionFromQueue(transId, resetIp);
+		}
+		//now update the object and the new relay's lastQueue
+		AddFakeTransactionToQueue(transId, nodeIp);
+		transObj["lastRelay"] = nodeIp;
+	}
+	
 }
+//adds the element to the lastQueue (fake representation queue for UI)
+function AddFakeTransactionToQueue(transId, nodeIp) {
+
+	//basic add, happens every time.
+	var node = cy.getElementById(nodeIp);
+	var queue = node._private.data.lastQueue;
+	var tempQueue = [];
+	for (var i in queue) {
+		//	console.log("EXISTING QUEUE");
+		tempQueue.push(queue[i]); //was tempQueue.push(i);
+	}
+	tempQueue.push(transId);
+	node.data('lastQueue', tempQueue);
+
+}
+
 //checks if the current element (ip) is being animated
 function IsElementAnimated(nodeIp) {
 	var node = cy.getElementById(nodeIp);
@@ -179,10 +237,10 @@ function IsElementAnimated(nodeIp) {
 }
 //checks if the quee of the given IP is full.
 function CheckIfQueueIsFull(nodeIp) {
-	console.log(nodeIp);
+	//console.log(nodeIp);
 	var node = cy.getElementById(nodeIp);
-	console.log("found elemnt: ");
-	console.log(node);
+	//console.log("found elemnt: ");
+	//console.log(node);
 	//check if limit has not been reached
 	if (node._private.data.queue.length < node._private.data.limit - 1) {
 		return false;
@@ -194,13 +252,13 @@ function CheckIfQueueIsFull(nodeIp) {
 //checks the head of the queue. Returns transactionId or null
 function GetHeadOfQueue(nodeIp) {
 	var node = cy.getElementById(nodeIp);
-	console.log("contents of queue, getting head");
-	console.log(node._private.data.queue);
+	//console.log("contents of queue, getting head");
+	//console.log(node._private.data.queue);
 	if (node._private.data.queue.length < 1) {
 		return null;
 	}
 	else {
-		console.log(node._private.data.queue[0]);
+	//	console.log(node._private.data.queue[0]);
 		return node._private.data.queue[0];
 	}
 }
