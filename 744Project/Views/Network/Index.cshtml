@@ -49,7 +49,7 @@
 </div>
 
 <div class="panel panel-default" style=" height: 500px; width:100%;">
-    <div id="cy" class="panel-body" style="height: 500px; width:100%;">
+    <div id="cy" class="panel-body" style="height: 500px; width:100%; padding:0px;">
     </div>
 </div>
 
@@ -58,13 +58,15 @@
     <div class="panel-body">
         <div class="row">
             <table class="table table-bordered">
-                <tr><th>Transaction Id</th><th>Store Ip</th><th>Encrypted Amount</th><th>Action</th></tr>
+                <tr><th>Transaction Id</th><th>Store Ip</th><th>Encrypted Amount</th><th>Status</th><th>Processing Result</th><th>Action</th></tr>
                 @foreach (var trans in Model.transactions)
                 {
                     <tr>
                         <td>@trans.Id</td>
                         <td>@trans.storeIp</td>
                         <td>@trans.transactionAmount</td>
+						<td class="status" id="@trans.Id">Not Sent</td>
+						<td class="pstatus" id="@trans.Id">N/A</td>
                         <td id="@trans.Id"><button class="SendTransaction btn btn-default" id="@trans.storeIp">Send</button></td>
                     </tr>
                 }
@@ -201,7 +203,7 @@
             for (var i in jsonData.regions[p].networkEntities) {
                  //if it is a store
                 if (jsonData.regions[p].networkEntities[i].type == 0) {
-					NetworkElements.nodes.push({ data: { id: i, color: 'yellow', shape: 'octagon', parent: p, width: 30, height: 30, category: 0, queue: [], lastQueue: [], limit:5, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+					NetworkElements.nodes.push({ data: { id: i, color: 'yellow', shape: 'octagon', parent: p, width: 30, height: 30, category: 0, queue: [], lastQueue: [], limit: 5, isActive: true, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                 }
                 //if it is a relay
                 else if (jsonData.regions[p].networkEntities[i].type == 1) {
@@ -223,7 +225,7 @@
 		}
 		console.log("===========================================================================================");
         //add processing center which is from processingCenter
-		NetworkElements.nodes.push({ data: { id: jsonData.processingCenter.ip, color: 'red', shape: 'triangle', width: 70, height: 70, category: 2, queue: [], lastQueue: [], limit:1000, databaseId: jsonData.processingCenter.databaseId }, position: { x: jsonData.processingCenter.x, y: jsonData.processingCenter.y } });
+		NetworkElements.nodes.push({ data: { id: jsonData.processingCenter.ip, color: 'red', shape: 'triangle', width: 70, height: 70, category: 2, queue: [], lastQueue: [], limit:1000, isActive: true, databaseId: jsonData.processingCenter.databaseId }, position: { x: jsonData.processingCenter.x, y: jsonData.processingCenter.y } });
 
 		//console.log("===========================================================================================");
 		for (var q in jsonData.connections) {
@@ -253,6 +255,7 @@
 				path: [],
 				curIndex: 0,
 				lastRelay: null,
+				processed: false,
 				storeIp: jsonData.transactions[trans].storeIp
 			}
 			TransactionList[jsonData.transactions[trans].Id + ""] = t;
@@ -558,7 +561,8 @@
              let pathQueue = [];
              pathQueue = shortestPath(graph, sourceIP, destinationIP);
              if (pathQueue == null) {
-                 return alert("Way is block, no way to Processing center");
+                // return alert("Way is block, no way to Processing center");
+				 return null;
              } else {
                  return getCompletedPath(pathQueue);
              }
@@ -587,37 +591,23 @@
             queue.push(transitionID);
             pathQueue = findShortestPath(storeIp, ProcessingCenterIp);
             console.log("node ip queue ", pathQueue);
-            backQueue = pathQueue.slice(0);
+            //backQueue = pathQueue.slice(0);
             //console.log("pathqueue.length,", pathQueue.length);
 			//OLD ANIMATION?
             //generateAnimation(storeIp, pathQueue, pathQueue.length);
 
 			var transactionId = $(this).parent().attr("id");
-			
+			if (pathQueue == null) {
+				UpdateTransactionStatus("No Path, Dropped", transactionId)
+				return;
+			}
+
+			UpdateTransactionStatus("Sent", transactionId);
 
 			//THIS IS WHAT I WILL TEST WITH IN THE MEANTIME.
 			
 			submitNewTransaction(storeIp, transactionId, processingCenter, pathQueue);
-
-			//var pc = cy.getElementById(processingCenter);
-			//Using Nan's code to get the shortest path...
-            /***************************************************************************************************
-            Abe'test code.
-
-             var graph = makeAGraph();
-			var result = shortestPath(graph, storeIp, processingCenter);
-			console.log("Nans path");
-			console.log(result);
-             ****************************************************************************************************/
-
-
-			//submitNewTransaction(cy.getElementById(storeIp), transactionId, processingCenter);
-
-
-			//TEMPORARY TO DEMONSTRATE HOW TO USE THE PROCESS TRANSACTION FUNCTIONALITY
-			//This just sends the transaction straight to the processingCenterQueue, where it can then be processed
-			var transactionId = $(this).parent().attr("id");
-			processingCenterQueue.push(transactionId);
+			
 		});
 
 
@@ -897,7 +887,7 @@
                             NetworkElements.nodes.forEach(function (node) {
 								if (node.data.databaseId == id) {
 									//was queue
-                                    node.data.lastQueue.forEach(function (item) {
+                                    node.data.queue.forEach(function (item) {
                                         $('<div>' + item + '</div>').appendTo($('#modalQueue'));
                                         $("#PCTransactionList").append('<div class="btn btn-default processTransactionBtn" id="' + item + '"onclick="processTransactionButton(' + item + ')">' +
                                             'Process transaction: ' + item +
@@ -1171,7 +1161,9 @@
 						$("#NodePopup").html("");
 						$("#NodePopup").modal('hide');
 						console.log(response.responseText);
-						printResponse(response.responseText);
+						//printResponse(response.responseText);
+						UpdateTransactionProcessed(response.responseText, event);
+						UpdateTransactionStatus("On the way back", event);
 					}
 					//if the transaction failed.
 					else {
@@ -1179,8 +1171,21 @@
 						$("#NodePopup").html("");
 						$("#NodePopup").modal('hide');
 						console.log(response.responseText);
-						printResponse(response.responseText)
+						//printResponse(response.responseText)
+						UpdateTransactionProcessed(response.responseText, event);
+						UpdateTransactionStatus("On the way back", event);
 					}
+					//remove(processingCenterQueue, event);
+
+					//new sending transaction back to store:
+					var transObj = TransactionList[event + ""];
+					transObj.curIndex = 0;
+					transObj.processed = true;
+					var path = findShortestPath(transObj.storeIp, ProcessingCenterIp); // the path back
+					var reversed = path.reverse();
+					reversed.shift();
+					RemoveTransactionFromQueue(event, ProcessingCenterIp)
+					submitNewTransaction(reversed[0], event, null, reversed);
 				},
 				failure: function (errMsg) {
 					console.log("bad bug");
@@ -1191,12 +1196,12 @@
 			$("#NodePopup").html("");
 			$('#myModal').modal('hide')
 
-			remove(processingCenterQueue, event);
+			
 
             //here is where you sent animation back
-            var backPath = backQueue.reverse();
-            console.log("backTo store, look at the path : ", backPath,"back");
-            backToStore("192.168.0.1", backPath, backPath.length);
+           // var backPath = backQueue.reverse();
+            //console.log("backTo store, look at the path : ", backPath,"back");
+            //backToStore("192.168.0.1", backPath, backPath.length);
 		}
 
 		function printResponse(response) {

@@ -37,10 +37,28 @@ function SendTransaction(transactionId, transObj, storeIp) {
 
 //this function handles the physical sending of a transaction to a node
 function SendToNode(currentIp, pathIndex, transactionId, transObj, lastIp) {
+	//base base case where the pathIndex is out of bounds (called on completion of route).
+	//if it is back to the store it started at, then remove it from the queue and end.
+	if (pathIndex >= transObj.path.length && transObj.processed) {
+		RemoveTransactionFromQueue(transactionId, transObj.storeIp);
+		RemoveFakeTransactionFromQueue(transactionId, transObj.storeIp);
+		UpdateTransactionStatus("Returned To Store", transactionId)
+		return;
+	} 
+	//if the node is inactive, drop the transaction
+	if (!GetActiveStatus(currentIp)) {
+		RemoveTransactionFromQueue(transactionId, transObj.storeIp);
+		RemoveFakeTransactionFromQueue(transactionId, transObj.lastRelay);
+		UpdateTransactionStatus("Dropped Transaction", transactionId);
+		return;
+	}
+
 	var result = CheckIfQueueIsFull(currentIp);
 	//base case, the queue is full and the transaction is dropped
 	if (result) {
-		alert("Dropped transaction, queue is full");
+		RemoveTransactionFromQueue(transactionId, transObj.storeIp);
+		RemoveFakeTransactionFromQueue(transactionId, transObj.lastRelay);
+		UpdateTransactionStatus("Dropped Transaction (full Queue)", transactionId);
 		return;
 	}
 	//Alternate case, the element is actually inactive, so the transaction should be dropped
@@ -56,6 +74,13 @@ function SendToNode(currentIp, pathIndex, transactionId, transObj, lastIp) {
 	if (isHead  && !isAnimated ) { //still check the next To-Queue if it's open??? can it take it?
 		console.log("animate the item");
 		AnimateItem(transactionId, currentIp, transObj, pathIndex);
+		return;
+	}
+
+	//case where it is puased and just sent, if it makes it to here, add it to resume animation stuff
+	if (!isAnimated && pathIndex <= 1) {
+		AddToResumeAnimationList(transactionId, currentIp, transObj, pathIndex);
+		return;
 	}
 }
 
@@ -270,6 +295,22 @@ function GetQueueList(nodeIp) {
 	return node._private.data.queue;
 }
 
+function GetActiveStatus(nodeIp) {
+	var node = cy.getElementById(nodeIp);
+	//console.log("contents of queue");
+	//console.log(node._private.data.queue);
+	return node._private.data.isActive;
+}
 
+
+// update the innerHtml of the given transaction
+function UpdateTransactionStatus(Message, transactionId){
+	var div = $(".status#" + transactionId).html(Message + "");
+}
+
+function UpdateTransactionProcessed(Message, transactionId) {
+	//var div =
+		$("td#"+transactionId+".pstatus").html(Message + "");
+}
 
 
