@@ -252,7 +252,7 @@ namespace _744Project.Controllers
             string strType1 = getTypeToString(ip1Type);
             string strType2 = getTypeToString(ip2Type);
 
-            ViewBag.SuccessMessage = strType1 + ": " + ip1 + " has been successfully connected to " + strType2 + ": " + ip2;
+            ViewBag.SuccessMessage = strType1 + ": (" + ip1 + ") has been successfully connected to " + strType2 + ": (" + ip2+")";
             return View();
 
         }
@@ -289,6 +289,40 @@ namespace _744Project.Controllers
             }
             connect.Close();
             return id;
+        }
+        public Boolean relayPCAreConnected(string id1, string id2, out string tableId)
+        {
+            Boolean connected = false;
+            tableId = "";
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select count(*) from RelayToProcessCenterConnections where relayID = '" + id1 + "' and processCenterID = '" + id2 + "' ";
+            int count1 = Convert.ToInt32(cmd.ExecuteScalar());
+            cmd.CommandText = "select count(*) from RelayToProcessCenterConnections where relayID = '" + id2 + "' and processCenterID = '" + id1 + "' ";
+            int count2 = Convert.ToInt32(cmd.ExecuteScalar());
+            // > 0 means they exist
+            if (count1 > 0 && count2 == 0)
+            {
+                cmd.CommandText = "select relayToProcessCenterConnectionID from RelayToProcessCenterConnections where relayID = '" + id1 + "' and processCenterID = '" + id2 + "' ";
+                tableId = cmd.ExecuteScalar().ToString();
+                connected = true;
+            }
+            else if (count1 == 0 && count2 > 0)
+            {
+                cmd.CommandText = "select relayToProcessCenterConnectionID from RelayToProcessCenterConnections where relayID = '" + id2 + "' and processCenterID = '" + id1 + "' ";
+                tableId = cmd.ExecuteScalar().ToString();
+                connected = true;
+            }
+            else if (count1 > 0 && count2 > 0)
+            {
+                //get the number of rows in the RelayToProcessCenterConnections table:
+                cmd.CommandText = "select count(*) from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY relayToProcessCenterConnectionID ASC) ,* FROM RelayToProcessCenterConnections) as t";
+                int totalRows = Convert.ToInt32(cmd.ExecuteScalar());
+                //Select the last relayToProcessCenterConnectionID:
+                cmd.CommandText = "select relayToProcessCenterConnectionID from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY relayToProcessCenterConnectionID ASC) ,* FROM RelayToProcessCenterConnections) as t where rowNum = '" + totalRows + "' ";
+                tableId = cmd.ExecuteScalar().ToString();
+                connected = true;
+            }
+            return connected;
         }
         public Boolean areTheyConnected(string id1, string id2, out string relayConnectionId)
         {
@@ -342,16 +376,38 @@ namespace _744Project.Controllers
             //if IP1 = gateway and IP2 = PC
             else if (ip1Type == 2 && ip2Type == 1) 
             {
-                cmd.CommandText = "insert into RelayToProcessCenterConnections (relayID, processCenterID, isActive, relayToProcessCenterConnectionWeight) " +
-                    "values('" + id1 + "', '" + id2 + "', '" + true + "', '"+weight+"')";
-                cmd.ExecuteScalar();
+                //check if the relay to PC are already connected:
+                Boolean relayToPCConnected = relayPCAreConnected(id1, id2, out string relayToProcessCenterConnectionId);
+                if (relayToPCConnected)
+                {
+                    ModelState.AddModelError("ip2", "The Relay and Process Center are already connected, but their connection wight has been successfully changed");
+                    cmd.CommandText = "update RelayToProcessCenterConnections set relayToProcessCenterConnectionWeight = '" + weight + "' where relayToProcessCenterConnectionID = '" + relayToProcessCenterConnectionId + "' ";
+                    cmd.ExecuteScalar();
+                }
+                else
+                {
+                    cmd.CommandText = "insert into RelayToProcessCenterConnections (relayID, processCenterID, isActive, relayToProcessCenterConnectionWeight) " +
+                        "values('" + id1 + "', '" + id2 + "', '" + true + "', '" + weight + "')";
+                    cmd.ExecuteScalar();
+                }
             }
             //if IP1 = PC and IP2 = gateway
             else if (ip1Type == 1 && ip2Type == 2)
             {
-                cmd.CommandText = "insert into RelayToProcessCenterConnections (relayID, processCenterID, isActive, relayToProcessCenterConnectionWeight) " +
+                //check if the relay to PC are already connected:
+                Boolean relayToPCConnected = relayPCAreConnected(id1, id2, out string relayToProcessCenterConnectionId);
+                if (relayToPCConnected)
+                {
+                    ModelState.AddModelError("ip2", "The Relay and Process Center are already connected, but their connection wight has been successfully changed");
+                    cmd.CommandText = "update RelayToProcessCenterConnections set relayToProcessCenterConnectionWeight = '" + weight + "' where relayToProcessCenterConnectionID = '" + relayToProcessCenterConnectionId + "' ";
+                    cmd.ExecuteScalar();
+                }
+                else
+                {
+                    cmd.CommandText = "insert into RelayToProcessCenterConnections (relayID, processCenterID, isActive, relayToProcessCenterConnectionWeight) " +
                     "values('" + id2 + "', '" + id1 + "', '" + true + "', '" + weight + "')";
-                cmd.ExecuteScalar();
+                    cmd.ExecuteScalar();
+                }
             }
             //if IP1 = store and IP2 = relay
             else if (ip1Type == 3 && ip2Type == 2)

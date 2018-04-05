@@ -1,0 +1,62 @@
+﻿@model _744Project.ViewModels.RegionsRelaysStoresViewModel
+@{
+    ViewBag.Title = "Update";
+}
+
+<div class="container">
+    <h2>Update</h2>
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    <h4>Modify Queue Limits</h4>
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+
+                    <div class="form-group">
+                        @Html.Label("Relay IP: ", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("ip", new SelectList(ViewBag.ip, ""), htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessage("relayIp", "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    @*Queue Limit*@
+                    <div class="form-group">
+                        @Html.Label("Queue Limit: ", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.Editor("queueLimit", new { htmlAttributes = new { @class = "form-control", @type = "number", @step = "any", @min = "1", @max = "500", autocomplete = "on" } })
+                            @Html.ValidationMessage("queueLimit", "", new { @class = "text-danger" })
+                            <h4 style="color:green">@ViewBag.SuccessMessage</h4>
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Create" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div>
+                <a href="../EditNetwork"> Back to Network Options </a>
+            </div>
+
+            @section Scripts {
+                @Scripts.Render("~/bundles/jqueryval")
+            }
+
+
+        </div>
+    </div>
+</div>
