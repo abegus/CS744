@@ -122,15 +122,49 @@ namespace _744Project.Controllers
             //get the number of rows in the Relays table:
             cmd.CommandText = "select count(*) from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY relayID ASC) ,* FROM Relays) as t";
             string relayId = cmd.ExecuteScalar().ToString();
+            //check if id is the last id
+            string tempId = checkIfIdIsTheLast(relayId, 2); //2 = Realy, 3 = Store.
+            if (!tempId.Equals(relayId))//if they are different:
+            {
+                relayId = tempId;
+            }
             connect.Close();
             return relayId;
+        }
+        public string checkIfIdIsTheLast(string id, int type)
+        {
+            string strLastId = "";
+            int tempId = 0;
+            int total = Convert.ToInt32(id);
+            SqlCommand cmd = connect.CreateCommand();
+            for (int i = 1; i <= total; i++)
+            {
+                if (type == 2)//if it's a Relay
+                {
+
+                    cmd.CommandText = "select relayId from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY relayID ASC) ,* FROM Relays) as t where rowNum = '" + i + "' ";
+                    int newId = Convert.ToInt32(cmd.ExecuteScalar());
+                    if (newId > tempId)
+                        tempId = newId;
+
+                }
+                else if (type == 3)//if it's a Store
+                {
+                    cmd.CommandText = "select storeId from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY storeId ASC) ,* FROM Stores) as t where rowNum = '" + i + "' ";
+                    int newId = Convert.ToInt32(cmd.ExecuteScalar());
+                    if (newId > tempId)
+                        tempId = newId;
+                }
+            }
+            strLastId = tempId.ToString();
+            return strLastId;
         }
         // POST: Relays/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "relayID,relayName,relayIP,regionID,isGateway,relayQueue,isActive")] Relay relay)
+        public ActionResult Create([Bind(Include = "relayID,relayName,relayIP,regionID,isGateway,relayQueue,isActive")] Relay relay, int? weight)
         {
             
             Boolean thereIsAnError = false;
@@ -187,6 +221,18 @@ namespace _744Project.Controllers
                 ModelState.AddModelError("relayQueue", "The Relay Queue Limit must be from 1 to 500");
                 thereIsAnError = true;
             }
+            //check if weight == NULL
+            if (string.IsNullOrWhiteSpace(weight.ToString()))
+            {
+                ModelState.AddModelError("weight", "The Weight field is required");
+                thereIsAnError = true;
+            }
+            //check if weight < 1 || > 500
+            else if (weight < 1 || weight > 500)
+            {
+                ModelState.AddModelError("weight", "The Weight must be from 1 to 500");
+                thereIsAnError = true;
+            }
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             if (thereIsAnError)
             {
@@ -195,7 +241,25 @@ namespace _744Project.Controllers
             }
             db.Relays.Add(relay);
             db.SaveChanges();
+            saveRelayToRelay(relay.relayID, relay.regionID, weight);
             return RedirectToAction("Index");            
+        }
+        public void saveRelayToRelay(string relayId, int regionId, int? weight)
+        {
+            string relay_relayID = relayId;
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            //find gateway for the selected region:
+            cmd.CommandText = "select gatewayIP from regions where regionId = '"+regionId+"' ";
+            string gatewayIp = cmd.ExecuteScalar().ToString();
+            //find the relayID for the gateway:
+            cmd.CommandText = "select relayID from relays where relayIP like '"+gatewayIp+"' ";
+            string relay2_relayID = cmd.ExecuteScalar().ToString();
+            //insert into table RelayToRelays:
+            cmd.CommandText = "insert into RelayToRelayConnections(relayWeight, relay_relayID, relay2_relayID, isActive) " +
+                "values ('" + weight + "', '" + relay_relayID + "', '" + relay2_relayID + "', '" + true + "') ";
+            cmd.ExecuteScalar();
+            connect.Close();
         }
 
         // GET: Relays/Edit/5

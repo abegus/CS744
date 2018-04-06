@@ -19,12 +19,12 @@
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
                 @*<div class="form-group">
-                     @Html.LabelFor(model => model.relayID, htmlAttributes: new { @class = "control-label col-md-2" })
-                     <div class="col-md-10">
-                         @Html.EditorFor(model => model.relayID, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.relayID, "", new { @class = "text-danger" })
-                    </div>
-                </div>*@
+             @Html.LabelFor(model => model.relayID, htmlAttributes: new { @class = "control-label col-md-2" })
+             <div class="col-md-10">
+                 @Html.EditorFor(model => model.relayID, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.relayID, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.relayIP, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -53,14 +53,14 @@
                 </div>
 
                 @*<div class="form-group">
-                    @Html.LabelFor(model => model.isGateway, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        <div class="checkbox">
-                            @Html.EditorFor(model => model.isGateway)
-                            @Html.ValidationMessageFor(model => model.isGateway, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>*@
+            @Html.LabelFor(model => model.isGateway, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.isGateway)
+                    @Html.ValidationMessageFor(model => model.isGateway, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>*@
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.relayQueue, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -71,14 +71,25 @@
                 </div>
 
                 @*<div class="form-group">
-                    @Html.LabelFor(model => model.isActive, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.isActive, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.isActive)
+                    @Html.ValidationMessageFor(model => model.isActive, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>*@
+
+                @*Weight*@
+                <div class="form-group">
+                    @Html.Label("Weight to Gateway", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        <div class="checkbox">
-                            @Html.EditorFor(model => model.isActive)
-                            @Html.ValidationMessageFor(model => model.isActive, "", new { @class = "text-danger" })
-                        </div>
+                        @Html.Editor("weight", new { htmlAttributes = new { @class = "form-control", @type = "number", @step = "any", @min = "1", @max = "500", autocomplete = "on" } })
+                        @Html.ValidationMessage("weight", "", new { @class = "text-danger" })
+                        <h4 style="color:green">@ViewBag.SuccessMessage</h4>
                     </div>
-                </div>*@
+                </div>
+
 
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
