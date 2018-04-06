@@ -209,15 +209,15 @@
                 else if (jsonData.regions[p].networkEntities[i].type == 1) {
                     if (jsonData.regions[p].networkEntities[i].isGateway) {//gateway represent other color
                         if (jsonData.regions[p].networkEntities[i].isActive) {
-							NetworkElements.nodes.push({ data: { id: i, color: 'green', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], lastQueue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+							NetworkElements.nodes.push({ data: { id: i, color: 'green', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, gateway: true, queue: [], lastQueue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                         } else {
-							NetworkElements.nodes.push({ data: { id: i, color: 'black', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], lastQueue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+							NetworkElements.nodes.push({ data: { id: i, color: 'black', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, gateway: true, queue: [], lastQueue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                         }
                     } else {
                         if (jsonData.regions[p].networkEntities[i].isActive) {//jsonData.relay[i].relayQueueLimit
-							NetworkElements.nodes.push({ data: { id: i, color: '#4d88ff', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], lastQueue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+							NetworkElements.nodes.push({ data: { id: i, color: '#4d88ff', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, gateway: false, queue: [], lastQueue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                         } else {
-							NetworkElements.nodes.push({ data: { id: i, color: 'black', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], lastQueue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+							NetworkElements.nodes.push({ data: { id: i, color: 'black', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, gateway: false, queue: [], lastQueue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                         }
                     }
                 } 
@@ -1000,24 +1000,31 @@
 			$("#NodePopup").html("");
 			$('#myModal').modal('hide')
 		}
-        function changeColor(id, type, isActive) {
+		function changeColor(id, type, isActive) {
+			var node = cy.getElementById(id);
+			node.data('isActive', isActive);
+			
             if (type == "relay") {
                 if (isActive) {
                     console.log("==============================");
-                    cy.getElementById(id).classes('liveRelay');
+					//cy.getElementById(id).classes('liveRelay');
+					AnimationColorChange(id, '#4d88ff', 'black',30);
                 } else {
                     console.log("+++++++++++++++++++++++++++++++");
-                    cy.getElementById(id).classes('block');
+					//cy.getElementById(id).classes('block');
+					AnimationColorChange(id, 'black', 'black',30);
                 }
             } else if (type == "gateway") {
                 console.log("gateway active: ", isActive);
                 console.log("change color id: ", id);
                 if (isActive) {
                     console.log("==============================");
-                    cy.getElementById(id).classes('liveGate');
+					//cy.getElementById(id).classes('liveGate');
+					AnimationColorChange(id, 'green', 'green',30);
                 } else {
                     console.log("+++++++++++++++++++++++++++++++");
-                    cy.getElementById(id).classes('block');
+					//cy.getElementById(id).classes('block');
+					AnimationColorChange(id, 'black', 'black', 30);
                 }
             } else {
                 console.log("change edge id: ", id);
@@ -1025,13 +1032,42 @@
                 console.log("change edge isActive: ", isActive);
                 if (isActive) {
                     console.log("==============================");
-                    cy.getElementById(id).classes('edge');
+					//cy.getElementById(id).classes('edge');
+					AnimationColorChange(id, 'grey', 'grey',3);
                 } else {
                     console.log("+++++++++++++++++++++++++++++++");
-                    cy.getElementById(id).classes('block');
+					//cy.getElementById(id).classes('block');
+					AnimationColorChange(id, '#990000', '#990000',3);
                 }
             }
-        }
+		}
+
+		function AnimationColorChange(currentIp, color, lineColor,size) {
+			var ann = cy.getElementById(currentIp).animation({
+				style: {
+					'background-color': color,
+					'line-color': lineColor,
+					'width': size,
+					'height': size
+				},
+				duration: 1
+			});
+
+			//currentAnimations.push(ann);
+
+			ann.play();/*.promise('completed').then(function () {
+				ann.reverse().rewind().play().promise('completed').then(function () {
+					currentAnimations.pop();
+					TransactionList[transId + ""]["curIndex"]++;//transObj["curIndex"]++;
+					pathIndex++;
+					var nextIp = transObj.path[pathIndex];
+					SendToNode(nextIp, pathIndex, transId, transObj, pathIndex, currentIp);
+					RemoveTransactionFromQueue(transId, currentIp);
+					WakeUpNodeHead(currentIp);
+				});
+			});*/
+		}
+
 		// this is the activate / inactivate
 		function Activate(id, type, ip) { //type 1 is relay
 			//console.log("testing 1 2 3");
@@ -1067,42 +1103,19 @@
                         console.log("After the NetworkElement.isActive is changed: " + node.data.isActive);
                         node.data.isActive = !node.data.isActive;
                         console.log("After the NetworkElement.isActive is changed: " + node.data.isActive);
-                        changeIsActive = node.data.isActive;
-                        //if (node.data.limit > 50) {
-                        //    changeType = "gateway";
-                        //} else {
-                        //    changeType = "relay";
-                        //}
-
-                        //if (changeType == "gateway") {
-                        //    if (changeIsActive) {
-                        //        node.data.color = 'green';
-                        //    } else {
-                        //        node.data.color = 'black';
-                        //    }
-                        //}
-                        //if (changeType == "relay") {
-                        //    if (changeIsActive) {
-                        //        node.data.color = '#4d88ff';
-                        //    } else {
-                        //        node.data.color = 'black';
-                        //    }
-                        //}
-						//if (node.data.isActive) {
-						//	//node.data.isActive = false;
-						//}
-						//else {
-						//	//node.data.isActive = true;
-						//}
-						//node.data.isActive = !node.data.isActive;
-						//console.log("After the NetworkElement.isActive is changed: " + node.data.isActive);
-						//node.data.color = 'black';
-						//console.log(" IP : " + ip + " is not active/inactive in js");
+						changeIsActive = node.data.isActive;
+						changeType = node.data.gateway;
 					}
 				});
 
                 //here is where you change how something looks if it is active or inactive after the call..
-                changeColor(changeID, changeType, changeIsActive);
+				if (changeType) {
+					changeColor(changeID, 'gateway', changeIsActive);
+				}
+				else {
+					changeColor(changeID, 'relay', changeIsActive);
+				}
+                
 
 				//this ajax call updates the database
 				var url = '/Network/SaveNoteInformation';
@@ -1182,6 +1195,10 @@
 					transObj.curIndex = 0;
 					transObj.processed = true;
 					var path = findShortestPath(transObj.storeIp, ProcessingCenterIp); // the path back
+					if (path == null) {
+						UpdateTransactionStatus("No path back", event);
+						return;
+					}
 					var reversed = path.reverse();
 					reversed.shift();
 					RemoveTransactionFromQueue(event, ProcessingCenterIp)

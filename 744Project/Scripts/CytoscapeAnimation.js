@@ -2,22 +2,8 @@
 var currentAnimations = [];
 var resumeAnimationList = [];
 
-//should be this but nans code is bugged...
-//function submitNewTransaction(nodeId, transactionId, pc){
+//Entry function of sending a transaction.
 function submitNewTransaction(nodeId, transactionId, pc, path) {
-
-	/*var graph = makeAGraph();
-	console.log("IN javascript file");
-	console.log("Node: " + nodeId + ", transaction: " + transactionId + ", pc: " + pc);
-	console.log(graph);*/
-
-	//var result = shortestPath(graph, nodeId, pc);
-	//console.log("Nans path");
-	//console.log(result);
-	//if (result.err != null) {
-	//	alert("No path available");
-	//}
-
 	console.log("=========Sending new transaction: " + transactionId + "===========");
 	console.log(path);
 	var transObj = TransactionList[transactionId + ""];
@@ -27,7 +13,6 @@ function submitNewTransaction(nodeId, transactionId, pc, path) {
 	SendTransaction(transactionId, transObj, nodeId);
 	console.log("================================");
 }
-
 
 //This function initiates the sending of a Transaction
 function SendTransaction(transactionId, transObj, storeIp) {
@@ -61,8 +46,6 @@ function SendToNode(currentIp, pathIndex, transactionId, transObj, lastIp) {
 		UpdateTransactionStatus("Dropped Transaction (full Queue)", transactionId);
 		return;
 	}
-	//Alternate case, the element is actually inactive, so the transaction should be dropped
-
 
 	//Change state, add to queue...
 	AddTransactionToQueue(transactionId, currentIp);
@@ -135,6 +118,12 @@ function AnimateItem(transId, currentIp, transObj, pathIndex) {
 	});
 }
 
+
+
+
+/********************************************************************************************************************
+ *							HELPER METHODS 
+ ********************************************************************************************************************/
 
 //adds an object to the list of animations to wake up upon pressing the play button.
 function AddToResumeAnimationList(transId, currentIp, transObj, pathIndex) {
