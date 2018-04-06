@@ -325,6 +325,12 @@ namespace _744Project.Controllers
             ////Select the last store ID:
             //cmd.CommandText = "select storesID from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY storeID ASC) ,* FROM Stores) as t where rowNum = '" + totalRows + "' ";
             string storeId = cmd.ExecuteScalar().ToString();
+            //check if id is the last id
+            string tempId = checkIfIdIsTheLast(storeId, 3); //2 = Realy, 3 = Store.
+            if (!tempId.Equals(storeId))//if they are different:
+            {
+                storeId = tempId;
+            }
             connect.Close();
             return storeId;
         }
@@ -336,8 +342,42 @@ namespace _744Project.Controllers
             //get the number of rows in the Relays table:
             cmd.CommandText = "select count(*) from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY relayID ASC) ,* FROM Relays) as t";            
             string relayId = cmd.ExecuteScalar().ToString();
+            //check if id is the last id
+            string tempId = checkIfIdIsTheLast(relayId, 2); //2 = Realy, 3 = Store.
+            if (!tempId.Equals(relayId))//if they are different:
+            {
+                relayId = tempId;
+            }
             connect.Close();
             return relayId;
+        }
+        public string checkIfIdIsTheLast(string id, int type)
+        {
+            string strLastId = "";
+            int tempId = 0;
+            int total = Convert.ToInt32(id);
+            SqlCommand cmd = connect.CreateCommand();
+            for (int i = 1; i <= total; i++)
+            {
+                if (type == 2)//if it's a Relay
+                {
+
+                    cmd.CommandText = "select relayId from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY relayID ASC) ,* FROM Relays) as t where rowNum = '" + i + "' ";
+                    int newId = Convert.ToInt32(cmd.ExecuteScalar());
+                    if (newId > tempId)
+                        tempId = newId;
+
+                }
+                else if (type == 3)//if it's a Store
+                {
+                    cmd.CommandText = "select storeId from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY storeId ASC) ,* FROM Stores) as t where rowNum = '" + i + "' ";
+                    int newId = Convert.ToInt32(cmd.ExecuteScalar());
+                    if (newId > tempId)
+                        tempId = newId;
+                }
+            }
+            strLastId = tempId.ToString();
+            return strLastId;
         }
         public int getLastRegionId()
         {

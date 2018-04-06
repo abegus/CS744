@@ -122,11 +122,44 @@ namespace _744Project.Controllers
             //get the number of rows in the Relays table:
             cmd.CommandText = "select count(*) from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY storeID ASC) ,* FROM Stores) as t";
             string storeId = cmd.ExecuteScalar().ToString();
+            //check if id is the last id
+            string tempId = checkIfIdIsTheLast(storeId, 3); //2 = Realy, 3 = Store.
+            if (!tempId.Equals(storeId))//if they are different:
+            {
+                storeId = tempId;
+            }
             connect.Close();
             return storeId;
         }
 
+        public string checkIfIdIsTheLast(string id, int type)
+        {
+            string strLastId = "";
+            int tempId = 0;
+            int total = Convert.ToInt32(id);
+            SqlCommand cmd = connect.CreateCommand();
+            for (int i = 1; i <= total; i++)
+            {
+                if (type == 2)//if it's a Relay
+                {
 
+                    cmd.CommandText = "select relayId from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY relayID ASC) ,* FROM Relays) as t where rowNum = '" + i + "' ";
+                    int newId = Convert.ToInt32(cmd.ExecuteScalar());
+                    if (newId > tempId)
+                        tempId = newId;
+
+                }
+                else if (type == 3)//if it's a Store
+                {
+                    cmd.CommandText = "select storeId from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY storeId ASC) ,* FROM Stores) as t where rowNum = '" + i + "' ";
+                    int newId = Convert.ToInt32(cmd.ExecuteScalar());
+                    if (newId > tempId)
+                        tempId = newId;
+                }
+            }
+            strLastId = tempId.ToString();
+            return strLastId;
+        }
 
         // POST: Stores/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -207,7 +240,9 @@ namespace _744Project.Controllers
 
 
             db.Stores.Add(store);
-            db.SaveChanges();
+            db.SaveChanges();            
+            //add storeID & relayID to StoreToRelays table:
+            saveStoresToRelays(store.relayID, storeId, true, store.storeWeight);
             return RedirectToAction("Index");
             //}
 
@@ -216,6 +251,15 @@ namespace _744Project.Controllers
             //return View(store);
         }
 
+        public void saveStoresToRelays(string relayId, string storeId, Boolean isActive, int? weight)
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "insert into StoresToRelays (relayID, storeID, isActive, weight) " +
+                "values ('" + relayId + "', '" + storeId + "', '" + isActive + "', '" + weight + "') ";
+            cmd.ExecuteScalar();
+            connect.Close();
+        }
 
 
         public int getRelaysRegion(string relayId)
