@@ -5,9 +5,11 @@ using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using _744Project.Models;
+using _744Project.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -22,6 +24,7 @@ namespace _744Project.Controllers
         SqlConnection connect = new SqlConnection(connectionString);
         //SqlConnection connect = Configuration.getConnectionString();
         static string g_id = "";
+        static string g_create_id = "";
         static int g_q1, g_q2, g_q3, g_final_question;
         static int pageRefreshes = 0, g_numOfTries = 0;
         static LoginViewModel model;
@@ -213,8 +216,10 @@ namespace _744Project.Controllers
         }
 
         // GET: SecurityQuestions/Create
-        public ActionResult Create()
+        public ActionResult Create(string id)
         {
+            if (!string.IsNullOrWhiteSpace(id))
+                g_create_id = id;            
             return View();
         }
 
@@ -223,16 +228,87 @@ namespace _744Project.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "SecurityQuestionsID,AspNetUserID,QuestionID,Answer")] SecurityQuestion securityQuestion)
+        public ActionResult Create([Bind(Include = "SecurityQuestionsID,AspNetUserID,QuestionID,Answer")] SecurityQuestion securityQuestion,
+            string answer1, string answer2, string answer3)
         {
-            if (ModelState.IsValid)
+            string id = g_create_id;
+            //Create an instance of a ViewModel:
+            var vModel = new QuestionsAnswersViewModel();
+            //Record any error:
+            Boolean thereIsAnError = false;
+            //Check if input is valid
+            Boolean answer1SpecialCharatcer = ContainsSpecialChars(answer1);
+            Boolean answer2SpecialCharatcer = ContainsSpecialChars(answer2);
+            Boolean answer3SpecialCharatcer = ContainsSpecialChars(answer3);
+            //Check input for answer1:
+            //if answer has a special:
+            if (answer1SpecialCharatcer)
             {
-                db.SecurityQuestions.Add(securityQuestion);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                ModelState.AddModelError("answer1", "The special characters like: ~, `, !, @, #, $, %, ^, &, *, (, ), +, =, \" are not allowed");
+                thereIsAnError = true;
+            }
+            //Check input not empty
+            else if (string.IsNullOrWhiteSpace(answer1))
+            {
+                ModelState.AddModelError("answer1", "The field for Answer 1 is required");
+                thereIsAnError = true;
+            }            
+            //Check for answer2 input:
+            if (answer2SpecialCharatcer)
+            {
+                ModelState.AddModelError("answer2", "The special characters like: ~, `, !, @, #, $, %, ^, &, *, (, ), +, =, \" are not allowed");
+                thereIsAnError = true;
+            }
+            //Check input not empty
+            else if (string.IsNullOrWhiteSpace(answer2))
+            {
+                ModelState.AddModelError("answer2", "The field for Answer 2 is required");
+                thereIsAnError = true;
             }
 
-            return View(securityQuestion);
+            //Check for answer3 input:
+            if (answer3SpecialCharatcer)
+            {
+                ModelState.AddModelError("answer3", "The special characters like: ~, `, !, @, #, $, %, ^, &, *, (, ), +, =, \" are not allowed");
+                thereIsAnError = true;
+            }
+            //Check input not empty
+            else if (string.IsNullOrWhiteSpace(answer3))
+            {
+                ModelState.AddModelError("answer3", "The field for Answer 3 is required");
+                thereIsAnError = true;
+            }
+
+
+            //if input is invalid, return view
+            if(thereIsAnError)
+                return View(vModel);
+            //else, store in db for the selected userID
+            saveNewAnswers(answer1, answer2, answer3, id);
+            //then go to home page:
+            return RedirectToAction("Index", "");            
+        }
+        public void saveNewAnswers(string answer1, string answer2, string answer3, string id)
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "insert into SecurityQuestions (AspNetUserID, QuestionID, Answer)"+
+                "values('"+id+"', '"+1+"', '"+answer1+"')";
+            cmd.ExecuteScalar();
+            cmd.CommandText = "insert into SecurityQuestions (AspNetUserID, QuestionID, Answer)" +
+                "values('" + id + "', '" + 2 + "', '" + answer2 + "')";
+            cmd.ExecuteScalar();
+            cmd.CommandText = "insert into SecurityQuestions (AspNetUserID, QuestionID, Answer)" +
+                "values('" + id + "', '" + 3 + "', '" + answer3 + "')";
+            cmd.ExecuteScalar();
+            connect.Close();
+        }
+        private Boolean ContainsSpecialChars(string value)
+        {            
+            Boolean itContainsSpecialCharacter = false;
+            Regex RgxUrl = new Regex("[^a-zA-Z0-9]");
+            itContainsSpecialCharacter = RgxUrl.IsMatch(value);
+            return itContainsSpecialCharacter;
         }
 
         // GET: SecurityQuestions/Edit/5

@@ -476,6 +476,7 @@
     <Compile Include="ViewModels\NetworkEntityViewModel.cs" />
     <Compile Include="ViewModels\NetworkViewModel.cs" />
     <Compile Include="ViewModels\NodeConfiguration.cs" />
+    <Compile Include="ViewModels\QuestionsAnswersViewModel.cs" />
     <Compile Include="ViewModels\RegionsRelaysStoresViewModel.cs" />
     <Compile Include="ViewModels\TransactionViewModel.cs" />
   </ItemGroup>

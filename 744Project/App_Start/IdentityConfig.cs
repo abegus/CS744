@@ -47,7 +47,9 @@ namespace _744Project
             manager.UserValidator = new UserValidator<ApplicationUser>(manager)
             {
                 AllowOnlyAlphanumericUserNames = false,
-                RequireUniqueEmail = true
+                //RequireUniqueEmail = true
+                //The below is to make the username not an email                
+                RequireUniqueEmail = false
             };
 
             // Configure validation logic for passwords
