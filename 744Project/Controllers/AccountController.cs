@@ -110,7 +110,7 @@ namespace _744Project.Controllers
             }
             //
 
-            var curLoginUser = (from usr in db.AspNetUsers where usr.Email == model.Email select usr).First();            
+            var curLoginUser = (from usr in db.AspNetUsers where usr.Email == model.Email select usr).First();
 
             if (curLoginUser.numFailedAttempts > 3)
             {
@@ -169,14 +169,14 @@ namespace _744Project.Controllers
             UserManager.MaxFailedAccessAttemptsBeforeLockout = 3;
             UserManager.UserLockoutEnabledByDefault = true;
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: true);
-            //if语句           
+            //if语句                       
             switch (result)
             {
                 case SignInStatus.Success:
                     curLoginUser.numFailedAttempts = 0;
                     db.SaveChanges();
                     string id = curLoginUser.Id;                    
-                    return RedirectToAction("Index", "SecurityQuestions", new { id });                
+                    return RedirectToAction("Index", "SecurityQuestions", new { id });
                     //return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -260,7 +260,7 @@ namespace _744Project.Controllers
             //rvm.questions = quesEmu;
             //return View();
             RegisterViewModel rvm = new RegisterViewModel();
-            GenerateSecurityQuestion();
+            //GenerateSecurityQuestion();
             return View(rvm);
         }
 
@@ -286,13 +286,13 @@ namespace _744Project.Controllers
         [AllowAnonymous]
         //[ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
-        {
+        {                        
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email};//security question and answer
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
-                {
+                {                    
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
@@ -301,7 +301,11 @@ namespace _744Project.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    //This gets the current user ID:
+                    var curLoginUser = (from usr in db.AspNetUsers where usr.Email == model.Email select usr).First();
+                    string id = curLoginUser.Id;
+                    //return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Create", "SecurityQuestions", new { id });
                 }
                 AddErrors(result);
             }

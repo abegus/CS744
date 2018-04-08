@@ -49,7 +49,7 @@
 </div>
 
 <div class="panel panel-default" style=" height: 500px; width:100%;">
-    <div id="cy" class="panel-body" style="height: 500px; width:100%;">
+    <div id="cy" class="panel-body" style="height: 500px; width:100%; padding:0px;">
     </div>
 </div>
 
@@ -58,13 +58,15 @@
     <div class="panel-body">
         <div class="row">
             <table class="table table-bordered">
-                <tr><th>Transaction Id</th><th>Store Ip</th><th>Encrypted Amount</th><th>Action</th></tr>
+                <tr><th>Transaction Id</th><th>Store Ip</th><th>Encrypted Amount</th><th>Status</th><th>Processing Result</th><th>Action</th></tr>
                 @foreach (var trans in Model.transactions)
                 {
                     <tr>
                         <td>@trans.Id</td>
                         <td>@trans.storeIp</td>
                         <td>@trans.transactionAmount</td>
+						<td class="status" id="@trans.Id">Not Sent</td>
+						<td class="pstatus" id="@trans.Id">N/A</td>
                         <td id="@trans.Id"><button class="SendTransaction btn btn-default" id="@trans.storeIp">Send</button></td>
                     </tr>
                 }
@@ -202,21 +204,21 @@
             for (var i in jsonData.regions[p].networkEntities) {
                  //if it is a store
                 if (jsonData.regions[p].networkEntities[i].type == 0) {
-                    NetworkElements.nodes.push({ data: { id: i, color: 'yellow', shape: 'octagon', parent: p, width: 30, height: 30, category: 0, queue:[], limit:5, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+					NetworkElements.nodes.push({ data: { id: i, color: 'yellow', shape: 'octagon', parent: p, width: 30, height: 30, category: 0, queue: [], lastQueue: [], limit: 5, isActive: true, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                 }
                 //if it is a relay
                 else if (jsonData.regions[p].networkEntities[i].type == 1) {
                     if (jsonData.regions[p].networkEntities[i].isGateway) {//gateway represent other color
                         if (jsonData.regions[p].networkEntities[i].isActive) {
-                            NetworkElements.nodes.push({ data: { id: i, color: 'green', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+							NetworkElements.nodes.push({ data: { id: i, color: 'green', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, gateway: true, queue: [], lastQueue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                         } else {
-                            NetworkElements.nodes.push({ data: { id: i, color: 'black', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+							NetworkElements.nodes.push({ data: { id: i, color: 'black', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, gateway: true, queue: [], lastQueue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                         }
                     } else {
                         if (jsonData.regions[p].networkEntities[i].isActive) {//jsonData.relay[i].relayQueueLimit
-                            NetworkElements.nodes.push({ data: { id: i, color: '#4d88ff', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+							NetworkElements.nodes.push({ data: { id: i, color: '#4d88ff', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, gateway: false, queue: [], lastQueue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                         } else {
-                            NetworkElements.nodes.push({ data: { id: i, color: 'black', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, queue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+							NetworkElements.nodes.push({ data: { id: i, color: 'black', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, gateway: false, queue: [], lastQueue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                         }
                     }
                 } 
@@ -224,7 +226,7 @@
 		}
 		console.log("===========================================================================================");
         //add processing center which is from processingCenter
-        NetworkElements.nodes.push({ data: { id: jsonData.processingCenter.ip, color: 'red', shape: 'triangle', width: 70, height: 70, category: 2, queue: [], limit:1000, databaseId: jsonData.processingCenter.databaseId }, position: { x: jsonData.processingCenter.x, y: jsonData.processingCenter.y } });
+		NetworkElements.nodes.push({ data: { id: jsonData.processingCenter.ip, color: 'red', shape: 'triangle', width: 70, height: 70, category: 2, queue: [], lastQueue: [], limit:1000, isActive: true, databaseId: jsonData.processingCenter.databaseId }, position: { x: jsonData.processingCenter.x, y: jsonData.processingCenter.y } });
 
 		//console.log("===========================================================================================");
 		for (var q in jsonData.connections) {
@@ -245,19 +247,21 @@
             } else {
                 ConnectionTemp.edges.push({ data: { id: jsonData.connections[q].ip1 + jsonData.connections[q].ip2, color: '#990000', queue: [], source: jsonData.connections[q].ip1, target: jsonData.connections[q].ip2, weight: jsonData.connections[q].weight, isActive: jsonData.connections[q].isActive, type1: jsonData.connections[q].type1, type2: jsonData.connections[q].type2 } });
             }
-		console.log(jsonData);
+		//console.log(jsonData);
 		//for(var q in jsonData.)
 		for (var trans in jsonData.transactions) {
-			console.log(jsonData.transactions[trans]);
+			//console.log(jsonData.transactions[trans]);
 			var t = {
 				id: jsonData.transactions[trans].Id,
 				path: [],
 				curIndex: 0,
+				lastRelay: null,
+				processed: false,
 				storeIp: jsonData.transactions[trans].storeIp
 			}
 			TransactionList[jsonData.transactions[trans].Id + ""] = t;
 		}
-		console.log(TransactionList);
+		//console.log(TransactionList);
 
         }
         
@@ -558,7 +562,8 @@
              let pathQueue = [];
              pathQueue = shortestPath(graph, sourceIP, destinationIP);
              if (pathQueue == null) {
-                 return alert("Way is block, no way to Processing center");
+                // return alert("Way is block, no way to Processing center");
+				 return null;
              } else {
                  return getCompletedPath(pathQueue);
              }
@@ -585,45 +590,25 @@
 			var storeIp = $(this).attr('id');
 			var transitionID = document.getElementById(storeIp).parentNode.id;
             queue.push(transitionID);
-
-            pathQueue = findShortestPath("192.168.0.35", "192.168.0.99");
+            pathQueue = findShortestPath(storeIp, ProcessingCenterIp);
             console.log("node ip queue ", pathQueue);
-
-   //         findShorestPath(storeIp, ProcessingCenterIp);
-			//console.log("node ip queue ", pathQueue);
-			//var path = $.extend(true, {},pathQueue);
-
-            backQueue = pathQueue.slice(0);
+            //backQueue = pathQueue.slice(0);
             //console.log("pathqueue.length,", pathQueue.length);
 			//OLD ANIMATION?
             //generateAnimation(storeIp, pathQueue, pathQueue.length);
 
 			var transactionId = $(this).parent().attr("id");
+			if (pathQueue == null) {
+				UpdateTransactionStatus("No Path, Dropped", transactionId)
+				return;
+			}
 
-			//this is what it should be bun NANS CODE IS BUGGED.
-			//submitNewTransaction(storeIp, transactionId, processingCenter);
+			UpdateTransactionStatus("Sent", transactionId);
+
 			//THIS IS WHAT I WILL TEST WITH IN THE MEANTIME.
-			//submitNewTransaction(storeIp, transactionId, processingCenter, path);
-
-			//var pc = cy.getElementById(processingCenter);
-			//Using Nan's code to get the shortest path...
-            /***************************************************************************************************
-            Abe'test code.
-
-             var graph = makeAGraph();
-			var result = shortestPath(graph, storeIp, processingCenter);
-			console.log("Nans path");
-			console.log(result);
-             ****************************************************************************************************/
-
-
-			//submitNewTransaction(cy.getElementById(storeIp), transactionId, processingCenter);
-
-
-			//TEMPORARY TO DEMONSTRATE HOW TO USE THE PROCESS TRANSACTION FUNCTIONALITY
-			//This just sends the transaction straight to the processingCenterQueue, where it can then be processed
-			var transactionId = $(this).parent().attr("id");
-			processingCenterQueue.push(transactionId);
+			
+			submitNewTransaction(storeIp, transactionId, processingCenter, pathQueue);
+			
 		});
 
 
@@ -793,22 +778,26 @@
 		===================================================================================================*/
 
 
+		var isAnimated = true;
 		//Working on pause and play, however it only works with one element on the "animation list" at a time.
 		//This is because there are multiple "threads"/"listeners" which begin each animation cycle, so the animations
 		//aren't running concurrently. To do more than one, there will have to be a way to either tie them together,
 		//or use some sort of javascript Mutex / Lock that must be used .
 		$(".PauseButton").click(function () {
 			console.log("Stopped!");
-			animations.forEach(function (element) {
+			isAnimated = false;
+			currentAnimations.forEach(function (element) {
 				console.log(element);
-				element.pause();
+				//element.pause();
 			});
 		});
 
 		$(".PlayButton").click(function () {
-			animations.forEach(function (element) {
+			isAnimated = true;
+			ResumeFromAnimationList();
+			currentAnimations.forEach(function (element) {
 				console.log(element);
-				element.play();
+				//element.play();
 			});
 		});
 
@@ -886,7 +875,8 @@
                         $("#myModal").modal();
                         if (type == 2) {
                             NetworkElements.nodes.forEach(function (node) {
-                                if (node.data.databaseId == id) {
+								if (node.data.databaseId == id) {
+									//was queue
                                     node.data.queue.forEach(function (item) {
                                         $('<div>' + item + '</div>').appendTo($('#modalQueue'));
                                         $("#PCTransactionList").append('<div class="btn btn-default processTransactionBtn" id="' + item + '"onclick="processTransactionButton(' + item + ')">' +
@@ -904,8 +894,13 @@
                         }
                         else if (type == 1) {
                             NetworkElements.nodes.forEach(function (node) {
-                                if (node.data.databaseId == id && node.data.category == type) {
-                                    node.data.queue.forEach(function (item) {
+								if (node.data.databaseId == id && node.data.category == type) {
+									console.log("AFTER SUCCESS");
+									console.log(node.data.queue);
+									var real = GetQueueList(node.data.id);
+									console.log(real);
+									//was queue
+									node.data.lastQueue.forEach(function (item) {
                                         $('<div>' + item + '</div>').appendTo($('#modalQueue'));
                                     });
 
@@ -915,8 +910,9 @@
                         else if (type == 0) {
                             NetworkElements.nodes.forEach(function (node) {
                                 //console.log("node id: ", node.data.id, "id :", id);
-                                if (node.data.databaseId == id && node.data.category == type) {
-                                    node.data.queue.forEach(function (item) {
+								if (node.data.databaseId == id && node.data.category == type) {
+									//was queue
+									node.data.lastQueue.forEach(function (item) {
                                         $('<div>' + item + '</div>').appendTo($('#modalQueue'));
                                     });
 
@@ -994,24 +990,31 @@
 			$("#NodePopup").html("");
 			$('#myModal').modal('hide')
 		}
-        function changeColor(id, type, isActive) {
+		function changeColor(id, type, isActive) {
+			var node = cy.getElementById(id);
+			node.data('isActive', isActive);
+			
             if (type == "relay") {
                 if (isActive) {
                     console.log("==============================");
-                    cy.getElementById(id).classes('liveRelay');
+					//cy.getElementById(id).classes('liveRelay');
+					AnimationColorChange(id, '#4d88ff', 'black',30);
                 } else {
                     console.log("+++++++++++++++++++++++++++++++");
-                    cy.getElementById(id).classes('block');
+					//cy.getElementById(id).classes('block');
+					AnimationColorChange(id, 'black', 'black',30);
                 }
             } else if (type == "gateway") {
                 console.log("gateway active: ", isActive);
                 console.log("change color id: ", id);
                 if (isActive) {
                     console.log("==============================");
-                    cy.getElementById(id).classes('liveGate');
+					//cy.getElementById(id).classes('liveGate');
+					AnimationColorChange(id, 'green', 'green',30);
                 } else {
                     console.log("+++++++++++++++++++++++++++++++");
-                    cy.getElementById(id).classes('block');
+					//cy.getElementById(id).classes('block');
+					AnimationColorChange(id, 'black', 'black', 30);
                 }
             } else {
                 console.log("change edge id: ", id);
@@ -1019,13 +1022,42 @@
                 console.log("change edge isActive: ", isActive);
                 if (isActive) {
                     console.log("==============================");
-                    cy.getElementById(id).classes('edge');
+					//cy.getElementById(id).classes('edge');
+					AnimationColorChange(id, 'grey', 'grey',3);
                 } else {
                     console.log("+++++++++++++++++++++++++++++++");
-                    cy.getElementById(id).classes('block');
+					//cy.getElementById(id).classes('block');
+					AnimationColorChange(id, '#990000', '#990000',3);
                 }
             }
-        }
+		}
+
+		function AnimationColorChange(currentIp, color, lineColor,size) {
+			var ann = cy.getElementById(currentIp).animation({
+				style: {
+					'background-color': color,
+					'line-color': lineColor,
+					'width': size,
+					'height': size
+				},
+				duration: 1
+			});
+
+			//currentAnimations.push(ann);
+
+			ann.play();/*.promise('completed').then(function () {
+				ann.reverse().rewind().play().promise('completed').then(function () {
+					currentAnimations.pop();
+					TransactionList[transId + ""]["curIndex"]++;//transObj["curIndex"]++;
+					pathIndex++;
+					var nextIp = transObj.path[pathIndex];
+					SendToNode(nextIp, pathIndex, transId, transObj, pathIndex, currentIp);
+					RemoveTransactionFromQueue(transId, currentIp);
+					WakeUpNodeHead(currentIp);
+				});
+			});*/
+		}
+
 		// this is the activate / inactivate
 		function Activate(id, type, ip) { //type 1 is relay
 			//console.log("testing 1 2 3");
@@ -1061,42 +1093,19 @@
                         console.log("After the NetworkElement.isActive is changed: " + node.data.isActive);
                         node.data.isActive = !node.data.isActive;
                         console.log("After the NetworkElement.isActive is changed: " + node.data.isActive);
-                        changeIsActive = node.data.isActive;
-                        //if (node.data.limit > 50) {
-                        //    changeType = "gateway";
-                        //} else {
-                        //    changeType = "relay";
-                        //}
-
-                        //if (changeType == "gateway") {
-                        //    if (changeIsActive) {
-                        //        node.data.color = 'green';
-                        //    } else {
-                        //        node.data.color = 'black';
-                        //    }
-                        //}
-                        //if (changeType == "relay") {
-                        //    if (changeIsActive) {
-                        //        node.data.color = '#4d88ff';
-                        //    } else {
-                        //        node.data.color = 'black';
-                        //    }
-                        //}
-						//if (node.data.isActive) {
-						//	//node.data.isActive = false;
-						//}
-						//else {
-						//	//node.data.isActive = true;
-						//}
-						//node.data.isActive = !node.data.isActive;
-						//console.log("After the NetworkElement.isActive is changed: " + node.data.isActive);
-						//node.data.color = 'black';
-						//console.log(" IP : " + ip + " is not active/inactive in js");
+						changeIsActive = node.data.isActive;
+						changeType = node.data.gateway;
 					}
 				});
 
                 //here is where you change how something looks if it is active or inactive after the call..
-                changeColor(changeID, changeType, changeIsActive);
+				if (changeType) {
+					changeColor(changeID, 'gateway', changeIsActive);
+				}
+				else {
+					changeColor(changeID, 'relay', changeIsActive);
+				}
+                
 
 				//this ajax call updates the database
 				var url = '/Network/SaveNoteInformation';
@@ -1155,7 +1164,9 @@
 						$("#NodePopup").html("");
 						$("#NodePopup").modal('hide');
 						console.log(response.responseText);
-						printResponse(response.responseText);
+						//printResponse(response.responseText);
+						UpdateTransactionProcessed(response.responseText, event);
+						UpdateTransactionStatus("On the way back", event);
 					}
 					//if the transaction failed.
 					else {
@@ -1163,8 +1174,25 @@
 						$("#NodePopup").html("");
 						$("#NodePopup").modal('hide');
 						console.log(response.responseText);
-						printResponse(response.responseText)
+						//printResponse(response.responseText)
+						UpdateTransactionProcessed(response.responseText, event);
+						UpdateTransactionStatus("On the way back", event);
 					}
+					//remove(processingCenterQueue, event);
+
+					//new sending transaction back to store:
+					var transObj = TransactionList[event + ""];
+					transObj.curIndex = 0;
+					transObj.processed = true;
+					var path = findShortestPath(transObj.storeIp, ProcessingCenterIp); // the path back
+					if (path == null) {
+						UpdateTransactionStatus("No path back", event);
+						return;
+					}
+					var reversed = path.reverse();
+					reversed.shift();
+					RemoveTransactionFromQueue(event, ProcessingCenterIp)
+					submitNewTransaction(reversed[0], event, null, reversed);
 				},
 				failure: function (errMsg) {
 					console.log("bad bug");
@@ -1175,12 +1203,12 @@
 			$("#NodePopup").html("");
 			$('#myModal').modal('hide')
 
-			remove(processingCenterQueue, event);
+			
 
             //here is where you sent animation back
-            var backPath = backQueue.reverse();
-            console.log("backTo store, look at the path : ", backPath,"back");
-            backToStore("192.168.0.1", backPath, backPath.length);
+           // var backPath = backQueue.reverse();
+            //console.log("backTo store, look at the path : ", backPath,"back");
+            //backToStore("192.168.0.1", backPath, backPath.length);
 		}
 
 		function printResponse(response) {

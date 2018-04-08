@@ -79,6 +79,7 @@ namespace _744Project.Models
         [Required]
         //[EmailAddress]
         [Display(Name = "Username")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         public string Email { get; set; }
 
         [Required]
@@ -91,19 +92,19 @@ namespace _744Project.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-
-       // [Required]
+        ////START OF NEW CODE
+        //[Required]
         //[DataType(DataType.Text)]
         //[Display(Name = "Security Question")]
         //public string SecuriyQuestion { get; set; }
+        ////END OF NEW CODE
+        //[Required]
+        //[DataType(DataType.Password)]
+        //[Display(Name = "Answer")]
+        //public string AnswerToSecurityQuestion { get; set; }
 
-        [Required]
-        [DataType(DataType.Password)]
-        [Display(Name = "Answer")]
-        public string AnswerToSecurityQuestion { get; set; }
-
-        //[Required]  this is the list of questions from the database (you made them)
-        public IQueryable<Questions> questions { get; set; }
+        ////[Required]  this is the list of questions from the database (you made them)
+        //public IQueryable<Questions> questions { get; set; }
     }
 
     public class ResetPasswordViewModel
