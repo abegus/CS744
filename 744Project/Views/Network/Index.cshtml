@@ -131,9 +131,8 @@
 				selector: 'node',
 				style: {
 					'border-width': '5',
-					//'background-color': 'red',
 					'background-color': 'data(color)',
-					content: 'data(id)',
+					content: 'data(name)',
                     'curve-style': 'bezier',
                     'shape': 'data(shape)',
                     'width': 'data(width)',
@@ -191,12 +190,11 @@
 	function convertToCytoscape() {
 		//alert("hi");
 		//console.log("Hello..");
-        console.log(jsonData.regions);
-        //change to use region
-        NetworkElements.nodes.push({ data: { id: 1, color: '#d4c4c4', shape: 'rectangle', width: 30, height: 30 } });
-        NetworkElements.nodes.push({ data: { id: 2, color: '#d4c4c4', shape: 'rectangle', width: 30, height: 30 } });
-        NetworkElements.nodes.push({ data: { id: 3, color: '#d4c4c4', shape: 'rectangle', width: 30, height: 30 } });
-        NetworkElements.nodes.push({ data: { id: 4, color: '#d4c4c4', shape: 'rectangle', width: 30, height: 30 } });
+        console.log("jsonData.regions: ",jsonData.regions);
+        //add regions
+        for (let i in jsonData.regions) {
+            NetworkElements.nodes.push({ data: { id: i, name: jsonData.regions[i].name, color: '#d4c4c4', shape: 'rectangle', width: 30, height: 30 } });
+        }
 
         for (var p in jsonData.regions) {
             var xLocation = 0;
@@ -204,21 +202,21 @@
             for (var i in jsonData.regions[p].networkEntities) {
                  //if it is a store
                 if (jsonData.regions[p].networkEntities[i].type == 0) {
-					NetworkElements.nodes.push({ data: { id: i, color: 'yellow', shape: 'octagon', parent: p, width: 30, height: 30, category: 0, queue: [], lastQueue: [], limit: 5, isActive: true, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+                    NetworkElements.nodes.push({ data: { id: i, color: 'yellow', name: jsonData.regions[p].networkEntities[i].ip, shape: 'octagon', parent: p, width: 30, height: 30, category: 0, queue: [], lastQueue: [], limit: 5, isActive: true, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                 }
                 //if it is a relay
                 else if (jsonData.regions[p].networkEntities[i].type == 1) {
                     if (jsonData.regions[p].networkEntities[i].isGateway) {//gateway represent other color
                         if (jsonData.regions[p].networkEntities[i].isActive) {
-							NetworkElements.nodes.push({ data: { id: i, color: 'green', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, gateway: true, queue: [], lastQueue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+                            NetworkElements.nodes.push({ data: { id: i, color: 'green', name: jsonData.regions[p].networkEntities[i].ip, shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, gateway: true, queue: [], lastQueue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                         } else {
-							NetworkElements.nodes.push({ data: { id: i, color: 'black', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, gateway: true, queue: [], lastQueue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+                            NetworkElements.nodes.push({ data: { id: i, color: 'black', name: jsonData.regions[p].networkEntities[i].ip,shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, gateway: true, queue: [], lastQueue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                         }
                     } else {
                         if (jsonData.regions[p].networkEntities[i].isActive) {//jsonData.relay[i].relayQueueLimit
-							NetworkElements.nodes.push({ data: { id: i, color: '#4d88ff', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, gateway: false, queue: [], lastQueue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+                            NetworkElements.nodes.push({ data: { id: i, color: '#4d88ff', name: jsonData.regions[p].networkEntities[i].ip,shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, gateway: false, queue: [], lastQueue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                         } else {
-							NetworkElements.nodes.push({ data: { id: i, color: 'black', shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, gateway: false, queue: [], lastQueue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
+                            NetworkElements.nodes.push({ data: { id: i, color: 'black', name: jsonData.regions[p].networkEntities[i].ip,shape: 'rectangle', parent: p, width: 30, height: 30, category: 1, gateway: false, queue: [], lastQueue: [], limit: jsonData.relay[i].relayQueueLimit, isActive: jsonData.regions[p].networkEntities[i].isActive, databaseId: jsonData.regions[p].networkEntities[i].databaseId }, position: { x: jsonData.regions[p].networkEntities[i].x, y: jsonData.regions[p].networkEntities[i].y } });
                         }
                     }
                 } 
@@ -226,7 +224,7 @@
 		}
 		console.log("===========================================================================================");
         //add processing center which is from processingCenter
-		NetworkElements.nodes.push({ data: { id: jsonData.processingCenter.ip, color: 'red', shape: 'triangle', width: 70, height: 70, category: 2, queue: [], lastQueue: [], limit:1000, isActive: true, databaseId: jsonData.processingCenter.databaseId }, position: { x: jsonData.processingCenter.x, y: jsonData.processingCenter.y } });
+        NetworkElements.nodes.push({ data: { id: jsonData.processingCenter.ip, color: 'red', name: jsonData.processingCenter.ip, shape: 'triangle', width: 70, height: 70, category: 2, queue: [], lastQueue: [], limit:1000, isActive: true, databaseId: jsonData.processingCenter.databaseId }, position: { x: jsonData.processingCenter.x, y: jsonData.processingCenter.y } });
 
 		//console.log("===========================================================================================");
 		for (var q in jsonData.connections) {
@@ -268,7 +266,7 @@
 		return NetworkElements;
     }
     
-    console.log("ConnectionTemp: ", ConnectionTemp);
+    //console.log("ConnectionTemp: ", ConnectionTemp);
         //console.log("after emptying the networkelement, ", NetworkElements);
 
 	/* ================================================================================================
@@ -400,7 +398,6 @@
             activeNodes = [];
             inActiveConnection = [];
             activeConnection = [];
-            //console.log("刚进makeAgraph, connectionTemp: ", ConnectionTemp);
             var graph = new Graph();
             //find all the inactive nodes
             NetworkElements.nodes.forEach(function (node) {
@@ -454,10 +451,7 @@
                     activeConnection.push(edge.data.id);
                 }
             });
-            //console.log("After inactivate node, inactive node: ", inActivatedNodes);
-            //console.log("After inactivate node, inactive connection: ", inActiveConnection);
-            //console.log("=====================================================================");
-            //console.log("before active the node connectionTemp: ", ConnectionTemp);
+           
             //To activate node of 
             NetworkElements.edges.forEach(function (edge) {
                 //两个点都是激活的，connection不是
@@ -467,11 +461,9 @@
                         edge.data.isActive = true;
                 }
             });
-            //console.log("After activate the node the connectiontem: ", ConnectionTemp);
 
             InActivateTheConnection();
 
-            //console.log("333333333333333333333333333333333333333333333333333333333333333333333333333");
             //find all the inactive connection
             inActiveConnection = [];
             activeConnection = [];
@@ -482,8 +474,6 @@
                     inActiveConnection.push(edge.data.id);
                 }
             });
-            //console.log("After activate node, inactive node: ", inActivatedNodes);
-            //console.log("After activate node, inactive connection: ", inActiveConnection);
 
             //here is to do make the graph at the data structure
             NetworkElements.edges.forEach(function (edge) {
@@ -524,7 +514,6 @@
                     temp.push(tempEdge.data.id);
                 }
             });
-            //console.log("here is at create a graph, temp: ",temp);
             NetworkElements.edges.forEach(function (edge) {
                 if (temp.indexOf(edge.data.id) >= 0) {
                     edge.data.isActive = !edge.data.isActive;
@@ -533,7 +522,6 @@
         }
 
         function getCompletedPath(path) {
-            //console.log("get CompletedPath, beggining path: ", path);
             let connectionPath = [], newPath = [];
             for (let i = 0; i < path.length; i++) {
                 if (i + 1 < path.length)
@@ -544,7 +532,6 @@
                         }
                     });
             }
-            //console.log("get completepath connectionPath: ", connectionPath);
             for (let j = 0; j < path.length; j++) {
                 if (j == path.length - 1) {
                     newPath.push(path[j]);
@@ -673,31 +660,7 @@
                 }
             });
         }
-        //function recursivePath(stack, item, i) {
-        //    console.log("item", item._private.data.id);
-        //    console.log("stack", stack);
-        //    var ann = cy.getElementById(item._private.data.id).animation({
-        //        style: {
-        //            'background-color': 'white',
-        //            'width': 50,
-        //            'height': 50
-        //        },
-        //        duration: 1000
-        //    });
-        //    animations.push(ann);
-
-        //    ann
-        //        .play() // start
-        //        .promise('completed').then(function () { // on next completed
-        //            i--;
-        //            ann.reverse().rewind().play();
-        //            animations.pop();
-        //            if (i > 0) { // was >=
-        //                return recursivePath(stack, stack[i], i); // i
-        //            }
-        //            return backTrackAnimation(stack, stack[0], 0);
-        //        });
-        //}
+       
 	//This function is exactly the same as the recursivePath function, except it goes from the ProcessingCenter back to the Store.
         function backToStore(processingCenter, nodeList, length) {
             console.log("Animation source", processingCenter);
@@ -738,30 +701,7 @@
 
         }
 
-	//function backTrackAnimation(stack, item, i) {
-	//	var ann = cy.getElementById(item._private.data.id).animation({
-	//		style: {
-	//			'background-color': 'green',
-	//			'width': 50,
-	//			'height':50
-	//		},
-	//		duration: 1000
-	//	});
-	//	animations.push(ann);
 
-	//	ann
-	//		.play() // start
-	//		.promise('completed').then(function () { // on next completed
-	//			ann.reverse().rewind().play();
-	//			animations.pop();
-	//			i++;
-	//			if (i < stack.length) {
-	//				return backTrackAnimation(stack, stack[i], i);
-	//			}
-	//			resetElements(stack);
-	//			return;
-	//		});
-	//}
 
 	//Not used yet, but this method is called once the animation is complete.
 	function resetElements(stack) {
