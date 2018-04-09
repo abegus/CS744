@@ -11,7 +11,7 @@
 		{
 			<span>Relay</span>
 		}
-		@if(Model.type == 0)
+		@if(Model.type == 2)
 		{
 			<span>Processing Center</span>
 		}
@@ -26,7 +26,9 @@
 			<dd>@Model.isActive</dd>
 			<dt>Gateway</dt>
 			<dd>@Model.isGateway</dd>
-			<dt>Queue</dt>
+			<dt>Queue Limit</dt>
+			<dd>@Model.queueLimit</dd>
+			<dt>Queue Contents</dt>
 			<dd id="modalQueue"><dd>
 			<dt>Region</dt>
 			<dd>@Model.region</dd>

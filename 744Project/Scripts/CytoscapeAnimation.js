@@ -256,7 +256,7 @@ function CheckIfQueueIsFull(nodeIp) {
 	//console.log("found elemnt: ");
 	//console.log(node);
 	//check if limit has not been reached
-	if (node._private.data.queue.length < node._private.data.limit - 1) {
+	if (node._private.data.queue.length < node._private.data.limit ) {
 		return false;
 	}
 	else {
