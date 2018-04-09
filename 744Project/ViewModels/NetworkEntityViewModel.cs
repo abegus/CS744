@@ -17,6 +17,7 @@ namespace _744Project.ViewModels
         public int type { get; set; }
         public int? region { get; set; }
         public bool? isGateway { get; set; }
+        public int? queueLimit { get; set; }
         public List<string> queue { get; set; } //should be empty, but it can be used by the JS?
 
         public NetworkEntityViewModel() { }
@@ -30,6 +31,7 @@ namespace _744Project.ViewModels
             region = store.regionID;
             isGateway = null; // a store cannot be a gateway
             queue = new List<string>();
+
         }
         public NetworkEntityViewModel(Relay relay)
         {
@@ -40,6 +42,7 @@ namespace _744Project.ViewModels
             region = relay.regionID;
             isGateway = relay.isGateway;
             queue = new List<string>();
+            queueLimit = relay.relayQueue;
         }
         public NetworkEntityViewModel(ProcessCenter pc)
         {
