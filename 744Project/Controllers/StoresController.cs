@@ -17,11 +17,31 @@ namespace _744Project.Controllers
         static string connectionString = Configuration.getConnectionString();
         SqlConnection connect = new SqlConnection(connectionString);
 
+
+        public void getAllIps()
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();            
+            cmd.CommandText = "select count(*) from Relays";
+            int totalRelays = Convert.ToInt32(cmd.ExecuteScalar());            
+            List<string> ip = new List<string>();            
+            //int ip1Counter = 0;            
+            for (int i = 1; i <= totalRelays; i++)
+            {
+                cmd.CommandText = "select relayId from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY relayID ASC), *FROM Relays) as t where rowNum = '" + i + "'";
+                string relayId = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select relayIp from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY relayID ASC), *FROM Relays) as t where rowNum = '" + i + "'";
+                string relayIp = cmd.ExecuteScalar().ToString();
+                ip.Add(relayIp);
+            }            
+            ViewBag.ip = ip;
+            connect.Close();
+        }
         // GET: Stores
         public ActionResult Index()
         {
-            var stores = db.Stores.Include(s => s.Region).Include(s => s.Relay);
-            return View(stores.ToList());
+            var stores = db.Stores.Include(s => s.Region).Include(s => s.Relay);           
+            return View(stores.ToList());            
         }
 
         // GET: Stores/Details/5
@@ -44,9 +64,19 @@ namespace _744Project.Controllers
         {
             ViewBag.regionID = new SelectList(db.Regions, "regionID", "regionName");
             ViewBag.relayID = new SelectList(db.Relays, "relayID", "relayName");
+            getAllIps();           
             return View();
         }
-
+        public string getRelayIdFromIp(string relayIp)
+        {
+            string id = "";
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select relayId from relays where relayip like '"+relayIp+"' ";
+            id = cmd.ExecuteScalar().ToString();
+            connect.Close();
+            return id;
+        }
         public Boolean checkDuplicateIP(string ip, out string errorMessage)
         {
             Boolean duplicate = false;
@@ -166,7 +196,7 @@ namespace _744Project.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "storeID,storeIP,storeName,storeWeight,relayID,regionID")] Store store)
+        public ActionResult Create([Bind(Include = "storeID,storeIP,storeName,storeWeight,relayID,regionID")] Store store, string relayIp)
         {
             //if (ModelState.IsValid)
             //{
@@ -175,6 +205,9 @@ namespace _744Project.Controllers
             store.storeID = storeId;
             
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //get relayID from relayIP:
+            store.relayID = getRelayIdFromIp(relayIp);
+
             //check for store.storeIP input
             string store_duplicate_error = "";
             string store_input_error = "";
@@ -235,6 +268,7 @@ namespace _744Project.Controllers
             {
                 ViewBag.regionID = new SelectList(db.Regions, "regionID", "regionName", store.regionID);
                 ViewBag.relayID = new SelectList(db.Relays, "relayID", "relayName", store.relayID);
+                getAllIps();
                 return View(store);
             }
 
