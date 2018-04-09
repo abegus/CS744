@@ -93,6 +93,11 @@ function AnimateItem(transId, currentIp, transObj, pathIndex) {
 		return;
 	}
 
+	//bug case on wakeup? might affect transactions coming from 2 ways ...
+	if (IsElementAnimated(currentIp)) {
+		return;
+	}
+
 	var ann = cy.getElementById(currentIp).animation({
 		style: {
 			'background-color': 'white',
