@@ -193,7 +193,7 @@
         console.log("jsonData.regions: ",jsonData.regions);
         //add regions
         for (let i in jsonData.regions) {
-            NetworkElements.nodes.push({ data: { id: i, name: jsonData.regions[i].name, color: '#d4c4c4', shape: 'rectangle', width: 30, height: 30 } });
+            NetworkElements.nodes.push({ data: { id: i, name: jsonData.regions[i].name, color: '#d4c4c4', shape: 'rectangle', width: 30, height: 30, isActive: true } });
         }
 
         for (var p in jsonData.regions) {
@@ -277,7 +277,7 @@
 	function exportPositions() {//cy
 		var list = [];
 		var nodes = cy.nodes();
-		console.log(nodes);
+		console.log("cytosacpe node: ",nodes);
 		console.log("=============================");
         for (var i = 0; i < nodes.length; i++) {
             var obj = {};
@@ -322,7 +322,6 @@
 										Find the shortest path
 	===================================================================================================*/
         var backQueue;
-        const ProcessingCenterIp = "192.168.0.1";
         function Graph() {
             var neighbors = this.neighbors = {};
             this.addRREdge = function (u, v) {
@@ -485,6 +484,7 @@
                     }
                 }
             });
+            test();
             return graph;
         }
 
@@ -544,17 +544,252 @@
         }
 
          //find the path from source node to destination node using their ip as key
+     //    function findShortestPath(sourceIP, destinationIP) {
+     //        let graph = makeAGraph();
+     //        let pathQueue = [];
+     //        pathQueue = shortestPath(graph, sourceIP, destinationIP);
+     //        if (pathQueue == null) {
+     //           // return alert("Way is block, no way to Processing center");
+				 //return null;
+     //        } else {
+     //            return getCompletedPath(pathQueue);
+     //        }
+     //   }
+        // new shortest path function which can handle the weight.
+    /**
+     ↓for new function finding shortest path test
+     */
+         class MinHeap {
+             constructor() {
+                 this.heap = []
+             }
+
+             insert(parameter) {
+                 this.heap.push(parameter)
+                 let i = this.heap.length - 1
+                 while (i > 0) {
+                     let j = Math.floor((i - 1) / 2)
+                     if (this.heap[i]['weight'] < this.heap[j]['weight']) {
+                         this.swap(i, j)
+                         i = j
+                     } else {
+                         break
+                     }
+                 }
+             }
+
+             remove_min() {
+                 this.swap(this.heap.length - 1, 0)
+                 let i = 0, minimum = this.heap.pop()
+                 while (i < this.heap.length) {
+                     let j = i * 2 + 1, k = i * 2 + 2, idx = null
+                     if (this.heap[j] && this.heap[k]) {
+                         idx = this.heap[j]['weight'] < this.heap[k]['weight'] ? j : k
+                         if (this.heap[i]['weight'] > this.heap[idx]['weight']) {
+                             this.swap(i, idx)
+                             i = idx
+                         } else {
+                             break
+                         }
+                     } else if (this.heap[j] && !this.heap[k]) {
+                         if (this.heap[i]['weight'] > this.heap[j]['weight']) {
+                             this.swap(j, i)
+                             i = j
+                         } else {
+                             break
+                         }
+                     } else if (!this.heap[j]) {
+                         break
+                     }
+                 }
+                 return minimum['vertex']
+             }
+
+             swap(x, y) {
+                 let temporary = this.heap[y]
+                 this.heap[y] = this.heap[x]
+                 this.heap[x] = temporary
+             }
+
+         }
+
+         class GraphT {
+             constructor() {
+                 this.vertices = {}
+             }
+
+             add_vertex(name, edges) {
+                 this.vertices[name] = edges
+             }
+
+             shortest_path(start, finish) {
+                 let distance_from_start = {}, previous_vertex = {}, vertex_set = new Set(), min_priority = new MinHeap(), path = []
+                 for (let vertex in this.vertices) {
+                     if (vertex == start) {
+                         distance_from_start[vertex] = 0
+                         min_priority.insert({ weight: 0, vertex: vertex })
+                     } else {
+                         distance_from_start[vertex] = 1 / 0
+                     }
+                     previous_vertex[vertex] = null
+                     vertex_set.add(vertex)
+                 }
+                 while (min_priority.heap.length > 0) {
+                     let least_distance = min_priority.remove_min()
+                     vertex_set.delete(least_distance)
+                     if (least_distance == finish) {
+                         while (least_distance) {
+                             path.push(least_distance)
+                             least_distance = previous_vertex[least_distance]
+                         }
+                         return path.reverse()
+                     }
+                     for (let neighbor in this.vertices[least_distance]) {
+                         let total = distance_from_start[least_distance] + this.vertices[least_distance][neighbor]
+                         if (total < distance_from_start[neighbor]) {
+                             distance_from_start[neighbor] = total
+                             previous_vertex[neighbor] = least_distance
+                             min_priority.insert({ weight: total, vertex: neighbor })
+                         }
+                     }
+                 }
+             } // end of shortest_path
+
+         }
+         //test();
          function findShortestPath(sourceIP, destinationIP) {
-             let graph = makeAGraph();
+             inActivatedNodes = [];
+             activeNodes = [];
+             inActiveConnection = [];
+             activeConnection = [];
+             //find all the inactive nodes
+             NetworkElements.nodes.forEach(function (node) {
+                 if (node.data.category) {
+                     //console.log("category,", node.data.category)
+                     if (node.data.category == 1) {
+                         if (!node.data.isActive) {
+                             inActivatedNodes.push(node.data.id);
+                         } else {
+                             activeNodes.push(node.data.id);
+                         }
+                     } else {
+                         //console.log("is active");
+                         return true;
+                     }
+                     //console.log("make a graph", node.data)
+                 }
+             });
+
+             NetworkElements.edges.forEach(function (edge) {
+                 if (!edge.data.isActive) {
+                     inActiveConnection.push(edge.data.id);
+                 } else {
+                     activeConnection.push(edge.data.id);
+                 }
+             });
+             //console.log("find ALL Inactive node: ", inActivatedNodes);
+             // console.log("Find ALL Inactive connection: ", inActiveConnection);
+
+             //handle if this relay is activated, if it's inactivated, find that relay through ip, then set it as false
+             if (inActivatedNodes) {
+                 NetworkElements.edges.forEach(function (edge) {
+                     if (inActivatedNodes.indexOf(edge.data.source) >= 0) {
+                         edge.data.isActive = false;
+                     }
+                 });
+                 NetworkElements.edges.forEach(function (edge) {
+                     if (inActivatedNodes.indexOf(edge.data.target) >= 0) {
+                         edge.data.isActive = false;
+                     }
+                 });
+             }
+             //console.log("2222222222222222222222222222222222222222222222222222222222222222222222222222222");
+             //find all the inactive connection
+             inActiveConnection = [];
+             activeConnection = [];
+             NetworkElements.edges.forEach(function (edge) {
+                 if (!edge.data.isActive) {
+                     inActiveConnection.push(edge.data.id);
+                 } else {
+                     activeConnection.push(edge.data.id);
+                 }
+             });
+
+             //To activate node of 
+             NetworkElements.edges.forEach(function (edge) {
+                 //两个点都是激活的，connection不是
+                 if (inActivatedNodes.indexOf(edge.data.source) < 0
+                     && inActivatedNodes.indexOf(edge.data.target) < 0) {
+                     //console.log("execute activate due to connection");
+                     edge.data.isActive = true;
+                 }
+             });
+
+             InActivateTheConnection();
+
+             //find all the inactive connection
+             inActiveConnection = [];
+             activeConnection = [];
+             NetworkElements.edges.forEach(function (edge) {
+                 if (edge.data.isActive) {
+                     activeConnection.push(edge.data.id);
+                 } else {
+                     inActiveConnection.push(edge.data.id);
+                 }
+             });
+
+             //here is to do make the graph at the data structure
+             let g = new GraphT()
+            
+             NetworkElements.edges.forEach(function (edge) {
+                 if (edge.data.isActive) {
+                     g.add_vertex(edge.data.source, createEdge(edge.data.target, edge.data.weight));
+                 }
+             });
+             NetworkElements.edges.forEach(function (edge) {
+                 if (edge.data.isActive) {
+                     if (edge.data.type1 == edge.data.type2) {
+                         g.add_vertex(edge.data.source, extend(g.vertices[edge.data.source], createEdge(edge.data.target, edge.data.weight)));
+                         if (g.vertices[edge.data.target] == null) {
+                             g.add_vertex(edge.data.target, createEdge(edge.data.source, edge.data.weight));
+                         } else {
+                             g.add_vertex(edge.data.target, extend(g.vertices[edge.data.target], createEdge(edge.data.source, edge.data.weight)));
+                         }
+                     } else {
+                         g.add_vertex(edge.data.source, extend(g.vertices[edge.data.source], createEdge(edge.data.target, edge.data.weight)));
+                     }
+                 }
+             });
+             g.add_vertex(jsonData.processingCenter.ip, {});
+             console.log(g.vertices)
+             console.log('----------------------------------')
              let pathQueue = [];
-             pathQueue = shortestPath(graph, sourceIP, destinationIP);
+             pathQueue = g.shortest_path(sourceIP, destinationIP);
+             console.log("test short path: ", pathQueue);
              if (pathQueue == null) {
-                // return alert("Way is block, no way to Processing center");
-				 return null;
+                 // return alert("Way is block, no way to Processing center");
+                 return null;
              } else {
                  return getCompletedPath(pathQueue);
              }
          }
+
+         function createEdge(ip, weight) {
+             let o = {};
+             o[ip] = weight;
+             return o;
+         }
+
+         function extend(obj1, obj2) {
+             for (let key in obj2) {
+                 if (obj1.hasOwnProperty(key)) continue;
+                 obj1[key] = obj2[key];
+             }
+             return obj1;
+         }
+
+    /*
+    ↑test new function*/
 
 	/* ================================================================================================
 										Send Transaction SECTION
@@ -577,7 +812,7 @@
 			var storeIp = $(this).attr('id');
 			var transitionID = document.getElementById(storeIp).parentNode.id;
             queue.push(transitionID);
-            pathQueue = findShortestPath(storeIp, ProcessingCenterIp);
+            pathQueue = findShortestPath(storeIp, "192.168.0.1");
             console.log("node ip queue ", pathQueue);
             //backQueue = pathQueue.slice(0);
             //console.log("pathqueue.length,", pathQueue.length);
@@ -663,7 +898,7 @@
        
 	//This function is exactly the same as the recursivePath function, except it goes from the ProcessingCenter back to the Store.
         function backToStore(processingCenter, nodeList, length) {
-            console.log("Animation source", processingCenter);
+            //console.log("Animation source", processingCenter);
             var ann = cy.getElementById(processingCenter).animation({
                     style: {
                         'background-color': 'green',
@@ -799,7 +1034,7 @@
 		function popupInformation(id,type) {
 			console.log(id + " clicked!");
 			//return;
-            console.log("type: ", type);
+            //console.log("type: ", type);
 			if (id != null ){//&& type != 2) {
 				var DEST = "/Network/GetNodeInformation?id=" +id+"&type="+type;
 				$.ajax({
@@ -835,10 +1070,10 @@
                         else if (type == 1) {
                             NetworkElements.nodes.forEach(function (node) {
 								if (node.data.databaseId == id && node.data.category == type) {
-									console.log("AFTER SUCCESS");
-									console.log(node.data.queue);
+									//console.log("AFTER SUCCESS");
+									//console.log(node.data.queue);
 									var real = GetQueueList(node.data.id);
-									console.log(real);
+									//console.log(real);
 									//was queue
 									node.data.lastQueue.forEach(function (item) {
                                         $('<div>' + item + '</div>').appendTo($('#modalQueue'));
@@ -889,8 +1124,8 @@
             ConnectionTemp.edges.forEach(function (edge) {
                 if (edge.data.id == (sourceIp + "" + targetIp)) {
                     edge.data.isActive = !edge.data.isActive;
-                    console.log("IN MODAL to inactivate connection ID: ", edge.data.id);
-                    console.log("IN MODAL to inactivate connection: ", edge.data.isActive);
+                    //console.log("IN MODAL to inactivate connection ID: ", edge.data.id);
+                    //console.log("IN MODAL to inactivate connection: ", edge.data.isActive);
                 }
             })
 
@@ -899,9 +1134,9 @@
                     changeID = el.data.id;
                     //console.log("el.data.id: ",el.data.id)
                     //console.log("CHANGING ACTIVE OF CONNECTION");
-                    console.log("before chaing the status: ", el.data.isActive);
+                    //console.log("before chaing the status: ", el.data.isActive);
 					el.data.isActive = !el.data.isActive;
-                    console.log("after changing the status: " + el.data.isActive);
+                    //console.log("after changing the status: " + el.data.isActive);
                     changeIsActive = el.data.isActive;
 				}
 			});
@@ -916,7 +1151,7 @@
 				dataType: 'json',
 				contentType: 'application/json;charset=utf-8',
 				success: function (data) {
-					console.log("after successfully call ajax, data: ", data)
+					//console.log("after successfully call ajax, data: ", data)
 					alert(data);
 					$("#NodePopup").html("");
 					$("#NodePopup").modal('hide');
@@ -1018,7 +1253,7 @@
 				//sets the javascript value (of isActive) to true/ false
 				var element = cy.getElementById(ip);
 				//var element = cy.$('#' + ip);
-				console.log(ip);
+				//console.log(ip);
 				console.log(element);
 				console.log("node infomation: ",element._private.data);
 
@@ -1083,13 +1318,13 @@
 		===================================================================================================*/
 
 		function processTransactionButton(event) {
-			console.log("this transaction was clicked: " + event);
+			//console.log("this transaction was clicked: " + event);
 
 			var returnText = "";
 			obj = {};
 			obj['transId'] = event;
 			obj = JSON.stringify(obj);
-			console.log(obj);
+			//console.log(obj);
 			var url = '/Transactions/ProcessTransaction';
 			$.ajax({
 				type: 'POST',
@@ -1098,12 +1333,12 @@
 				dataType: 'json',
 				contentType: 'application/json;charset=utf-8',
 				success: function (response) {
-					console.log("returned correctly...");
+					//console.log("returned correctly...");
 					//if the transaction succeeded.
 					if (response.success) {
 						$("#NodePopup").html("");
 						$("#NodePopup").modal('hide');
-						console.log(response.responseText);
+						//console.log(response.responseText);
 						//printResponse(response.responseText);
 						UpdateTransactionProcessed(response.responseText, event);
 						UpdateTransactionStatus("On the way back", event);
@@ -1113,7 +1348,7 @@
 						// DoSomethingElse()
 						$("#NodePopup").html("");
 						$("#NodePopup").modal('hide');
-						console.log(response.responseText);
+						//console.log(response.responseText);
 						//printResponse(response.responseText)
 						UpdateTransactionProcessed(response.responseText, event);
 						UpdateTransactionStatus("On the way back", event);
@@ -1156,7 +1391,7 @@
 		}
 		function remove(array, element) {
 			const index = array.indexOf(element);
-			console.log(array);
+			//console.log(array);
 
 			if (array.length <= 2) {
 				array.splice(0, array.length);
