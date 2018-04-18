@@ -10,8 +10,8 @@
         <div class="panel-body">
 
             @using (Html.BeginForm())
-            {
-                @Html.AntiForgeryToken()
+    {
+        @Html.AntiForgeryToken()
 
             <div class="form-horizontal">
                 <h4>Relay</h4>
@@ -34,13 +34,13 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.relayName, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.relayName, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.relayName, "", new { @class = "text-danger" })
-                    </div>
-                </div>
+                @*<div class="form-group">
+            @Html.LabelFor(model => model.relayName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.relayName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.relayName, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
 
 
 
@@ -80,9 +80,18 @@
             </div>
         </div>*@
 
+                <div class="form-group">
+                    @Html.Label("To IP ", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("ip", new SelectList(ViewBag.ip, ""), htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessage("ip", "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
                 @*Weight*@
                 <div class="form-group">
-                    @Html.Label("Weight to Gateway", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.Label("Weight to IP", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.Editor("weight", new { htmlAttributes = new { @class = "form-control", @type = "number", @step = "any", @min = "1", @max = "500", autocomplete = "on" } })
                         @Html.ValidationMessage("weight", "", new { @class = "text-danger" })
@@ -97,11 +106,15 @@
                     </div>
                 </div>
             </div>
-            }
+}
+
+            @*<div>
+                @Html.ActionLink("Back to List", "Index")
+            </div>*@
 
             <div>
-                @Html.ActionLink("Back to List", "Index")
+                <a href="../EditNetwork"> Back to Network Options </a>
             </div>
-</div>
+        </div>
 </div>
 </div>

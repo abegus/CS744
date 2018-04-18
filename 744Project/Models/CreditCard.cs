@@ -20,7 +20,7 @@ namespace _744Project.Models
 
         //[Required]
         [Display(Name = "Card Number")]
-        //[Range(1000000000000000, 9999999999999999, ErrorMessage = "Card Number must be 16 digits and not starting with a zero ")]
+        [Range(1000000000000000, 9999999999999999, ErrorMessage = "Card Number must be 16 digits and not starting with a zero ")]
         public Int64 cardNumber { get; set; }
         [Required]
         [Display(Name = "Card Expiration Date")]

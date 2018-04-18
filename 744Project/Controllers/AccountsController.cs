@@ -54,6 +54,18 @@ namespace _744Project.Controllers
             //
         }
 
+        public Boolean checkDuplicateCard(long cardNumber)
+        {
+            Boolean duplicate = false;
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select count(*) from CreditCards where cardNumber like '" + cardNumber + "' ";
+            int totalDuplicate = Convert.ToInt32(cmd.ExecuteScalar());
+            if (totalDuplicate > 0)
+                duplicate = true;
+            connect.Close();
+            return duplicate;
+        }
         // POST: Accounts/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -71,9 +83,22 @@ namespace _744Project.Controllers
             //db.CreditCards.Add(creditCard);                
             //db.Accounts.Add(account);
             //db.SaveChanges();
+            Boolean thereIsAnError = false;
             if (account.accountBalance > 9999999999999999 || account.accountBalance < -9999999999999999)
             {
                 ModelState.AddModelError("account.accountBalance", "The balance must between -9999999999999999 and 9999999999999999");
+                thereIsAnError = true;
+                //return View(vModel.account);
+            }
+            Boolean duplicateCard = checkDuplicateCard(creditCard.cardNumber);
+            if (duplicateCard)
+            {
+                ModelState.AddModelError("creditCard.cardNumber", "The card number you entered matches another card.");
+                ViewBag.accountID = new SelectList(db.Accounts, "accountID", "accountNumber", creditCard.accountID);
+                thereIsAnError = true;                
+            }
+            if (thereIsAnError)
+            {
                 return View(vModel.account);
             }
             db.Accounts.Add(account);                
@@ -86,7 +111,7 @@ namespace _744Project.Controllers
             //Get the last card ID which is for the one just created:
             int lastCardId = getLastCardId();
             //Get a random card number from the table NewCardNumbers and store it in cardNumber of table CreditCards:
-            getRandomCardNumber(lastCardId);
+            //getRandomCardNumber(lastCardId);
             return RedirectToAction("Index");
             //}            
             //return View(vModel.account);

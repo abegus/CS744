@@ -10,20 +10,20 @@
         <div class="panel-body">
 
             @using (Html.BeginForm())
-            {
-                @Html.AntiForgeryToken()
+    {
+        @Html.AntiForgeryToken()
 
             <div class="form-horizontal">
                 <h4>Regions</h4>
                 <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(model => model.regions.regionName, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.regions.regionName, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.regions.regionName, "", new { @class = "text-danger" })
-                    </div>
-                </div>
+                @*<div class="form-group">
+            @Html.LabelFor(model => model.regions.regionName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.regions.regionName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.regions.regionName, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.regions.gatewayIP, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -33,14 +33,13 @@
                     </div>
                 </div>
                 @*Relay Name*@
-                <div class="form-group">
-                    @*@Html.LabelFor(model => model.relay.relayName, htmlAttributes: new { @class = "control-label col-md-2" })*@
-                    @Html.Label("Gateway Name", htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.relay.relayName, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.relay.relayName, "", new { @class = "text-danger" })
-                    </div>
-                </div>
+                @*<div class="form-group">
+            @Html.Label("Gateway Name", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.relay.relayName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.relay.relayName, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
                 @*Relay Queue Limit*@
                 <div class="form-group">
                     @*@Html.LabelFor(model => model.relay.relayQueue, htmlAttributes: new { @class = "control-label col-md-2" })*@
@@ -75,13 +74,33 @@
                     </div>
                 </div>
                 @*Gateway to PC Weight*@
+                @*<div class="form-group">
+            @Html.LabelFor(model => model.relayToProcessCenterConnection.relayToProcessCenterConnectionWeight, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.relayToProcessCenterConnection.relayToProcessCenterConnectionWeight, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.relayToProcessCenterConnection.relayToProcessCenterConnectionWeight, "", new { @class = "text-danger" })
+                <h4 style="color:green">@ViewBag.SuccessMessage</h4>
+            </div>
+        </div>*@
+
                 <div class="form-group">
-                    @Html.LabelFor(model => model.relayToProcessCenterConnection.relayToProcessCenterConnectionWeight, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.Label("Gateway to IP ", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EditorFor(model => model.relayToProcessCenterConnection.relayToProcessCenterConnectionWeight, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.relayToProcessCenterConnection.relayToProcessCenterConnectionWeight, "", new { @class = "text-danger" })
+                        @Html.DropDownList("ip", new SelectList(ViewBag.ip, ""), htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessage("ip", "", new { @class = "text-danger" })                        
                     </div>
                 </div>
+
+                <div class="form-group">
+                    @Html.Label("Gateway weight ", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.Editor("gatewayWeight", new { htmlAttributes = new { @class = "form-control", @type = "number", @step = "any", @min = "1", @max = "500", autocomplete = "on" } })
+                        @Html.ValidationMessage("gatewayWeight", "", new { @class = "text-danger" })
+                        <h4 style="color:green">@ViewBag.SuccessMessage</h4>
+                    </div>
+                </div>
+
+
                 @*<div class="form-group">
             @Html.Label("Gateway to Process Center Weight", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -97,12 +116,15 @@
                     </div>
                 </div>
             </div>
-            }
+}
 
+            @*<div>
+            @Html.ActionLink("Back to List", "Index")
+        </div>*@
             <div>
-                @Html.ActionLink("Back to List", "Index")
+                <a href="../EditNetwork"> Back to Network Options </a>
             </div>
 
-</div>
+        </div>
 </div>
 </div>

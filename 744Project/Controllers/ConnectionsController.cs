@@ -412,16 +412,36 @@ namespace _744Project.Controllers
             //if IP1 = store and IP2 = relay
             else if (ip1Type == 3 && ip2Type == 2)
             {
-                cmd.CommandText = "insert into StoresToRelays (relayID, storeID, isActive, weight) " +
+                cmd.CommandText = "select count(*) from StoresToRelays where relayID like '"+id2+"' and storeID like '"+id1+"' ";
+                int totalConnections = Convert.ToInt32(cmd.ExecuteScalar());
+                if (totalConnections > 0)
+                {
+                    cmd.CommandText = "update StoresToRelays set weight = '"+weight+"' where relayID = '"+id2+"' and storeID = '"+id1+"' ";
+                    cmd.ExecuteScalar();
+                }
+                else
+                {
+                    cmd.CommandText = "insert into StoresToRelays (relayID, storeID, isActive, weight) " +
                     "values('" + id2 + "', '" + id1 + "', '" + true + "', '" + weight + "')";
-                cmd.ExecuteScalar();
+                    cmd.ExecuteScalar();
+                }                
             }
             //if IP1 = relay and IP2 = store
             else if (ip1Type == 2 && ip2Type == 3)
             {
-                cmd.CommandText = "insert into StoresToRelays (relayID, storeID, isActive, weight) " +
-                    "values('" + id1 + "', '" + id2 + "', '" + true + "', '" + weight + "')";
-                cmd.ExecuteScalar();
+                cmd.CommandText = "select count(*) from StoresToRelays where relayID like '" + id2 + "' and storeID like '" + id1 + "' ";
+                int totalConnections = Convert.ToInt32(cmd.ExecuteScalar());
+                if (totalConnections > 0)
+                {
+                    cmd.CommandText = "update StoresToRelays set weight = '" + weight + "' where relayID = '" + id2 + "' and storeID = '" + id1 + "' ";
+                    cmd.ExecuteScalar();
+                }
+                else
+                {
+                    cmd.CommandText = "insert into StoresToRelays (relayID, storeID, isActive, weight) " +
+                        "values('" + id1 + "', '" + id2 + "', '" + true + "', '" + weight + "')";
+                    cmd.ExecuteScalar();
+                }
             }
             connect.Close();
         }

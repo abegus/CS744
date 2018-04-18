@@ -17,6 +17,11 @@ namespace _744Project.Controllers
 
         static string connectionString = Configuration.getConnectionString();
         SqlConnection connect = new SqlConnection(connectionString);
+        static DateTime g_cardExpirationDate;
+        static string str_g_cardExpirationDate;
+        //To store the value of cardID and cardNumber:
+        static int g_cardID;
+        static long g_cardNumber;
         //SqlConnection connect = Configuration.getConnectionString();
         // GET: CreditCards
         public ActionResult Index()
@@ -56,16 +61,38 @@ namespace _744Project.Controllers
         {
             if (ModelState.IsValid)
             {
+                
+                //Get a random card number from the table NewCardNumbers and store it in cardNumber of table CreditCards:
+                //getRandomCardNumber(creditCard.cardID);
+                //check if the card number matches another existing card:                
+                Boolean duplicateCard = checkDuplicateCard(creditCard.cardNumber);
+                if(duplicateCard)
+                {
+                    ModelState.AddModelError("cardNumber", "The card number you entered matches another card.");
+                    ViewBag.accountID = new SelectList(db.Accounts, "accountID", "accountNumber", creditCard.accountID);
+                    return View(creditCard);
+                }
                 db.CreditCards.Add(creditCard);
                 db.SaveChanges();
-                //Get a random card number from the table NewCardNumbers and store it in cardNumber of table CreditCards:
-                getRandomCardNumber(creditCard.cardID);
                 return RedirectToAction("Index");
             }
 
             ViewBag.accountID = new SelectList(db.Accounts, "accountID", "accountNumber", creditCard.accountID);
             return View(creditCard);
         }
+        public Boolean checkDuplicateCard(long cardNumber) 
+        {
+            Boolean duplicate = false;
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select count(*) from CreditCards where cardNumber like '"+cardNumber+"' ";
+            int totalDuplicate = Convert.ToInt32(cmd.ExecuteScalar());
+            if (totalDuplicate > 0)
+                duplicate = true;
+            connect.Close();
+            return duplicate;
+        }
+
         public void getRandomCardNumber(int cardID)
         {
             connect.Open();
@@ -90,6 +117,7 @@ namespace _744Project.Controllers
         // GET: CreditCards/Edit/5
         public ActionResult Edit(int? id)
         {
+            
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -102,34 +130,51 @@ namespace _744Project.Controllers
             //To get the cardID then use it when calling the POST method:
             if (id != null)
             {
-                cardID = Convert.ToInt32(id);
-                cardNumber = creditCard.cardNumber;
+                g_cardID = Convert.ToInt32(id);
+                g_cardNumber = creditCard.cardNumber;               
+                g_cardExpirationDate = creditCard.cardExpirationDate;
+                str_g_cardExpirationDate = g_cardExpirationDate.ToShortDateString();
+                str_g_cardExpirationDate = g_cardExpirationDate.Year + "-" + g_cardExpirationDate.Month.ToString("d2");
+                ViewBag.cardExpirationDate = str_g_cardExpirationDate;
             }
-
+            //creditCard.cardExpirationDate = g_cardExpirationDate;
             ViewBag.accountID = new SelectList(db.Accounts, "accountID", "accountNumber", creditCard.accountID);
             return View(creditCard);
         }
-        //To store the value of cardID and cardNumber:
-        static int cardID;
-        static long cardNumber;
+        
 
         // POST: CreditCards/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "cardID,cardNumber,cardExpirationDate,cardSecurityCode,accountID,firstName,lastName")] CreditCard creditCard)
+        public ActionResult Edit([Bind(Include = "cardID,cardNumber,cardExpirationDate,cardSecurityCode,accountID,firstName,lastName")] CreditCard creditCard, DateTime cardExpirationDate)
         {
-            if (ModelState.IsValid)
-            {
+            //creditCard.cardNumber = getCardNumber(g_cardID);
+            creditCard.cardID = g_cardID;
+            creditCard.cardNumber = g_cardNumber;
+            creditCard.cardExpirationDate = cardExpirationDate;
+            ViewBag.cardExpirationDate = creditCard.cardExpirationDate;
+            //if (ModelState.IsValid)
+            //{
+                ////Change the accountNumber again to match the accountID:
+                //changeCardNumberToPreviousCardNumber(cardID, cardNumber);
                 db.Entry(creditCard).State = EntityState.Modified;
-                db.SaveChanges();
-                //Change the accountNumber again to match the accountID:
-                changeCardNumberToPreviousCardNumber(cardID, cardNumber);
+                db.SaveChanges();                
                 return RedirectToAction("Index");
-            }
-            ViewBag.accountID = new SelectList(db.Accounts, "accountID", "accountNumber", creditCard.accountID);            
-            return View(creditCard);
+            //}
+            //ViewBag.accountID = new SelectList(db.Accounts, "accountID", "accountNumber", creditCard.accountID);            
+            //return View(creditCard);
+        }
+        public long getCardNumber(int cardID)
+        {
+            long cardNumber = 0;
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select cardNumber from creditCards where cardID = '"+cardID+"' ";
+            cardNumber = Convert.ToInt64(cmd.ExecuteScalar());
+            connect.Close();
+            return cardNumber;
         }
         public void changeCardNumberToPreviousCardNumber(int oldCardId, long newCardNumber)// was int newCardNumber
         {

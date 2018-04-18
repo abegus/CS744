@@ -277,7 +277,12 @@ namespace _744Project.Controllers
             db.SaveChanges();            
             //add storeID & relayID to StoreToRelays table:
             saveStoresToRelays(store.relayID, storeId, true, store.storeWeight);
-            return RedirectToAction("Index");
+            //return RedirectToAction("Index");
+            ViewBag.SuccessMessage = "The new store has been successfully added to the network!";
+            ViewBag.regionID = new SelectList(db.Regions, "regionID", "regionName", store.regionID);
+            ViewBag.relayID = new SelectList(db.Relays, "relayID", "relayName", store.relayID);
+            getAllIps();
+            return View(store);            
             //}
 
             //ViewBag.regionID = new SelectList(db.Regions, "regionID", "regionName", store.regionID);

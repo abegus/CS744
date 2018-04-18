@@ -39,21 +39,25 @@ namespace _744Project.Controllers
             model = new LoginViewModel();
             if(!string.IsNullOrWhiteSpace(id))
                 g_id = id;
-            pageRefreshes++;
+            pageRefreshes++;            
+            //Random index = new Random();
+            //g_q1 = questionIds[index.Next(1, 4) - 1];
             //The below guarantees us to have three non-redundant different random questions:
             if (pageRefreshes == 1)
             {
-                getThreeQuestions();
+                getThreeQuestions(0);
                 model.SecuriyQuestion = getQuestion(g_id, g_q1);  //db.Questions.Find(g_q1).QuestionText;
                 g_final_question = g_q1;
             }
             else if(pageRefreshes == 2 )
             {
+                getThreeQuestions(1);
                 model.SecuriyQuestion = getQuestion(g_id, g_q2); //db.Questions.Find(g_q2).QuestionText;
                 g_final_question = g_q2;
             }
-            else if(pageRefreshes == 3)
+            else
             {
+                getThreeQuestions(2);
                 model.SecuriyQuestion = getQuestion(g_id, g_q3);  //db.Questions.Find(g_q3).QuestionText;
                 pageRefreshes = 0;
                 g_final_question = g_q3;
@@ -65,26 +69,34 @@ namespace _744Project.Controllers
             //return View(db.SecurityQuestions.ToList());
             return View(model);
         }
-        public void getThreeQuestions()
+        public void getThreeQuestions(int ran)
         {
-            Random index = new Random();
-            g_q1 = index.Next(1, 4);
-            if(g_q1 == 3)
+            int [] questionIds = new int[3];
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select questionID from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY questionID ASC), * FROM SecurityQuestions where AspNetUserID like '" + g_id + "') as t  where rowNum = '" + 1 + "'";
+            questionIds[0] = Convert.ToInt32(cmd.ExecuteScalar());
+            cmd.CommandText = "select questionID from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY questionID ASC), * FROM SecurityQuestions where AspNetUserID like '" + g_id + "') as t  where rowNum = '" + 2 + "'";
+            questionIds[1] = Convert.ToInt32(cmd.ExecuteScalar());
+            cmd.CommandText = "select questionID from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY questionID ASC), * FROM SecurityQuestions where AspNetUserID like '" + g_id + "') as t  where rowNum = '" + 3 + "'";
+            questionIds[2] = Convert.ToInt32(cmd.ExecuteScalar());
+            connect.Close();            
+            g_q1 = questionIds[ran];
+            if (g_q1 == questionIds[3 - 1])
             {
-                g_q2 = 1;
-                g_q3 = 2;
+                g_q2 = questionIds[1 - 1];
+                g_q3 = questionIds[2 - 1];
             }
-            else if(g_q1 == 2)
+            else if(g_q1 == questionIds[2 - 1])
             {
-                g_q2 = 3;
-                g_q3 = 1;
+                g_q2 = questionIds[3 - 1];
+                g_q3 = questionIds[1 - 1];
             }
-            else if(g_q1 == 1)
+            else if(g_q1 == questionIds[1 - 1])
             {
-                g_q2 = 2;
-                g_q3 = 3;
-            }
-            
+                g_q2 = questionIds[2 - 1];
+                g_q3 = questionIds[3 - 1];
+            }            
         }
         public string getQuestion(string g_id, int questionId)
         {
@@ -179,9 +191,30 @@ namespace _744Project.Controllers
                 }
                 else
                 {
+                    pageRefreshes++;
+                    //The below guarantees us to have three non-redundant different random questions:
+                    if (pageRefreshes == 1)
+                    {
+                        //getThreeQuestions();
+                        model.SecuriyQuestion = getQuestion(g_id, g_q1);  //db.Questions.Find(g_q1).QuestionText;
+                        g_final_question = g_q1;
+                    }
+                    else if (pageRefreshes == 2)
+                    {
+                        model.SecuriyQuestion = getQuestion(g_id, g_q2); //db.Questions.Find(g_q2).QuestionText;
+                        g_final_question = g_q2;
+                    }
+                    else
+                    {
+                        model.SecuriyQuestion = getQuestion(g_id, g_q3);  //db.Questions.Find(g_q3).QuestionText;
+                        pageRefreshes = 0;
+                        g_final_question = g_q3;
+                    }
+                    ViewBag.Security = "";
+
                     ModelState.AddModelError("answer", "Input Error: Please provide a correct answer.");
                     return View(model);
-                    //return RedirectToAction("Index", "SecurityQuestions", new { id });
+                    //return RedirectToAction("Index", "SecurityQuestions", new { id });                    
                 }
             }
             //var answers = model.AnswerToSecurityQuestion;
