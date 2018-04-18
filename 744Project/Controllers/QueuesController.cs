@@ -116,6 +116,12 @@ namespace _744Project.Controllers
         public void changeQueueLimit(string ip, int? newLimit)
         {
             string id = getId(ip);
+
+            //abes code to set inactive
+            var relay = db.Relays.Find(id);
+            relay.isActive = false;
+            db.SaveChanges();
+            //end of abes code to set inactive
             
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
