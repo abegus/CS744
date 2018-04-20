@@ -63,49 +63,63 @@ namespace _744Project.Controllers
             var valid = true;
             //cant check if the card attached to the account matches one in the database, because it must in order
             //to be a valid transaction....
-            
-            //Start by SALEH
+
             //check if card exists in creditcards
-            var creditCard = db.CreditCards.Find(transaction.cardNumber);
-            if(db.CreditCards == null)
-            {
-                valid = false;
-            }
-            //End by SALEH
+            var creditCard = (from cd in db.CreditCards where cd.cardNumber == transaction.cardNumber select cd).FirstOrDefault();
             
-            //check if the card is expired            
-            //if (transaction.CreditCard.cardExpirationDate < transaction.transactionTime)
-            //{
-            //    valid = false;
-            //}
-            //Start by SALEH
-            if (creditCard.cardExpirationDate < transaction.transactionTime)
+            //if there is no such credit card with that number, the transaction is invalid.
+            if(creditCard == null)
             {
                 valid = false;
             }
-            //End by SALEH
 
-            //check if the account has enough balance for the amount mentioned
-            //first check debit, 
-            //var account = transaction.CreditCard.Account;
-
-            //Start by SALEH
-            var account = creditCard.Account;
-            //End by SALEH
-            if (transaction.transactionType.Equals("Debit"))
+            //check if the card is expired           
+            else
             {
-                if (account.accountBalance - System.Convert.ToDecimal(transaction.transactionAmount) < 0)
+                if (creditCard.cardExpirationDate < transaction.transactionTime)
                 {
                     valid = false;
                 }
-            }
-            else if (transaction.transactionType.Equals("Credit"))
-            {
-                if (account.accountBalance + System.Convert.ToDecimal(transaction.transactionAmount) > account.accountMax)
+
+                //check if the merchant's name and Ip match in the database
+                var store = (from st in db.Stores where st.storeIP == transaction.storeIP select st).FirstOrDefault();
+                //no such IP
+                if(store == null)
                 {
                     valid = false;
                 }
+                //no matching store name IF the transactionMerchant is not "SELF"
+                else if(transaction.transactionMerchant != "SELF" && transaction.transactionMerchant != "Self")
+                {
+                    if(transaction.transactionMerchant != store.storeName)
+                        valid = false;
+                }
+
+
+
+                //check if the account has enough balance for the amount mentioned
+                //first check debit, 
+                //var account = transaction.CreditCard.Account;
+
+                
+                var account = creditCard.Account;
+                //no more need for checking Debit...
+                /*if (transaction.transactionType.Equals("Debit"))
+                {
+                    if (account.accountBalance - System.Convert.ToDecimal(transaction.transactionAmount) < 0)
+                    {
+                        valid = false;
+                    }
+                }*/
+                if (transaction.transactionType.Equals("Credit"))
+                {
+                    if (account.accountBalance + System.Convert.ToDecimal(transaction.transactionAmount) > account.accountMax)
+                    {
+                        valid = false;
+                    }
+                }
             }
+            
 
             if (valid)
             {

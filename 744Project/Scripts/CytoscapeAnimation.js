@@ -299,7 +299,8 @@ function GetActiveStatus(nodeIp) {
 
 // update the innerHtml of the given transaction
 function UpdateTransactionStatus(Message, transactionId){
-	var div = $(".status#" + transactionId).html(Message + "");
+	//var div = $(".status#" + transactionId).html(Message + "");
+	$("td#" + transactionId + ".status").html(Message + "");
 }
 
 function UpdateTransactionProcessed(Message, transactionId) {

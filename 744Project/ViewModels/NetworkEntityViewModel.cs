@@ -13,6 +13,7 @@ namespace _744Project.ViewModels
     {
         public bool isActive { get; set; }
         public string ip { get; set; }
+        public string name { get; set; }
         public string id { get; set; }
         public int type { get; set; }
         public int? region { get; set; }
@@ -31,6 +32,7 @@ namespace _744Project.ViewModels
             region = store.regionID;
             isGateway = null; // a store cannot be a gateway
             queue = new List<string>();
+            name = store.storeName;
 
         }
         public NetworkEntityViewModel(Relay relay)
@@ -43,6 +45,7 @@ namespace _744Project.ViewModels
             isGateway = relay.isGateway;
             queue = new List<string>();
             queueLimit = relay.relayQueue;
+            name = null;
         }
         public NetworkEntityViewModel(ProcessCenter pc)
         {
@@ -54,6 +57,7 @@ namespace _744Project.ViewModels
             isGateway = null; //cant be a gateway.
             queue = new List<string>();
             type = 2;
+            name = null;
         }
     }
 }

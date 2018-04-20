@@ -58,13 +58,14 @@
     <div class="panel-body">
         <div class="row">
             <table class="table table-bordered">
-                <tr><th>Transaction Id</th><th>Store Ip</th><th>Encrypted Amount</th><th>Status</th><th>Processing Result</th><th>Action</th></tr>
+                <tr><th>Transaction Id</th><th>Store Ip</th><th>Encrypted Amount</th><th>Processed Time</th><th>Status</th><th>Processing Result</th><th>Action</th></tr>
                 @foreach (var trans in Model.transactions)
                 {
                     <tr>
                         <td>@trans.Id</td>
                         <td>@trans.storeIp</td>
                         <td>@trans.transactionAmount</td>
+						<td class="processTime" id="@trans.Id"></td>
 						<td class="status" id="@trans.Id">Not Sent</td>
 						<td class="pstatus" id="@trans.Id">N/A</td>
                         <td id="@trans.Id"><button class="SendTransaction btn btn-default" id="@trans.storeIp">Send</button></td>
@@ -1329,7 +1330,7 @@
 			obj = {};
 			obj['transId'] = event;
 			obj = JSON.stringify(obj);
-			//console.log(obj);
+			console.log(obj);
 			var url = '/Transactions/ProcessTransaction';
 			$.ajax({
 				type: 'POST',
@@ -1340,6 +1341,10 @@
 				success: function (response) {
 					//console.log("returned correctly...");
 					//if the transaction succeeded.
+					//update the processed time field:
+					var newDate = new Date().toLocaleString();
+					$("td#" + event + ".processTime").html(newDate+ "");
+
 					if (response.success) {
 						$("#NodePopup").html("");
 						$("#NodePopup").modal('hide');
