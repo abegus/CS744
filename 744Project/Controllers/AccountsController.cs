@@ -301,20 +301,34 @@ namespace _744Project.Controllers
                 }
             }
         }
+        public long getCardNumber(int cardID)
+        {
+            long cardNumber = 0;
+            //connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select cardNumber from creditCards where cardID = '" + cardID + "' ";
+            cardNumber = Convert.ToInt64(cmd.ExecuteScalar());
+            //connect.Close();
+            return cardNumber;
+        }
+
         public void checkAttachedTransactions(int id)
         {
+            //get the card number from the card ID:
+            long cardNumber = getCardNumber(id);
+
             SqlCommand cmd = connect.CreateCommand();
-            cmd.CommandText = "select count(*) from transactions where cardID = '" + id + "'  ";
+            cmd.CommandText = "select count(*) from transactions where cardNumber = '" + cardNumber + "'  ";
             int totalTransactionsForCard = Convert.ToInt32(cmd.ExecuteScalar());
             if (totalTransactionsForCard > 0)//if it's true, then there are transactions for that card and they need to be deleted as well.
             {
                 //count the related cards for the selected account:
-                cmd.CommandText = "select count(*) from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY transactionID ASC) ,* FROM transactions where cardID = '" + id + "') as t";
+                cmd.CommandText = "select count(*) from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY transactionID ASC) ,* FROM transactions where cardNumber = '" + cardNumber + "') as t";
                 int totalTransactions = Convert.ToInt32(cmd.ExecuteScalar());
                 for (int i = 1; i <= totalTransactions; i++)
                 {
                     //select the transactionID for the selected credit card:
-                    cmd.CommandText = "select transactionID from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY transactionID ASC) ,* FROM Transactions where cardID = '" + id + "') as t";
+                    cmd.CommandText = "select transactionID from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY transactionID ASC) ,* FROM Transactions where cardNumber = '" + cardNumber + "') as t";
                     int transactionID = Convert.ToInt32(cmd.ExecuteScalar());
                     //checkAttachedProcessTransactions(transactionID);
                     checkAttachedTransactionsForTransaction(transactionID, "ProcessCenterTransactions", "processCenterTransactionID");
@@ -324,7 +338,7 @@ namespace _744Project.Controllers
                     checkAttachedTransactionsForTransaction(transactionID, "RelayTransactions", "relayTransactionID");                    
                 }
                 //Now, delete the transaction from the Transactions table:
-                cmd.CommandText = "delete from transactions where cardID = '" + id + "' ";
+                cmd.CommandText = "delete from transactions where cardNumber = '" + cardNumber + "' ";
                 cmd.ExecuteScalar();
             }
         }

@@ -243,26 +243,28 @@ namespace _744Project.Controllers
                 }
             }
             connect.Close();
-        }
+        }        
 
         public void checkAttachedTransactions(int id)
         {
+            //get the card number from the card ID:
+            long cardNumber = getCardNumber(id);
             //Open a new connection to the database:
             connect.Open();
-            SqlCommand cmd = connect.CreateCommand();
-            cmd.CommandText = "select count(*) from transactions where cardID = '" + id + "'  ";
+            SqlCommand cmd = connect.CreateCommand();            
+            cmd.CommandText = "select count(*) from transactions where cardNumber = '" + cardNumber + "'  ";
             int totalTransactionsForCard = Convert.ToInt32(cmd.ExecuteScalar());
             if (totalTransactionsForCard > 0)//if it's true, then there are transactions for that card and they need to be deleted as well.
             {
                 //count the related cards for the selected account:
-                cmd.CommandText = "select count(*) from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY transactionID ASC) ,* FROM transactions where cardID = '" + id + "') as t";
+                cmd.CommandText = "select count(*) from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY transactionID ASC) ,* FROM transactions where cardNumber = '" + cardNumber + "') as t";
                 int totalTransactions = Convert.ToInt32(cmd.ExecuteScalar());
                 connect.Close();
                 for (int i = 1; i <= totalTransactions; i++)
                 {
                     connect.Open();
                     //select the transactionID for the selected credit card:
-                    cmd.CommandText = "select transactionID from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY transactionID ASC) ,* FROM Transactions where cardID = '" + id + "') as t where rowNum = '"+i+"' ";
+                    cmd.CommandText = "select transactionID from (SELECT rowNum = ROW_NUMBER() OVER (ORDER BY transactionID ASC) ,* FROM Transactions where cardNumber = '" + cardNumber + "') as t where rowNum = '"+i+"' ";
                     int transactionID = Convert.ToInt32(cmd.ExecuteScalar());
                     connect.Close();
                     //check if there is a transaction in the ProcessCenterTransactions:                    
@@ -274,7 +276,7 @@ namespace _744Project.Controllers
                 }
                 connect.Open();
                 //Now, delete the transaction from the Transactions table:
-                cmd.CommandText = "delete from transactions where cardID = '" + id + "' ";
+                cmd.CommandText = "delete from transactions where cardNumber = '" + cardNumber + "' ";
                 cmd.ExecuteScalar();
                 //Close the connection to the database:
                 connect.Close();
