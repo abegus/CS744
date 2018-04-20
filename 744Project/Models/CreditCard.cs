@@ -12,7 +12,7 @@ namespace _744Project.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public CreditCard()
         {
-            Transactions = new HashSet<Transaction>();
+            //Transactions = new HashSet<Transaction>();
         }
         [Display(Name = "Card ID")]
         [Key]
@@ -55,8 +55,8 @@ namespace _744Project.Models
 
         //public virtual Customer Customer { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Transaction> Transactions { get; set; }
+        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        //public virtual ICollection<Transaction> Transactions { get; set; }
 
 
     } 

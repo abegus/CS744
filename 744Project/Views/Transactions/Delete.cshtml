@@ -14,19 +14,25 @@
                 <hr />
                 <dl class="dl-horizontal">
                     @*<dt>
-                        @Html.DisplayNameFor(model => model.Account.accountNumber)
-                    </dt>
+            @Html.DisplayNameFor(model => model.Account.accountNumber)
+        </dt>
 
-                    <dd>
-                        @Html.DisplayFor(model => model.Account.accountNumber)
-                    </dd>*@
-
+        <dd>
+            @Html.DisplayFor(model => model.Account.accountNumber)
+        </dd>*@
                     <dt>
-                        @Html.DisplayNameFor(model => model.CreditCard.cardNumber)
+                        @Html.DisplayNameFor(model => model.transactionID)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.CreditCard.cardNumber)
+                        @Html.DisplayFor(model => model.transactionID)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.cardNumber)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.cardNumber)
                     </dd>
 
                     <dt>
@@ -62,14 +68,26 @@
                     </dd>
 
                     <dt>
-                        @Html.DisplayNameFor(model => model.storeID)
+                        @Html.DisplayNameFor(model => model.storeIP)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.storeID)
+                        @Html.DisplayFor(model => model.storeIP)
                     </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.transactionStatus)
+                    </dt>
 
-                  
+                    <dd>
+                        @Html.DisplayFor(model => model.transactionStatus)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.encryptedFlag)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.encryptedFlag)
+                    </dd>
 
                 </dl>
 

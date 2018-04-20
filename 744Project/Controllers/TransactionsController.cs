@@ -31,7 +31,8 @@ namespace _744Project.Controllers
         // GET: Transactions
         public ActionResult Index()
         {
-            var transactions = db.Transactions.Include(t => t.CreditCard);
+            //var transactions = db.Transactions.Include(t => t.CreditCard);
+            var transactions = db.Transactions;
             return View(transactions.ToList());
         }
 
@@ -51,9 +52,9 @@ namespace _744Project.Controllers
         }
 
         [HttpPost]
-        public ActionResult ProcessTransaction(TransactionViewModel trans) 
+        public ActionResult ProcessTransaction(TransactionViewModel trans)
         {
-           // var transaction = db.Transactions.Find(trans.transId);
+            // var transaction = db.Transactions.Find(trans.transId);
             Encryption cl = new Encryption();
             cl.decryptAndStoreTransaction(trans.transId + "");
 
@@ -62,18 +63,38 @@ namespace _744Project.Controllers
             var valid = true;
             //cant check if the card attached to the account matches one in the database, because it must in order
             //to be a valid transaction....
-
-            //check if the card is expired
-            if(transaction.CreditCard.cardExpirationDate < transaction.transactionTime)
+            
+            //Start by SALEH
+            //check if card exists in creditcards
+            var creditCard = db.CreditCards.Find(transaction.cardNumber);
+            if(db.CreditCards == null)
             {
                 valid = false;
             }
+            //End by SALEH
+            
+            //check if the card is expired            
+            //if (transaction.CreditCard.cardExpirationDate < transaction.transactionTime)
+            //{
+            //    valid = false;
+            //}
+            //Start by SALEH
+            if (creditCard.cardExpirationDate < transaction.transactionTime)
+            {
+                valid = false;
+            }
+            //End by SALEH
+
             //check if the account has enough balance for the amount mentioned
             //first check debit, 
-            var account = transaction.CreditCard.Account;
+            //var account = transaction.CreditCard.Account;
+
+            //Start by SALEH
+            var account = creditCard.Account;
+            //End by SALEH
             if (transaction.transactionType.Equals("Debit"))
             {
-                if(account.accountBalance - System.Convert.ToDecimal(transaction.transactionAmount) < 0)
+                if (account.accountBalance - System.Convert.ToDecimal(transaction.transactionAmount) < 0)
                 {
                     valid = false;
                 }
@@ -100,46 +121,116 @@ namespace _744Project.Controllers
         // GET: Transactions/Create
         public ActionResult Create()
         {
-            ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardNumber");
-            ViewBag.storeID = new SelectList(db.Stores, "storeID", "storeIp");
+            //ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardNumber");
+            //ViewBag.storeID = new SelectList(db.Stores, "storeID", "storeIp");
             return View();
         }
 
+
+        public Boolean checkForCorrectIP(string ip, out string errorMessage)
+        {
+            Boolean correct = true;
+            errorMessage = "";
+            if (ip.Length < 11)//minimum length should match: 192.168.0.X = 11
+            {
+                errorMessage = "Input Error: The IP must be more than 11 characters";
+                correct = false;
+            }
+            else if (ip.Length > 13)//max length: 192.168.0.XXX = 13
+            {
+                errorMessage = "Input Error: The IP must be less than 13 characters";
+                correct = false;
+            }
+            else if (!ip.Substring(0, 10).Equals("192.168.0."))//our standard IP must start with "192.168.0."
+            {
+                errorMessage = "Input Error: The IP must start with '192.168.0.' ";
+                correct = false;
+            }
+            else if (string.IsNullOrWhiteSpace(ip.Substring(10)))//check if last digits of ip are empty spaces
+            {
+                errorMessage = "Input Error: The IP cannot end with empty spaces";
+                correct = false;
+            }
+            else if (!ip.Substring(10).All(char.IsDigit))//check last chars of IP are digits
+            {
+                errorMessage = "Input Error: The IP must end with digits";
+                correct = false;
+            }
+            else if (Convert.ToInt32(ip.Substring(10)) < 1 || Convert.ToInt32(ip.Substring(10)) > 254)//end of IP cannot be 0 nor 255 because they are reserved according to project description
+            {
+                errorMessage = "Input Error: The last digits of the IP must be anywhere from 1 to 254";
+                correct = false;
+            }
+            return correct;
+        }
+
+        static string g_transactionType = "", g_transactionMerchant = "";
+        static Boolean g_isSelf;
         // POST: Transactions/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "transactionID,transactionTime,transactionAmount,transactionType,transactionStatus,encryptedFlag,cardID,storeID")] Transaction transaction) // and the storeId
+        public ActionResult Create([Bind(Include = "transactionID,transactionTime,transactionAmount,transactionType, transactionMerchant,transactionStatus,encryptedFlag,cardNumber,storeIP, isSelf")] Transaction transaction) // and the storeId
         {
+
+            //if (!string.IsNullOrWhiteSpace(g_transactionMerchant))
+            //transaction.transactionMerchant = g_transactionMerchant;
+
+            if (transaction.transactionType == "Debit")
+            {
+                g_isSelf = false;
+                g_transactionType = "Debit";
+                if (transaction.isSelf == true)
+                {
+                    g_isSelf = true;
+                    g_transactionMerchant = "Self";
+                }
+                else
+                {
+                    g_isSelf = false;
+                    g_transactionMerchant = transaction.transactionMerchant;
+                }
+            }
+            else
+            {
+                g_transactionType = "Credit";
+                g_isSelf = false;
+                g_transactionMerchant = transaction.transactionMerchant;
+                //transaction.transactionMerchant = (from store in db.Stores where store.storeID == transaction.storeID select store.storeName).FirstOrDefault();                
+            }
+            transaction.transactionMerchant = g_transactionMerchant;
+            transaction.isSelf = g_isSelf;
+            transaction.transactionType = g_transactionType;            
+            
             if (ModelState.IsValid)
             {
                 
                 //to get he storeId, you have to send an additional string through the from on Transaction/Create. 
-                StoreTransaction st = new StoreTransaction();
-                //st.storeID = storeId;
-                st.storeID = transaction.storeID;
-                st.transactionID = transaction.transactionID;
-                if(transaction.transactionType == "Debit")
+                //StoreTransaction st = new StoreTransaction();
+                ////st.storeID = storeId;
+                //st.storeID = transaction.storeID;
+                //st.transactionID = transaction.transactionID;                
+                string errorMessage = "";
+                Boolean correctIP = checkForCorrectIP(transaction.storeIP, out errorMessage);
+                if (!correctIP)
                 {
-                    transaction.transactionMerchant = "Self";
-                    db.Transactions.Add(transaction);
-                }
-                else
-                {
-                    transaction.transactionMerchant = (from store in db.Stores where store.storeID == transaction.storeID select store.storeName).FirstOrDefault();
-                    db.Transactions.Add(transaction);
+                    ModelState.AddModelError("storeIP", errorMessage);
+                    return View(transaction);
                 }
 
-                db.StoreTransactions.Add(st);
+
+                //db.StoreTransactions.Add(st);
+                db.Transactions.Add(transaction);
                 db.SaveChanges();
+                encryption.encryptAndStoreTransaction(transaction.transactionID.ToString());
+                g_transactionType = ""; g_transactionMerchant = ""; g_isSelf = false;
                 return RedirectToAction("Index");
             }
 
 
-
-            ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardNumber", transaction.cardID);
-            ViewBag.storeID = new SelectList(db.Stores, "storeID", "storeIp", transaction.storeID);
+            //ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardNumber", transaction.cardID);
+            //ViewBag.storeID = new SelectList(db.Stores, "storeID", "storeIp", transaction.storeID);                        
             return View(transaction);
         }
 
@@ -155,8 +246,8 @@ namespace _744Project.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardNumber", transaction.cardID);
-            ViewBag.storeID = new SelectList(db.Stores, "storeID", "storeIp", transaction.storeID);
+            //ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardNumber", transaction.cardID);
+            //ViewBag.storeID = new SelectList(db.Stores, "storeID", "storeIp", transaction.storeID);
             return View(transaction);
         }
 
@@ -176,15 +267,15 @@ namespace _744Project.Controllers
                 }
                 else
                 {
-                    transaction.transactionMerchant = (from store in db.Stores where store.storeID == transaction.storeID select store.storeName).FirstOrDefault();
+                    //transaction.transactionMerchant = (from store in db.Stores where store.storeID == transaction.storeID select store.storeName).FirstOrDefault();
                     
                 }
                 db.Entry(transaction).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardNumber", transaction.cardID);
-            ViewBag.storeID = new SelectList(db.Stores, "storeID", "storeIp", transaction.storeID);
+            //ViewBag.cardID = new SelectList(db.CreditCards, "cardID", "cardNumber", transaction.cardID);
+            //ViewBag.storeID = new SelectList(db.Stores, "storeID", "storeIp", transaction.storeID);
             return View(transaction);
         }
 

@@ -18,7 +18,7 @@
                         @Html.DisplayNameFor(model => model.Account.accountNumber)
                     </th>*@
                     <th>
-                        @Html.DisplayNameFor(model => model.CreditCard.cardNumber)
+                        @Html.DisplayNameFor(model => model.cardNumber)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.transactionTime)
@@ -46,7 +46,7 @@
                             @Html.DisplayFor(modelItem => item.Account.accountNumber)
                         </td>*@
                         <td>
-                            @Html.DisplayFor(modelItem => item.CreditCard.cardNumber)
+                            @Html.DisplayFor(modelItem => item.cardNumber)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.transactionTime)
@@ -61,13 +61,13 @@
                             @Html.DisplayFor(modelItem => item.transactionMerchant)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.StoreTransactions.First().Store.storeIP)
-                            
+                            @*@Html.DisplayFor(modelItem => item.StoreTransactions.First().Store.storeIP)*@
+                            @Html.DisplayFor(modelItem => item.storeIP)
                         </td>
                        
                         <td>
-                            @Html.ActionLink("Edit", "Edit", new { id = item.transactionID }) |
-                            @Html.ActionLink("Details", "Details", new { id = item.transactionID }) |
+                            @*@Html.ActionLink("Edit", "Edit", new { id = item.transactionID }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.transactionID }) |*@
                             @Html.ActionLink("Delete", "Delete", new { id = item.transactionID }) |
                             @Html.ActionLink("Encrypt", "Encrypt", new { id = item.transactionID }) |
                             @Html.ActionLink("Decrypt", "Decrypt", new { id = item.transactionID })

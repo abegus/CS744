@@ -282,23 +282,30 @@ namespace _744Project.ViewModels
     public class EncryptedTransaction
     {
         public int Id { get; set; }
-        public int? cardId { get; set; }
+        //public int? cardId { get; set; }
         public string storeIp { get; set; }
         public bool? transactionStatus { get; set; }
         public string transactionAmount { get; set; }
         public bool? encryptedFlag { get; set; }
-
+        //Start by Saleh
+        public long cardNumber { get; set; }
+        //public string storeIP { get; set; }
+        //End by Saleh
         public EncryptedTransaction(Transaction trans)
         {
             this.Id = trans.transactionID;
-            this.cardId = trans.cardID;
+            //this.cardId = trans.cardID;
             this.transactionStatus = trans.transactionStatus;
-            this.storeIp = trans.StoreTransactions.FirstOrDefault().Store.storeIP;
+            //this.storeIp = trans.StoreTransactions.FirstOrDefault().Store.storeIP;
             this.encryptedFlag = trans.encryptedFlag;
             this.transactionAmount = trans.transactionAmount;
-        }
-
+            //Start by Saleh
+            this.cardNumber = trans.cardNumber;
+            this.storeIp = trans.storeIP;
+            //End by Saleh
     }
+
+}
 
     public class IpConnection //private?
     {

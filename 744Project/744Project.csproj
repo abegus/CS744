@@ -442,6 +442,22 @@
     <Compile Include="Migrations\201804180431431_editedAccountsAndcreditCards.Designer.cs">
       <DependentUpon>201804180431431_editedAccountsAndcreditCards.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804192327394_transactions.cs" />
+    <Compile Include="Migrations\201804192327394_transactions.Designer.cs">
+      <DependentUpon>201804192327394_transactions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804200041124_transactionsEdited.cs" />
+    <Compile Include="Migrations\201804200041124_transactionsEdited.Designer.cs">
+      <DependentUpon>201804200041124_transactionsEdited.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804200129096_transaction2.cs" />
+    <Compile Include="Migrations\201804200129096_transaction2.Designer.cs">
+      <DependentUpon>201804200129096_transaction2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804200140099_t3.cs" />
+    <Compile Include="Migrations\201804200140099_t3.Designer.cs">
+      <DependentUpon>201804200140099_t3.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -908,6 +924,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804180431431_editedAccountsAndcreditCards.resx">
       <DependentUpon>201804180431431_editedAccountsAndcreditCards.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804192327394_transactions.resx">
+      <DependentUpon>201804192327394_transactions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804200041124_transactionsEdited.resx">
+      <DependentUpon>201804200041124_transactionsEdited.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804200129096_transaction2.resx">
+      <DependentUpon>201804200129096_transaction2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804200140099_t3.resx">
+      <DependentUpon>201804200140099_t3.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.addmiddlename.resources" />
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.initialcreate.resources" />

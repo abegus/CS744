@@ -10,80 +10,105 @@
 
 
             @using (Html.BeginForm())
-            {
-                @Html.AntiForgeryToken()
+    {
+        @Html.AntiForgeryToken()
 
-            <div class="form-horizontal">
-                <h4>Transaction</h4>
-                <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(model => model.transactionTime, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.transactionTime, new { htmlAttributes = new { type = "datetime-local", @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.transactionTime, "", new { @class = "text-danger" })
-                    </div>
+        <div class="form-horizontal">
+            <h4>Transaction</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.transactionTime, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.transactionTime, new { htmlAttributes = new { type = "datetime-local", @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.transactionTime, "", new { @class = "text-danger" })
                 </div>
+            </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.transactionAmount, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.transactionAmount, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.transactionAmount, "", new { @class = "text-danger" })
-                    </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.transactionAmount, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.transactionAmount, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.transactionAmount, "", new { @class = "text-danger" })
                 </div>
+            </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.transactionType, htmlAttributes: new { @class = "control-label col-md-2" })
-                    
-                        @*@Html.EditorFor(model => model.transactionType, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.transactionType, "", new { @class = "text-danger" })*@
-                        <div class="col-md-10">
-                            <select class="form-control" id="transactionType" name="transactionType">
-                                <option selected="selected" value="Credit">Credit</option>
-                                <option value="Debit">Debit</option>
-                            </select>
-                            <span class="field-validation-valid text-danger" data-valmsg-for="transactionType" data-valmsg-replace="true"></span>
-                        </div>
-                    
+            <div class="form-group">
+                @Html.LabelFor(model => model.transactionType, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <select class="form-control" id="transactionType" name="transactionType">
+                        <option selected="selected" value="Credit">Credit</option>
+                        <option value="Debit">Debit</option>
+                    </select>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="transactionType" data-valmsg-replace="true"></span>
                 </div>
+            </div>
 
-                @*<div class="form-group">
-                    @Html.LabelFor(model => model.transactionMerchant, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.transactionMerchant, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.transactionMerchant, "", new { @class = "text-danger" })
-                    </div>
-                </div>*@
 
-                @*<div class="form-group">
-                    @Html.LabelFor(model => model.transactionStatus, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        <div class="checkbox">
-                            @Html.EditorFor(model => model.transactionStatus)
-                            @Html.ValidationMessageFor(model => model.transactionStatus, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>*@
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.cardID, "Credit Card Number", htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.DropDownList("cardID", null, htmlAttributes: new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.cardID, "", new { @class = "text-danger" })
-                    </div>
+            <div class="form-group" id="isSelf">
+                @Html.LabelFor(model => model.isSelf, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.CheckBoxFor(model => model.isSelf, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.isSelf, "", new { @class = "text-danger" })
                 </div>
+            </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.StoreTransactions.First().Store.storeIP, "Store IP", htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.DropDownList("storeID", null, htmlAttributes: new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.StoreTransactions.First().Store.storeIP, "", new { @class = "text-danger" })
-                    </div>
+            <div class="form-group" id="merchantName">
+                @Html.LabelFor(model => model.transactionMerchant, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.transactionMerchant, new { htmlAttributes = new { id = "merchantNameInput", @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.transactionMerchant, "", new { @class = "text-danger" })
                 </div>
+            </div>
 
 
-                @*<div class="form-group">
+            @*<div class="form-group">
+            @Html.LabelFor(model => model.transactionStatus, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.transactionStatus)
+                    @Html.ValidationMessageFor(model => model.transactionStatus, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>*@
+
+            @*<div class="form-group">
+            @Html.LabelFor(model => model.cardID, "Credit Card Number", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("cardID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.cardID, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+            @*<div class="form-group">
+            @Html.LabelFor(model => model.StoreTransactions.First().Store.storeIP, "Store IP", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("storeID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.StoreTransactions.First().Store.storeIP, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.cardNumber, "Credit Card Number", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.cardNumber, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.cardNumber, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.storeIP, "Store IP", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.storeIP, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.storeIP, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+
+
+            @*<div class="form-group">
             @Html.LabelFor(model => model.accountID, "accountID", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("accountID", null, htmlAttributes: new { @class = "form-control" })
@@ -91,21 +116,57 @@
             </div>
         </div>*@
 
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Create" class="btn btn-default" />
-                    </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-default" />
                 </div>
             </div>
-            }
+        </div>
+}
 
             <div>
                 @Html.ActionLink("Back to List", "Index")
             </div>
 
+            <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+            <script src="http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.js"></script>
             @section Scripts {
                 @Scripts.Render("~/bundles/jqueryval")
+
+                <script>                    
+                    console.log("Before selecting transaction type");
+                    $("#isSelf").hide();
+                    $("#transactionType").on("change", function () {
+                        if ($("#transactionType option:selected").val() == "Debit") {
+                            $("#isSelf").show();
+                            console.log("Debit is selected");
+                        } else {
+                            $("#isSelf").hide();
+                            console.log("Credit is selected");
+                        }
+                    });
+                    console.log("After selecting transaction type");
+                </script>
+                <script>
+                    console.log("Before selecting isSelf");
+                    const checkbox = $("#isSelf");
+                    checkbox.change(function (event) {
+                        var checkbox = event.target;
+                        if (checkbox.checked) {
+                            $("#merchantName").hide();
+                            console.log("isSelf is checked");
+                            document.getElementById("merchantNameInput").value = "Self";
+                            console.log("mechantName value changed to Self");
+                        } else {
+                            $("#merchantName").show();
+                            console.log("isSelf is unchecked");
+                            document.getElementById("merchantNameInput").value = "";
+                            console.log("mechantName value changed to '' ");
+                        }
+                    });
+                    console.log("After selecting isSelf");                    
+                </script>
             }
-</div>
+        </div>
 </div>
 </div>

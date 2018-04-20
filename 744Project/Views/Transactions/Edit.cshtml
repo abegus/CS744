@@ -11,8 +11,8 @@
 
 
             @using (Html.BeginForm())
-            {
-                @Html.AntiForgeryToken()
+    {
+        @Html.AntiForgeryToken()
 
             <div class="form-horizontal">
                 <h4>Transaction</h4>
@@ -39,9 +39,9 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.transactionType, htmlAttributes: new { @class = "control-label col-md-2" })
                     @*<div class="col-md-10">
-            @Html.EditorFor(model => model.transactionType, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.transactionType, "", new { @class = "text-danger" })
-        </div>*@
+                @Html.EditorFor(model => model.transactionType, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.transactionType, "", new { @class = "text-danger" })
+            </div>*@
                     <div class="col-md-10">
                         <select class="form-control" id="transactionType" name="transactionType">
                             <option selected="selected" value="Credit">Credit</option>
@@ -52,12 +52,12 @@
                 </div>
 
                 @*<div class="form-group">
-                    @Html.LabelFor(model => model.transactionMerchant, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.transactionMerchant, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.transactionMerchant, "", new { @class = "text-danger" })
-                    </div>
-                </div>*@
+            @Html.LabelFor(model => model.transactionMerchant, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.transactionMerchant, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.transactionMerchant, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
 
                 @*<div class="form-group">
             @Html.LabelFor(model => model.transactionStatus, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -69,19 +69,37 @@
             </div>
         </div>*@
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.cardID, "card ID", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                <div class="form-group" id="isSelf">
+                    @Html.LabelFor(model => model.isSelf, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.DropDownList("cardID", null, htmlAttributes: new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.cardID, "", new { @class = "text-danger" })
+                        @Html.CheckBoxFor(model => model.isSelf, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.isSelf, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group" id="merchantName">
+                    @Html.LabelFor(model => model.transactionMerchant, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.transactionMerchant, new { htmlAttributes = new { id = "merchantNameInput", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.transactionMerchant, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.cardNumber, "Credit Card Number", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.cardNumber, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.cardNumber, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.StoreTransactions.First().Store.storeIP, "Store IP", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.storeIP, "Store IP", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.DropDownList("storeID", null, htmlAttributes: new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.StoreTransactions.First().Store.storeIP, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.storeIP, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.storeIP, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
@@ -109,7 +127,7 @@
                     </div>
                 </div>
             </div>
-            }
+}
 
             <div>
                 @Html.ActionLink("Back to List", "Index")
@@ -117,7 +135,44 @@
 
             @section Scripts {
                 @Scripts.Render("~/bundles/jqueryval")
+
+                <script>
+
+                    console.log("Before selecting transaction type");
+                    $("#isSelf").hide();
+                    $("#transactionType").on("change", function () {
+                        if ($("#transactionType option:selected").val() == "Debit") {
+                            $("#isSelf").show();
+                            console.log("Debit is selected");
+                        } else {
+                            $("#isSelf").hide();
+                            console.log("Credit is selected");
+                        }
+                    });
+                    console.log("After selecting transaction type");
+                </script>
+                <script>
+                    console.log("Before selecting isSelf");
+                    const checkbox = $("#isSelf");
+                    checkbox.change(function (event) {
+                        var checkbox = event.target;
+                        if (checkbox.checked) {
+                            $("#merchantName").hide();
+                            console.log("isSelf is checked");
+                            document.getElementById("merchantNameInput").value = "Self";
+                            console.log("mechantName value changed to Self");
+                        } else {
+                            $("#merchantName").show();
+                            console.log("isSelf is unchecked");
+                            document.getElementById("merchantNameInput").value = "";
+                            console.log("mechantName value changed to '' ");
+                        }
+                    });
+                    console.log("After selecting isSelf");
+                </script>
+
+
             }
-</div>
+        </div>
 </div>
 </div>

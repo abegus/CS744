@@ -58,10 +58,10 @@ namespace _744Project.Models
                 .WithRequired(e => e.AspNetUser)
                 .HasForeignKey(e => e.UserId);
 
-            modelBuilder.Entity<CreditCard>()
-                .HasMany(e => e.Transactions)
-                .WithRequired(e => e.CreditCard)
-                .HasForeignKey(e => e.cardID);
+            modelBuilder.Entity<CreditCard>();
+                //.HasMany(e => e.Transactions)
+                //.WithRequired(e => e.CreditCard)
+                //.HasForeignKey(e => e.cardID);
 
             //adding many to many (self) relatioship for Relays
            /* modelBuilder.Entity<Relay>()

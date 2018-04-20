@@ -20,6 +20,7 @@ namespace _744Project.Models
 
         [Display(Name = "Transaction Time")]
         [Required]
+        [DisplayFormat(DataFormatString = "{0:MMM dd, yyyy HH:mm}")]
         public DateTime? transactionTime { get; set; }
 
         [Display(Name = "Transaction Amount")]
@@ -33,8 +34,8 @@ namespace _744Project.Models
         [StringLength(50, MinimumLength = 2)]
         public string transactionType { get; set; }
 
-        [Display(Name = "Transaction Merchant")]
-        //[Required]
+        [Display(Name = "Merchant Name")]
+        [Required]
         //[StringLength(100, MinimumLength = 2, ErrorMessage = "The transaction Merchant length is two at least")]
         public string transactionMerchant { get; set; }
 
@@ -44,14 +45,30 @@ namespace _744Project.Models
 
         //public bool? sentFlag { get; set; }
 
-        [Display(Name = "Card ID")]
-        [Required]
-        public int? cardID { get; set; }
+        //[Display(Name = "Card ID")]
+        //[Required]
+        //public int? cardID { get; set; }
 
-        [Display(Name = "Store ID")]
+        //[Display(Name = "Store ID")]
+        //[Required]
+        //[StringLength(50)]
+        //public string storeID { get; set; }
+
+
+
         [Required]
-        [StringLength(50)]
-        public string storeID { get; set; }
+        [Display(Name = "Card Number")]
+        [Range(1000000000000000, 9999999999999999, ErrorMessage = "Card Number must be 16 digits and not starting with a zero ")]
+        public Int64 cardNumber { get; set; }
+
+        [Display(Name = "Store IP")]
+        [Required]
+        [StringLength(100)]
+        public string storeIP { get; set; }
+
+        [Display(Name = "Self?")]
+        public bool isSelf { get; set; }
+
 
         /* [Display(Name = "Account ID")]
          [Required]
@@ -59,7 +76,7 @@ namespace _744Project.Models
 
          public virtual Account Account { get; set; }*/
 
-        public virtual CreditCard CreditCard { get; set; }
+        //public virtual CreditCard CreditCard { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProcessCenterTransaction> ProcessCenterTransactions { get; set; }
