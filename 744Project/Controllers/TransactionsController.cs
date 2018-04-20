@@ -104,21 +104,25 @@ namespace _744Project.Controllers
                 
                 var account = creditCard.Account;
                 //no more need for checking Debit...
-                /*if (transaction.transactionType.Equals("Debit"))
+                if (transaction.transactionType.Equals("Debit"))
                 {
-                    if (account.accountBalance - System.Convert.ToDecimal(transaction.transactionAmount) < 0)
-                    {
-                        valid = false;
-                    }
-                }*/
+                    
+                    account.accountBalance -= System.Convert.ToDecimal(transaction.transactionAmount);
+                }
                 if (transaction.transactionType.Equals("Credit"))
                 {
                     if (account.accountBalance + System.Convert.ToDecimal(transaction.transactionAmount) > account.accountMax)
                     {
                         valid = false;
                     }
+                    else
+                    {
+                        account.accountBalance += System.Convert.ToDecimal(transaction.transactionAmount);
+                    }
                 }
+                db.SaveChanges();
             }
+            
             
 
             if (valid)
