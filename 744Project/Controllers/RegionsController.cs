@@ -123,7 +123,7 @@ namespace _744Project.Controllers
             SqlCommand cmd = connect.CreateCommand();
             cmd.CommandText = "select count(*) from ProcessCenters";
             int totalPCS = Convert.ToInt32(cmd.ExecuteScalar());
-            cmd.CommandText = "select count(*) from Relays";
+            cmd.CommandText = "select count(*) from Relays where isGateway = 1";
             int totalRelays = Convert.ToInt32(cmd.ExecuteScalar());
             List<string> ip = new List<string>();
             int ip1Counter = 0;
@@ -138,9 +138,9 @@ namespace _744Project.Controllers
             }
             for (int i = 1; i <= totalRelays; i++)
             {
-                cmd.CommandText = "select relayId from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY relayID ASC), *FROM Relays) as t where rowNum = '" + i + "'";
+                cmd.CommandText = "select relayId from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY relayID ASC), *FROM Relays where isGateway = 1) as t where rowNum = '" + i + "'";
                 string relayId = cmd.ExecuteScalar().ToString();
-                cmd.CommandText = "select relayIp from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY relayID ASC), *FROM Relays) as t where rowNum = '" + i + "'";
+                cmd.CommandText = "select relayIp from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY relayID ASC), *FROM Relays where isGateway = 1) as t where rowNum = '" + i + "'";
                 string relayIp = cmd.ExecuteScalar().ToString();
                 ip1Counter++;
                 ip.Add(relayIp);

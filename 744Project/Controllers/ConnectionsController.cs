@@ -429,11 +429,11 @@ namespace _744Project.Controllers
             //if IP1 = relay and IP2 = store
             else if (ip1Type == 2 && ip2Type == 3)
             {
-                cmd.CommandText = "select count(*) from StoresToRelays where relayID like '" + id2 + "' and storeID like '" + id1 + "' ";
+                cmd.CommandText = "select count(*) from StoresToRelays where relayID like '" + id1 + "' and storeID like '" + id2 + "' ";
                 int totalConnections = Convert.ToInt32(cmd.ExecuteScalar());
                 if (totalConnections > 0)
                 {
-                    cmd.CommandText = "update StoresToRelays set weight = '" + weight + "' where relayID = '" + id2 + "' and storeID = '" + id1 + "' ";
+                    cmd.CommandText = "update StoresToRelays set weight = '" + weight + "' where relayID = '" + id1 + "' and storeID = '" + id2 + "' ";
                     cmd.ExecuteScalar();
                 }
                 else

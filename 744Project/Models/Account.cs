@@ -59,8 +59,9 @@ namespace _744Project.Models
         public string accountZip { get; set; }        
         [Required]
         [Display(Name = "Phone")]
-        [StringLength(10, MinimumLength = 10)]
-        [RegularExpression("^[0-9]*$", ErrorMessage = "Phone number must be 10 digits")]
+        //[StringLength(10, MinimumLength = 10)]
+        //[RegularExpression(@"^\(\d{3}\)\s{0,1}\d{3}-\d{7}$", ErrorMessage = "Enter a valid number")]
+        //[RegularExpression("^[0-9]*$", ErrorMessage = "Phone number must be 10 digits")]
         public string accountPhone { get; set; }
         [Required]
         [Range(0, 25000)]

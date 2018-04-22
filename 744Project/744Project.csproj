@@ -458,6 +458,10 @@
     <Compile Include="Migrations\201804200140099_t3.Designer.cs">
       <DependentUpon>201804200140099_t3.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804221837086_phoneMasked.cs" />
+    <Compile Include="Migrations\201804221837086_phoneMasked.Designer.cs">
+      <DependentUpon>201804221837086_phoneMasked.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -656,10 +660,12 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.maskedinput.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\maskedinput-binder.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\Objects.js" />
     <Content Include="Scripts\respond.js" />
@@ -936,6 +942,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804200140099_t3.resx">
       <DependentUpon>201804200140099_t3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804221837086_phoneMasked.resx">
+      <DependentUpon>201804221837086_phoneMasked.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.addmiddlename.resources" />
     <EmbeddedResource Include="obj\Debug\_744Project.Migrations.initialcreate.resources" />

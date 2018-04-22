@@ -28,7 +28,7 @@ namespace _744Project.Models
         public DateTime cardExpirationDate { get; set; }
         [Required]
         [Display(Name = "Card Security Code")]
-        [StringLength(3, MinimumLength = 3)]
+        [StringLength(3, MinimumLength = 3, ErrorMessage = "Security Code must be 3 digits")]
         [RegularExpression("^[0-9]*$", ErrorMessage = "Security Code must be 3 digits")]
         public string cardSecurityCode { get; set; }
         //[Required]

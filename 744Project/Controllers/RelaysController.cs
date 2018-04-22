@@ -43,7 +43,7 @@ namespace _744Project.Controllers
         public ActionResult Create()
         {
             getAllIps(1);
-            ViewBag.regionID = new SelectList(db.Regions, "regionID", "regionName");
+            ViewBag.regionID = new SelectList(db.Regions, "regionID", "regionID");
             return View();
         }
 

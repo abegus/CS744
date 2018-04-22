@@ -80,16 +80,20 @@ namespace _744Project
             string transactionMerchant = cmd.ExecuteScalar().ToString();
             cmd.CommandText = "select transactionStatus from Transactions where transactionId = '" + transactionId + "' ";
             string transactionStatus = cmd.ExecuteScalar().ToString();
+            //cmd.CommandText = "select storeIP from Transactions where transactionId = '" + transactionId + "' ";
+            //string storeIp = cmd.ExecuteScalar().ToString();
             //encrypt each string in the transactions except the transactionID, cardID, and AccountID. 
             //I also noticed that we still have the "connectionID". I just ignored it.
             transactionAmount = encrypt(transactionAmount);
             transactionType = encrypt(transactionType);
             transactionMerchant = encrypt(transactionMerchant);
+            //storeIp = encrypt(storeIp);
             //transactionStatus = encrypt(transactionStatus); //The transaction status cannot be encrypted because its value is either True or False.
             //Now update the selected transaction:
             cmd.CommandText = "update Transactions set transactionAmount = '" + transactionAmount + "' ,    " +
                 "transactionType = '" + transactionType + "' , transactionMerchant = '" + transactionMerchant + "' , " +
                 "transactionStatus = '" + transactionStatus + "' , encryptedFlag = 1 " +
+                //", storeIP = '" + storeIp + "' " +
                 "where transactionId = '" + transactionId + "' ";
             cmd.ExecuteScalar();
             
@@ -127,16 +131,20 @@ namespace _744Project
             string transactionMerchant = cmd.ExecuteScalar().ToString();
             cmd.CommandText = "select transactionStatus from Transactions where transactionId = '" + transactionId + "' ";
             string transactionStatus = cmd.ExecuteScalar().ToString();
+            //cmd.CommandText = "select storeIP from Transactions where transactionId = '" + transactionId + "' ";
+            //string storeIp = cmd.ExecuteScalar().ToString();
             //encrypt each string in the transactions except the transactionID, cardID, and AccountID. 
             //I also noticed that we still have the "connectionID". I just ignored it.
             transactionAmount = decrypt(transactionAmount);
             transactionType = decrypt(transactionType);
             transactionMerchant = decrypt(transactionMerchant);
+            //storeIp = decrypt(storeIp);
             //transactionStatus = decrypt(transactionStatus); //The transaction status cannot be decrypted because its value is either True or False.
             //Now update the selected transaction:
             cmd.CommandText = "update Transactions set transactionAmount = '" + transactionAmount + "' ,    " +
                 "transactionType = '" + transactionType + "' , transactionMerchant = '" + transactionMerchant + "' , " +
                 "transactionStatus = '" + transactionStatus + "' , encryptedFlag = 0 " +
+                //", storeIP = '" + storeIp + "' " +
                 "where transactionId = '" + transactionId + "' ";
                 
             cmd.ExecuteScalar();
