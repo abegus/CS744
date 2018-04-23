@@ -101,26 +101,29 @@ namespace _744Project.Controllers
                 //first check debit, 
                 //var account = transaction.CreditCard.Account;
 
+                if(!valid)
+                {
+                    var account = creditCard.Account;
+                    //no more need for checking Debit...
+                    if (transaction.transactionType.Equals("Debit"))
+                    {
+
+                        account.accountBalance -= System.Convert.ToDecimal(transaction.transactionAmount);
+                    }
+                    if (transaction.transactionType.Equals("Credit"))
+                    {
+                        if (account.accountBalance + System.Convert.ToDecimal(transaction.transactionAmount) > account.accountMax)
+                        {
+                            valid = false;
+                        }
+                        else
+                        {
+                            account.accountBalance += System.Convert.ToDecimal(transaction.transactionAmount);
+                        }
+                    }
+                    db.SaveChanges();
+                }
                 
-                var account = creditCard.Account;
-                //no more need for checking Debit...
-                if (transaction.transactionType.Equals("Debit"))
-                {
-                    
-                    account.accountBalance -= System.Convert.ToDecimal(transaction.transactionAmount);
-                }
-                if (transaction.transactionType.Equals("Credit"))
-                {
-                    if (account.accountBalance + System.Convert.ToDecimal(transaction.transactionAmount) > account.accountMax)
-                    {
-                        valid = false;
-                    }
-                    else
-                    {
-                        account.accountBalance += System.Convert.ToDecimal(transaction.transactionAmount);
-                    }
-                }
-                db.SaveChanges();
             }
             
             
