@@ -138,6 +138,9 @@ namespace _744Project
             transactionAmount = decrypt(transactionAmount);
             transactionType = decrypt(transactionType);
             transactionMerchant = decrypt(transactionMerchant);
+            //The below is to avoid the single quitations and replcae them with 2 single quotations
+            transactionMerchant = transactionMerchant.Replace("'", "''");
+            //
             //storeIp = decrypt(storeIp);
             //transactionStatus = decrypt(transactionStatus); //The transaction status cannot be decrypted because its value is either True or False.
             //Now update the selected transaction:
