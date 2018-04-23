@@ -27,7 +27,7 @@ function SendToNode(currentIp, pathIndex, transactionId, transObj, lastIp) {
 	if (pathIndex >= transObj.path.length && transObj.processed) {
 		RemoveTransactionFromQueue(transactionId, transObj.storeIp);
 		RemoveFakeTransactionFromQueue(transactionId, transObj.storeIp);
-		UpdateTransactionStatus("Returned To Store", transactionId)
+		UpdateTransactionStatus("Returned To Source", transactionId)
 		return;
 	} 
 	//if the node is inactive, drop the transaction
