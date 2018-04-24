@@ -51,7 +51,14 @@ namespace _744Project.Controllers
             ViewBag.accountID = new SelectList(db.Accounts, "accountID", "accountNumber");
             return View();
         }
-
+        public Boolean invalidCardNumber(long cardNumber)
+        {
+            Boolean valid = true;            
+            char firstNumber = cardNumber.ToString()[0];
+            if (firstNumber == '9')
+                valid = false;
+            return valid;
+        }
         // POST: CreditCards/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -60,15 +67,22 @@ namespace _744Project.Controllers
         public ActionResult Create([Bind(Include = "cardID,cardNumber,cardExpirationDate,cardSecurityCode, accountID,firstName,lastName")] CreditCard creditCard)
         {
             if (ModelState.IsValid)
-            {
-                
+            {                                
                 //Get a random card number from the table NewCardNumbers and store it in cardNumber of table CreditCards:
                 //getRandomCardNumber(creditCard.cardID);
                 //check if the card number matches another existing card:                
                 Boolean duplicateCard = checkDuplicateCard(creditCard.cardNumber);
-                if(duplicateCard)
+                //check if the first number = 9:
+                Boolean valid = invalidCardNumber(creditCard.cardNumber);
+                if (duplicateCard)
                 {
                     ModelState.AddModelError("cardNumber", "The card number you entered matches another card.");
+                    ViewBag.accountID = new SelectList(db.Accounts, "accountID", "accountNumber", creditCard.accountID);
+                    return View(creditCard);
+                }
+                else if(!valid)
+                {
+                    ModelState.AddModelError("cardNumber", "The card number you entered must not start with the number 9");
                     ViewBag.accountID = new SelectList(db.Accounts, "accountID", "accountNumber", creditCard.accountID);
                     return View(creditCard);
                 }
@@ -157,9 +171,9 @@ namespace _744Project.Controllers
             ViewBag.cardExpirationDate = creditCard.cardExpirationDate;
             //if (ModelState.IsValid)
             //{
-                ////Change the accountNumber again to match the accountID:
-                //changeCardNumberToPreviousCardNumber(cardID, cardNumber);
-                db.Entry(creditCard).State = EntityState.Modified;
+            ////Change the accountNumber again to match the accountID:
+            //changeCardNumberToPreviousCardNumber(cardID, cardNumber);
+            db.Entry(creditCard).State = EntityState.Modified;
                 db.SaveChanges();                
                 return RedirectToAction("Index");
             //}
